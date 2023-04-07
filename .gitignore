@@ -12,3 +12,12 @@ outputs/*
 ai_settings.yaml
 .vscode
 auto-gpt.json
+.idea
+venv
+.idea
+ai_settings.yaml
+app/.DS_Store
+.DS_Store
+venv-test
+uvicorn.log
+output.log

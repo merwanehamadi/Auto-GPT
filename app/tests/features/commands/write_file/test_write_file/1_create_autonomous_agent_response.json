@@ -1,0 +1,11 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-length": "45",
+        "content-type": "application/json"
+    },
+    "body": {
+        "message": "Autonomous agent created",
+        "id": 1
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-length": "53",
+        "content-type": "application/json"
+    },
+    "body": {
+        "message": "Autonomous agent terminated gracefully."
+    }
+}

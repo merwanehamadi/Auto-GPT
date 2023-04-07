@@ -1,3 +1,5 @@
+import os
+
 import yaml
 import data
 import os
@@ -12,7 +14,7 @@ class AIConfig:
         ai_goals (list): The list of objectives the AI is supposed to complete.
     """
 
-    def __init__(self, ai_name: str="", ai_role: str="", ai_goals: list=[]) -> None:
+    def __init__(self, ai_name: str="", ai_role: str="", ai_goals: list=[], interactive_input: bool=True) -> None:
         """
         Initialize a class instance
 
@@ -27,6 +29,7 @@ class AIConfig:
         self.ai_name = ai_name
         self.ai_role = ai_role
         self.ai_goals = ai_goals
+        self.interactive_input = interactive_input
 
     # Soon this will go in a folder where it remembers more stuff about the run(s)
     SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'ai_settings.yaml')
@@ -34,7 +37,7 @@ class AIConfig:
     @classmethod
     def load(cls: object, config_file: str=SAVE_FILE) -> object:
         """
-        Returns class object with parameters (ai_name, ai_role, ai_goals) loaded from yaml file if yaml file exists, 
+        Returns class object with parameters (ai_name, ai_role, ai_goals) loaded from yaml file if yaml file exists,
         else returns class with no parameters.
 
         Parameters:
@@ -42,9 +45,8 @@ class AIConfig:
            config_file (int): The path to the config yaml file. DEFAULT: "../ai_settings.yaml"
 
         Returns:
-            cls (object): A instance of given cls object  
+            cls (object): A instance of given cls object
         """
-
         try:
             with open(config_file) as file:
                 config_params = yaml.load(file, Loader=yaml.FullLoader)
@@ -54,21 +56,22 @@ class AIConfig:
         ai_name = config_params.get("ai_name", "")
         ai_role = config_params.get("ai_role", "")
         ai_goals = config_params.get("ai_goals", [])
-
-        return cls(ai_name, ai_role, ai_goals)
+        interactive_input = config_params.get("interactive_input", True)
+        return cls(ai_name, ai_role, ai_goals, interactive_input)
 
     def save(self, config_file: str=SAVE_FILE) -> None:
         """
         Saves the class parameters to the specified file yaml file path as a yaml file.
 
-        Parameters: 
+        Parameters:
             config_file(str): The path to the config yaml file. DEFAULT: "../ai_settings.yaml"
 
         Returns:
-            None 
+            None
         """
 
         config = {"ai_name": self.ai_name, "ai_role": self.ai_role, "ai_goals": self.ai_goals}
+
         with open(config_file, "w") as file:
             yaml.dump(config, file)
 
@@ -76,7 +79,7 @@ class AIConfig:
         """
         Returns a prompt to the user with the class information in an organized fashion.
 
-        Parameters: 
+        Parameters:
             None
 
         Returns:

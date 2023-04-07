@@ -1,3 +1,4 @@
+import os
 import time
 import openai
 from dotenv import load_dotenv
@@ -63,10 +64,9 @@ def chat_with_ai(
             """
             model = cfg.fast_llm_model # TODO: Change model from hardcode to argument
             # Reserve 1000 tokens for the response
-            
-            if cfg.debug:
+            if os.environ.get("DEBUG"):
                 print(f"Token limit: {token_limit}")
-                
+
             send_token_limit = token_limit - 1000
 
             relevant_memory = permanent_memory.get_relevant(str(full_message_history[-5:]), 10)
@@ -105,6 +105,7 @@ def chat_with_ai(
             # Append user input, the length of this is accounted for above
             current_context.extend([create_chat_message("user", user_input)])
 
+            # current_context.append(create_chat_message("system", "{\n    \"thoughts\":\n    {\n        \"text\": \""))
             # Calculate remaining tokens
             tokens_remaining = token_limit - current_tokens_used
             # assert tokens_remaining >= 0, "Tokens remaining is negative. This should never happen, please submit a bug report at https://www.github.com/Torantulino/Auto-GPT"

@@ -1,4 +1,5 @@
 from memory.local import LocalCache
+
 try:
     from memory.redismem import RedisMemory
 except ImportError:
@@ -28,6 +29,8 @@ def get_memory(cfg, init=False):
                   " use Redis as a memory backend.")
         else:
             memory = RedisMemory(cfg)
+    elif cfg.memory_backend == "no_memory":
+        memory = NoMemory(cfg)
 
     if memory is None:
         memory = LocalCache(cfg)
