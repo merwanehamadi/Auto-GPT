@@ -198,6 +198,30 @@ export PINECONE_ENV="Your pinecone region" # something like: us-east4-gcp
 
 ```
 
+### Running on docker
+Docker is a tool that allows you to run applications in a containerized environment.
+
+1. Install docker desktop. https://www.docker.com/products/docker-desktop
+2. Run the following command in your terminal:
+```
+docker build -t auto-gpt .
+```
+3. This will build the docker image. You can now run the docker image with the following command:
+```
+docker run -it auto-gpt
+```
+4. Follow the interactive console to create your autonomous agent. Make sure you setup your environment variables as described above.
+```
+setx PINECONE_API_KEY "YOUR_PINECONE_API_KEY"
+export PINECONE_ENV="Your pinecone region" # something like: us-east4-gcp
+
+```
+For macOS and Linux users:
+```
+export PINECONE_API_KEY="YOUR_PINECONE_API_KEY"
+export PINECONE_ENV="Your pinecone region" # something like: us-east4-gcp
+
+```
 Or you can set them in the `.env` file.
 
 ## View Memory Usage
