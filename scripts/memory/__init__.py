@@ -1,5 +1,7 @@
 from memory.local import LocalCache
 
+from scripts.memory.no_memory import NoMemory
+
 try:
     from memory.redismem import RedisMemory
 except ImportError:

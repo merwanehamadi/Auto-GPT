@@ -70,7 +70,7 @@ class AIConfig:
             None
         """
 
-        config = {"ai_name": self.ai_name, "ai_role": self.ai_role, "ai_goals": self.ai_goals}
+        config = {"ai_name": self.ai_name, "ai_role": self.ai_role, "ai_goals": self.ai_goals, "interactive_input": self.interactive_input}
 
         with open(config_file, "w") as file:
             yaml.dump(config, file)
@@ -95,4 +95,3 @@ class AIConfig:
 
         full_prompt += f"\n\n{data.load_prompt()}"
         return full_prompt
-

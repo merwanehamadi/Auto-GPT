@@ -294,7 +294,7 @@ def parse_arguments():
         print_to_console("Debug Mode: ", Fore.GREEN, "ENABLED")
         cfg.set_debug_mode(True)
 
-class AutonomousAgent():
+class Agent():
     def __init__(self,
                  cfg,
                  prompt=None,
@@ -433,5 +433,5 @@ if __name__ == '__main__':
     # this is particularly important for indexing and referencing pinecone memory
     memory = get_memory(cfg, init=True)
     print('Using memory of type: ' + memory.__class__.__name__)
-    autonomous_agent = AutonomousAgent(cfg, prompt, memory, full_message_history, result, next_action_count, user_input)
-    autonomous_agent.start_loop()
+    agent = Agent(cfg, prompt, memory, full_message_history, result, next_action_count, user_input)
+    agent.start_loop()

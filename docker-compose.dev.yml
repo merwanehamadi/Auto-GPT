@@ -13,6 +13,6 @@ services:
     restart: always
     volumes:
       # Adds current directory as volume.
-      - .:/app/
+      - .:/autogpt/
     env_file:
     - .env

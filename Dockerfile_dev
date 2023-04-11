@@ -5,4 +5,4 @@ COPY . /app
 
 RUN pip install -r requirements-dev.txt
 
-CMD ["python3", "-m", "app"]
+CMD ["python3", "-m", "autogpt"]

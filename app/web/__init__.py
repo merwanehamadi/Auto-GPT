@@ -1,1 +1,0 @@
-"""WEB API for app."""

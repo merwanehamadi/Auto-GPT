@@ -1,8 +1,0 @@
-{
-    "method": "PATCH",
-    "url": "http://localhost:6060/api/v1/autonomous_agents/1",
-    "headers": {},
-    "body": {
-        "status": "active"
-    }
-}
