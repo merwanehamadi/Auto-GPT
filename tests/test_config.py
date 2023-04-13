@@ -1,5 +1,5 @@
 import unittest
-from scripts.config import Config
+from auto_gpt.config import Config
 
 
 class TestConfig(unittest.TestCase):

@@ -3,8 +3,8 @@ import random
 import string
 import sys
 from pathlib import Path
-# Add the parent directory of the 'scripts' folder to the Python path
-sys.path.append(str(Path(__file__).resolve().parent.parent.parent / 'scripts'))
+# Add the parent directory of the 'auto_gpt' folder to the Python path
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / 'auto_gpt'))
 from config import Config
 from memory.local import LocalCache
 

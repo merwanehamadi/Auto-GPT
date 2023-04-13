@@ -1,1 +1,1 @@
-from scripts.main import main
+from auto_gpt.main import main

@@ -29,7 +29,7 @@ class AbstractSingleton(abc.ABC, metaclass=Singleton):
 
 class Config(metaclass=Singleton):
     """
-    Configuration class to store the state of bools for different scripts access.
+    Configuration class to store the state of bools for different auto_gpt access.
     """
 
     def __init__(self):

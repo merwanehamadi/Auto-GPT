@@ -5,7 +5,7 @@
 # pip install pytest-mock
 import pytest
 
-from scripts.browse import scrape_links
+from auto_gpt.browse import scrape_links
 
 """
 Code Analysis
