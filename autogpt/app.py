@@ -1,6 +1,6 @@
 """ Command and Control """
 import json
-from typing import List, NoReturn, Union
+from typing import List, NoReturn, Union, Dict
 from autogpt.agent.agent_manager import AgentManager
 from autogpt.commands.evaluate_code import evaluate_code
 from autogpt.commands.google_search import google_official_search, google_search

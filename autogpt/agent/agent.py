@@ -1,12 +1,10 @@
 from colorama import Fore, Style
-from autogpt.app import execute_command, get_command
+from autogpt.app import execute_command
 
 from autogpt.chat import chat_with_ai, create_chat_message
 from autogpt.config import Config
-from autogpt.json_fixes.bracket_termination import (
-    attempt_to_fix_json_by_finding_outermost_brackets,
-)
-from autogpt.logs import logger, print_assistant_thoughts
+from autogpt.json_validation.validate_json import validate_json
+from autogpt.logs import logger, print_assistant_thoughts, fix_json_using_multiple_techniques
 from autogpt.speech import say_text
 from autogpt.spinner import Spinner
 from autogpt.utils import clean_input
@@ -70,18 +68,20 @@ class Agent:
                     cfg.fast_token_limit,
                 )  # TODO: This hardcodes the model to use GPT3.5. Make this an argument
 
-            # Print Assistant thoughts
-            print_assistant_thoughts(self.ai_name, assistant_reply)
+            assistant_reply_json = fix_json_using_multiple_techniques(assistant_reply)
 
-            # Get command name and arguments
-            try:
-                command_name, arguments = get_command(
-                    attempt_to_fix_json_by_finding_outermost_brackets(assistant_reply)
-                )
-                if cfg.speak_mode:
-                    say_text(f"I want to execute {command_name}")
-            except Exception as e:
-                logger.error("Error: \n", str(e))
+            # Print Assistant thoughts
+            if assistant_reply_json != {}:
+                assistant_reply_json_valid = validate_json(assistant_reply_json, 'llm_response_format_1')
+                # Get command name and arguments
+                if assistant_reply_json_valid != {}:
+                    try:
+                        print_assistant_thoughts(self.ai_name, assistant_reply_json_valid)
+                        command_name, arguments = assistant_reply_json_valid["command"]["name"], assistant_reply_json_valid["command"]["args"]
+                        if cfg.speak_mode:
+                            say_text(f"I want to execute {command_name}")
+                    except Exception as e:
+                        logger.error("Error: \n", str(e))
 
             if not cfg.continuous_mode and self.next_action_count == 0:
                 ### GET USER AUTHORIZATION TO EXECUTE COMMAND ###

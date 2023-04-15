@@ -17,6 +17,7 @@ orjson
 Pillow
 selenium
 webdriver-manager
+jsonschema
 coverage
 flake8
 numpy
