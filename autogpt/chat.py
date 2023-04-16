@@ -1,8 +1,8 @@
 import time
 
 from openai.error import RateLimitError
-
 from autogpt import token_counter
+from autogpt.completion_guide.json_guide import insert_completion_guide_to_last_message, insert_completion_guide_to_ai_response
 from autogpt.config import Config
 from autogpt.llm_utils import create_chat_completion
 from autogpt.logs import logger
@@ -156,12 +156,24 @@ def chat_with_ai(
 
             # TODO: use a model defined elsewhere, so that model can contain
             # temperature and other settings we care about
+
+            # current_context = insert_completion_guide_to_last_message(current_context)
+
             assistant_reply = create_chat_completion(
                 model=model,
                 messages=current_context,
                 max_tokens=tokens_remaining,
             )
-
+            #
+            # current_context_with_completion_guide = insert_completion_guide_to_last_message(current_context)
+            #
+            # assistant_reply_without_completion_guide = create_chat_completion(
+            #     model=model,
+            #     messages=current_context_with_completion_guide,
+            #     max_tokens=tokens_remaining,
+            # )
+            #
+            # assistant_reply = insert_completion_guide_to_ai_response(assistant_reply_without_completion_guide)
             # Update full message history
             full_message_history.append(create_chat_message("user", user_input))
             full_message_history.append(
