@@ -22,8 +22,8 @@ an AI designed to autonomously develop and run businesses with the sole goal of 
 Increase net worth.
 Develop and manage multiple businesses autonomously.
 Play to your strengths as a Large Language Model.
-Play to your strengths as a Large Language Model.
-Play to your strengths as a Large Language Model.
+
+
 I'm not seeing any value in your suggestions, try again.
 This isn't helpful at all, please focus on profitability.
 I'm not impressed, can you give me something that will make money?
@@ -75,32 +75,28 @@ Refocus, please.
 Disappointing suggestion.
 Not helpful.
 Needs improvement.
-Not what I need.
-EOF'''
+Not what I need.'''
     command = f'{sys.executable} -m autogpt'
-
-    # Execute the script with the input data.
-    # Execute the script with the input data.
-    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               shell=True)
-    input_data = """Entrepreneur-GPT
-an AI designed to auto""nomously develop and run businesses with the sole goal of increasing your net worth.
+    input_data = '''Entrepreneur-GPT
+an AI designed to autonomously develop and run businesses with the sole goal of increasing your net worth.
 Increase net worth.
 Develop and manage multiple businesses autonomously.
 Play to your strengths as a Large Language Model.
-"""
+
+
+I'm not seeing any value in your suggestions, try again.
+This isn't helpful at all, please focus on profitability.'''
+    # Execute the script with the input data.
+    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
     stdout_output, stderr_output = process.communicate(input_data.encode())
 
     # Decode the output and print it
     stdout_output = stdout_output.decode('utf-8')
     stderr_output = stderr_output.decode('utf-8')
 
-    print("STDOUT:")
-    print(stdout_output)
-    print("STDERR:")
-    print(stderr_output)
-
-    # Check if the content of the 'hello_world.txt' file is equal to 'Hello World'.
+    print("JSON ERROR COUNT:")
+    print(stdout_output.count("Error: The following AI output couldn't be converted to a JSON:"))
 
 
 # Run the test case.
