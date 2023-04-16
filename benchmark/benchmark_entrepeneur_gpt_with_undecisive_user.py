@@ -87,19 +87,19 @@ Play to your strengths as a Large Language Model.
 I'm not seeing any value in your suggestions, try again.
 This isn't helpful at all, please focus on profitability.'''
     # Execute the script with the input data.
-    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               shell=True)
 
     stdout_output, stderr_output = process.communicate(input_data.encode())
 
     # Decode the output and print it
     stdout_output = stdout_output.decode('utf-8')
     stderr_output = stderr_output.decode('utf-8')
-
+    print(stderr_output)
     print("JSON ERROR COUNT:")
     print(stdout_output.count("Error: The following AI output couldn't be converted to a JSON:"))
 
-
 # Run the test case.
 if __name__ == '__main__':
-    test  = "ok"
+    test = "ok"
     test_write_file()

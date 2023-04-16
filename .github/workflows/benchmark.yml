@@ -30,6 +30,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run unittest tests with coverage
+    - name: benchmark
       run: |
          python benchmark/benchmark_entrepeneur_gpt_with_undecisive_user.py
