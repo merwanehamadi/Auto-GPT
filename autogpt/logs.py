@@ -196,7 +196,7 @@ def remove_color_codes(s: str) -> str:
 logger = Logger()
 
 
-def fix_json_using_multiple_techniques(assistant_reply: str) -> dict[Any, Any]:
+def fix_json_using_multiple_techniques(assistant_reply: str) -> Dict[Any, Any]:
     from autogpt.json_fixes.parsing import attempt_to_fix_json_by_finding_outermost_brackets
 
     from autogpt.json_fixes.parsing import fix_and_parse_json
