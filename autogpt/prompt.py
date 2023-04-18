@@ -24,10 +24,6 @@ class Prompt:
         self.triggering_prompt = triggering_prompt
 
     @staticmethod
-    def create_prompt_from_ai_config(ai_config):
-        return Prompt(system_prompt=ai_config.construct_full_prompt())
-
-    @staticmethod
     def get_prompt() -> str:
         """
         This function generates a prompt string that includes various constraints,
@@ -37,57 +33,8 @@ class Prompt:
             str: The generated prompt string.
         """
 
-<<<<<<< HEAD
-    # Define the command list
-    commands = [
-        ("Google Search", "google", {"input": "<search>"}),
-        (
-            "Browse Website",
-            "browse_website",
-            {"url": "<url>", "question": "<what_you_want_to_find_on_website>"},
-        ),
-        (
-            "Start GPT Agent",
-            "start_agent",
-            {"name": "<name>", "task": "<short_task_desc>", "prompt": "<prompt>"},
-        ),
-        (
-            "Message GPT Agent",
-            "message_agent",
-            {"key": "<key>", "message": "<message>"},
-        ),
-        ("List GPT Agents", "list_agents", {}),
-        ("Delete GPT Agent", "delete_agent", {"key": "<key>"}),
-        (
-            "Clone Repository",
-            "clone_repository",
-            {"repository_url": "<url>", "clone_path": "<directory>"},
-        ),
-        ("Write to file", "write_to_file", {"file": "<file>", "text": "<text>"}),
-        ("Read file", "read_file", {"file": "<file>"}),
-        ("Append to file", "append_to_file", {"file": "<file>", "text": "<text>"}),
-        ("Delete file", "delete_file", {"file": "<file>"}),
-        ("Search Files", "search_files", {"directory": "<directory>"}),
-        ("Analyze Code", "analyze_code", {"code": "<full_code_string>"}),
-        (
-            "Get Improved Code",
-            "improve_code",
-            {"suggestions": "<list_of_suggestions>", "code": "<full_code_string>"},
-        ),
-        (
-            "Write Tests",
-            "write_tests",
-            {"code": "<full_code_string>", "focus": "<list_of_focus_areas>"},
-        ),
-        ("Execute Python File", "execute_python_file", {"file": "<file>"}),
-        ("Task Complete (Shutdown)", "task_complete", {"reason": "<reason>"}),
-        ("Generate Image", "generate_image", {"prompt": "<prompt>"}),
-        ("Send Tweet", "send_tweet", {"text": "<text>"}),
-    ]
-=======
         # Initialize the Config object
         cfg = Config()
->>>>>>> 2cfc1d38 (Remove unused import in prompt.py)
 
         # Initialize the PromptGenerator object
         prompt_generator = PromptGenerator()
@@ -139,7 +86,7 @@ class Prompt:
             ("Append to file", "append_to_file", {"file": "<file>", "text": "<text>"}),
             ("Delete file", "delete_file", {"file": "<file>"}),
             ("Search Files", "search_files", {"directory": "<directory>"}),
-            ("Evaluate Code", "evaluate_code", {"code": "<full_code_string>"}),
+            ("Analyze Code", "analyze_code", {"code": "<full_code_string>"}),
             (
                 "Get Improved Code",
                 "improve_code",
