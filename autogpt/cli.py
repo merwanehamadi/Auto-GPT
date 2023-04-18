@@ -69,8 +69,8 @@ def main(
     Start an Auto-GPT assistant.
     """
     # Put imports inside function to avoid importing everything when starting the CLI
-    import logging
 
+<<<<<<< HEAD
     from colorama import Fore
 
     from autogpt.agent.agent import Agent
@@ -138,6 +138,14 @@ def main(
             system_prompt=system_prompt,
             triggering_prompt=triggering_prompt,
         )
+=======
+    from autogpt.agent.agent_utils import create_agent
+    from autogpt.prompt import Prompt
+
+    if ctx.invoked_subcommand is None:
+        prompt = Prompt()
+        agent = create_agent(prompt)
+>>>>>>> 1b0a03c0 (Refactor main function and imports in cli.py)
         agent.start_interaction_loop()
 
 
