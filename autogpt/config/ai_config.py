@@ -108,7 +108,7 @@ class AIConfig:
             ""
         )
 
-        from autogpt.prompt import get_prompt
+        from autogpt.prompt import Prompt
 
         # Construct full prompt
         full_prompt = (
@@ -117,5 +117,5 @@ class AIConfig:
         for i, goal in enumerate(self.ai_goals):
             full_prompt += f"{i+1}. {goal}\n"
 
-        full_prompt += f"\n\n{get_prompt()}"
+        full_prompt += f"\n\n{Prompt.get_prompt()}"
         return full_prompt
