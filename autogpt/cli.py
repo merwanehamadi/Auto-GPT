@@ -78,13 +78,8 @@ def main(
     from autogpt.configurator import create_config
     from autogpt.logs import logger
     from autogpt.memory import get_memory
-<<<<<<< HEAD
-    from autogpt.prompt import construct_prompt
-    from autogpt.utils import get_current_git_branch, get_latest_bulletin
-=======
     from autogpt.prompt import Prompt
-    from autogpt.utils import get_latest_bulletin
->>>>>>> 79ca0bc5 (solve conflicts)
+    from autogpt.utils import get_current_git_branch, get_latest_bulletin
 
     if ctx.invoked_subcommand is None:
         cfg = Config()
@@ -110,7 +105,6 @@ def main(
             motd = get_latest_bulletin()
             if motd:
                 logger.typewriter_log("NEWS: ", Fore.GREEN, motd)
-<<<<<<< HEAD
             git_branch = get_current_git_branch()
             if git_branch and git_branch != "stable":
                 logger.typewriter_log(
@@ -119,22 +113,13 @@ def main(
                     f"You are running on `{git_branch}` branch "
                     "- this is not a supported branch.",
                 )
-        system_prompt = construct_prompt()
+        prompt = Prompt()
         # print(prompt)
         # Initialize variables
         full_message_history = []
         next_action_count = 0
-        # Make a constant:
-        triggering_prompt = (
-            "Determine which next command to use, and respond using the"
-            " format specified above:"
-        )
-=======
-        prompt = Prompt()
-
->>>>>>> 79ca0bc5 (solve conflicts)
         # Initialize memory and make sure it is empty.
-        # this is particularly important for indexing and referencing memory
+        # this is particularly important for indexing and referencing pinecone memory
         memory = get_memory(cfg, init=True)
         logger.typewriter_log(
             "Using memory of type:", Fore.GREEN, f"{memory.__class__.__name__}"
@@ -143,8 +128,8 @@ def main(
         agent = Agent(
             ai_name=ai_name,
             memory=memory,
-            full_message_history=[],
-            next_action_count=0,
+            full_message_history=full_message_history,
+            next_action_count=next_action_count,
             system_prompt=prompt.system_prompt,
             triggering_prompt=prompt.triggering_prompt,
         )
