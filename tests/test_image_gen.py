@@ -1,6 +1,7 @@
 import hashlib
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 from autogpt.commands.image_gen import generate_image, generate_image_with_sd_webui
@@ -51,12 +52,11 @@ def test_huggingface(request, config, workspace):
         assert img.size == (768, 768)
     image_path.unlink()
 
-
 def test_sd_webui(config, workspace):
     """Test SD WebUI image generation."""
     config.image_provider = "sd_webui"
+    ## TODO: remove the return statement above and uncomment the following lines
     return
-
     # Test using size 128
     image_path = lst(generate_image_with_sd_webui("astronaut riding a horse", 128))
     assert image_path.exists()
