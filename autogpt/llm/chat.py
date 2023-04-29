@@ -155,12 +155,19 @@ def chat_with_ai(
 
             # Insert Memories
             if len(full_message_history) > 0:
-                newly_trimmed_messages, agent.last_memory_index = get_newly_trimmed_messages(
+                (
+                    newly_trimmed_messages,
+                    agent.last_memory_index,
+                ) = get_newly_trimmed_messages(
                     full_message_history=full_message_history,
                     current_context=current_context,
-                    last_memory_index=agent.last_memory_index
+                    last_memory_index=agent.last_memory_index,
                 )
-                agent.summary_memory = update_running_summary(current_memory=agent.summary_memory, new_events=newly_trimmed_messages)
+                # if agent.last_memory_index != 0:
+                agent.summary_memory = update_running_summary(
+                    current_memory=agent.summary_memory,
+                    new_events=newly_trimmed_messages,
+                )
                 current_context.insert(insertion_index, agent.summary_memory)
 
             api_manager = ApiManager()
@@ -229,6 +236,36 @@ def chat_with_ai(
 
             # TODO: use a model defined elsewhere, so that model can contain
             # temperature and other settings we care about
+            import json
+            import os
+
+            # Create DEBUG folder if it does not exist
+            if not os.path.exists("DEBUG"):
+                os.mkdir("DEBUG")
+
+            # Create nested folder named with the current length of full_message_history
+            nested_folder_name = str(len(full_message_history) / 3)
+            nested_folder_path = os.path.join("DEBUG", nested_folder_name)
+
+            if not os.path.exists(nested_folder_path):
+                os.mkdir(nested_folder_path)
+
+            # Save current_context and full_message_history to separate files inside the nested folder
+            with open(
+                os.path.join(nested_folder_path, "current_context.json"),
+                "w",
+                encoding="utf-8",
+            ) as f:
+                json.dump(current_context, f, ensure_ascii=False, indent=4)
+
+            with open(
+                os.path.join(nested_folder_path, "full_message_history.json"),
+                "w",
+                encoding="utf-8",
+            ) as f:
+                json.dump(full_message_history, f, ensure_ascii=False, indent=4)
+            ###############################################################################
+
             assistant_reply = create_chat_completion(
                 model=model,
                 messages=current_context,
