@@ -122,6 +122,7 @@ def create_chat_completion(
     Returns:
         str: The response from the chat completion
     """
+
     cfg = Config()
     if temperature is None:
         temperature = cfg.temperature
