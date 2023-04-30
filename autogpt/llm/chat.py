@@ -154,12 +154,14 @@ def chat_with_ai(
                 next_message_to_add_index -= 1
 
             # Insert Memories
-            newly_trimmed_messages = get_newly_trimmed_messages(
-                full_message_history=full_message_history,
-                current_context=current_context,
-            )
-            memory = update_running_summary(newly_trimmed_messages)
-            current_context.insert(insertion_index, memory)
+            if len(full_message_history) > 0:
+                newly_trimmed_messages = get_newly_trimmed_messages(
+                    full_message_history=full_message_history,
+                    current_context=current_context,
+                )
+                if len(newly_trimmed_messages) > 0:
+                    memory = update_running_summary(newly_trimmed_messages)
+                    current_context.insert(insertion_index, memory)
 
             api_manager = ApiManager()
             # inform the AI about its remaining budget (if it has one)
