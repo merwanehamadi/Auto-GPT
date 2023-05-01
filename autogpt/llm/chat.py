@@ -8,6 +8,7 @@ from autogpt.llm.api_manager import ApiManager
 from autogpt.llm.base import Message
 from autogpt.llm.llm_utils import create_chat_completion
 from autogpt.llm.token_counter import count_message_tokens
+from autogpt.log_cycle.log_cycle_mixin import LogCycleMixin
 from autogpt.logs import logger
 from autogpt.memory_management.store_memory import (
     save_memory_trimmed_from_context_window,
@@ -163,7 +164,8 @@ def chat_with_ai(
                     current_context=current_context,
                     last_memory_index=agent.last_memory_index,
                 )
-                agent.summary_memory = update_running_summary(
+                agent.summary_memxory = update_running_summary(
+                    agent,
                     current_memory=agent.summary_memory,
                     new_events=newly_trimmed_messages,
                 )
@@ -231,6 +233,7 @@ def chat_with_ai(
                 logger.debug(f"{message['role'].capitalize()}: {message['content']}")
                 logger.debug("")
             logger.debug("----------- END OF CONTEXT ----------------")
+            agent.log_cycle(current_context, LogCycleMixin.CURRENT_CONTEXT_FILE_NAME)
 
             # TODO: use a model defined elsewhere, so that model can contain
             # temperature and other settings we care about
