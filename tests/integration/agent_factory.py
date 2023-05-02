@@ -19,6 +19,17 @@ def agent_test_config(config: Config):
     config.set_temperature(was_temperature)
 
 
+# @pytest.fixture
+# def agent_test_config(config: Config):
+#     was_continuous_mode = config.continuous_mode
+#     was_temperature = config.temperature
+#     config.set_continuous_mode(False)
+#     config.set_temperature(0)
+#     yield config
+#     config.set_continuous_mode(was_continuous_mode)
+#     config.set_temperature(was_temperature)
+
+
 @pytest.fixture
 def memory_local_cache(agent_test_config: Config):
     was_memory_backend = agent_test_config.memory_backend

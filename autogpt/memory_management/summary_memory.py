@@ -2,8 +2,10 @@ import copy
 import json
 from typing import Dict, List, Tuple
 
+from autogpt.agent import Agent
 from autogpt.config import Config
 from autogpt.llm.llm_utils import create_chat_completion
+from autogpt.log_cycle.log_cycle import PROMPT_SUMMARY_FILE_NAME, SUMMARY_FILE_NAME
 
 cfg = Config()
 
@@ -46,7 +48,7 @@ def get_newly_trimmed_messages(
 
 
 def update_running_summary(
-    current_memory: str, new_events: List[Dict[str, str]]
+    agent: Agent, current_memory: str, new_events: List[Dict[str, str]]
 ) -> str:
     """
     This function takes a list of dictionaries representing new events and combines them with the current summary,
@@ -89,11 +91,33 @@ def update_running_summary(
     if len(new_events) == 0:
         new_events = "Nothing new happened."
 
-    prompt = f'''Your task is to create a concise running summary of actions and information results in the provided text, focusing on key and potentially important information to remember.
+    data = [{'role': 'you', 'content': '{"command": {"name": "read_file", "args": {"filename": "instructions_1.txt"}}}'}, {'role': 'your computer', 'content': 'Command read_file returned: \nThe current task_id is 1111.\\nRead the file instructions_2.txt using the read_file command.'}]
 
-You will receive the current summary and the your latest actions. Combine them, adding relevant key information from the latest development in 1st person past tense and keeping the summary concise.
+    output = ""
 
-Summary So Far:
+    data = [{'role': 'you', 'content': '{"command": {"name": "read_file", "args": {"filename": "instructions_1.txt"}}}'}, {'role': 'your computer', 'content': 'Command read_file returned: \nThe current task_id is 1111.\\nRead the file instructions_2.txt using the read_file command.'}]
+
+    output = ""
+    
+    for item in data:
+        if item['role'] == 'you':
+            command = eval(item['content'])["command"]
+            output += f"Command: {command['name']} - args: {command['args']}\n"
+        elif item['role'] == 'your computer':
+            content = item['content'].replace('\\\\n', '\\n')
+            output += "{}\n".format(content)
+
+    print(output)
+
+
+    print(output)
+
+
+    prompt = f'''Your task is to update running summary so far of actions and information results in the provided text, focusing on key and potentially important information to remember.
+
+You will receive the current summary and the your latest actions. Combine them, adding relevant key information from the latest development in 1st person past tense and keeping the summary concise. [BOLD]REMEMBER THIS: PLEASE RETAIN INFORMATION [/BOLD]!!!
+
+!!!CRITICAL Summary So Far that needs to be retained:
 """
 {current_memory}
 """
@@ -104,15 +128,28 @@ Latest Development:
 """
 '''
 
+
     messages = [
         {
             "role": "user",
             "content": prompt,
         }
     ]
-
+    agent.log_cycle_handler.log_cycle(
+        agent.config.ai_name,
+        agent.created_at,
+        agent.cycle_count,
+        messages,
+        PROMPT_SUMMARY_FILE_NAME,
+    )
     current_memory = create_chat_completion(messages, cfg.fast_llm_model)
-
+    agent.log_cycle_handler.log_cycle(
+        agent.config.ai_name,
+        agent.created_at,
+        agent.cycle_count,
+        current_memory,
+        SUMMARY_FILE_NAME,
+    )
     message_to_return = {
         "role": "system",
         "content": f"This reminds you of these events from your past: \n{current_memory}",

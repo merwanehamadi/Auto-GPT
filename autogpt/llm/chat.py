@@ -8,14 +8,10 @@ from autogpt.llm.api_manager import ApiManager
 from autogpt.llm.base import Message
 from autogpt.llm.llm_utils import create_chat_completion
 from autogpt.llm.token_counter import count_message_tokens
-from autogpt.log_cycle.log_cycle import PROMPT_NEXT_ACTION_FILE_NAME
+from autogpt.log_cycle.log_cycle import PROMPT_NEXT_ACTION_FILE_NAME, SUMMARY_FILE_NAME
 from autogpt.logs import logger
 from autogpt.memory_management.store_memory import (
     save_memory_trimmed_from_context_window,
-)
-from autogpt.memory_management.summary_memory import (
-    get_newly_trimmed_messages,
-    update_running_summary,
 )
 
 cfg = Config()
@@ -153,6 +149,10 @@ def chat_with_ai(
 
                 # Move to the next most recent message in the full message history
                 next_message_to_add_index -= 1
+            from autogpt.memory_management.summary_memory import (
+                get_newly_trimmed_messages,
+                update_running_summary,
+            )
 
             # Insert Memories
             if len(full_message_history) > 0:
@@ -165,6 +165,7 @@ def chat_with_ai(
                     last_memory_index=agent.last_memory_index,
                 )
                 agent.summary_memory = update_running_summary(
+                    agent,
                     current_memory=agent.summary_memory,
                     new_events=newly_trimmed_messages,
                 )
