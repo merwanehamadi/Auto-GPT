@@ -16,6 +16,10 @@ def vcr_config():
             "Authorization",
             "X-OpenAI-Client-User-Agent",
             "User-Agent",
+            'Accept-Encoding',
+            'Connection'
         ],
         "match_on": ["method", "uri", "body"],
     }
+
+    filter_headers=['User-Agent', 'Accept-Encoding', 'Accept', 'Connection'],

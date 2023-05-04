@@ -1,0 +1,11 @@
+# Dockerfile for running pytest
+ARG BUILD_TYPE=dev
+
+# Build from the existing autogpt image
+FROM auto-gpt:${BUILD_TYPE} AS autogpt-pytest
+
+# Install pytest
+RUN pip install --no-cache-dir pytest
+
+# Change the entrypoint to run pytest
+ENTRYPOINT ["pytest"]

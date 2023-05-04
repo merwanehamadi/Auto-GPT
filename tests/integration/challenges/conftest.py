@@ -1,5 +1,5 @@
 import pytest
-
+import docker
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -15,3 +15,10 @@ def pytest_configure(config):
 def user_selected_level(request) -> int:
     ## used for challenges in the goal oriented tests
     return request.config.option.level
+
+@pytest.fixture
+def docker_client():
+    client = docker.from_env()
+    yield client
+    client.close()
+

@@ -7,7 +7,7 @@ from pytest_mock import MockerFixture
 
 import autogpt.commands.execute_code as sut  # system under testing
 from autogpt.config import Config
-
+import docker
 
 @pytest.fixture
 def config_allow_execute(config: Config, mocker: MockerFixture):
@@ -30,6 +30,7 @@ def random_string():
 
 
 def test_execute_python_file(python_test_file: str, random_string: str):
+    client = docker.from_env()
     result = sut.execute_python_file(python_test_file)
     assert result == f"Hello {random_string}!\n"
 
