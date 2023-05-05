@@ -37,7 +37,7 @@ def input_generator(input_sequence: list) -> Generator[str, None, None]:
     :return: A generator that yields input strings.
     """
     yield from input_sequence
-
+hi cs ch
 
 # @pytest.skip("Nobody beat this challenge yet")
 @pytest.mark.vcr
