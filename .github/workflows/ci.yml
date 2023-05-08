@@ -6,9 +6,9 @@ on:
   pull_request_target:
     types: [ opened, synchronize ]
 
-concurrency:
-  group: ${{ format('ci-{0}', github.head_ref && format('pr-{0}', github.event.pull_request.number) || github.sha) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+#concurrency:
+#  group: ${{ format('ci-{0}', github.head_ref && format('pr-{0}', github.event.pull_request.number) || github.sha) }}
+#  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
