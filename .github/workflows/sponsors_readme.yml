@@ -26,3 +26,4 @@ jobs:
           branch: master
           folder: '.'
           token: ${{ secrets.README_UPDATER_PAT }}
+# ok
