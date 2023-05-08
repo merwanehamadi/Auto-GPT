@@ -191,6 +191,7 @@ def create_code_agent(agent_test_config, memory_local_cache, workspace: Workspac
     command_registry.import_commands("autogpt.commands.file_operations")
     command_registry.import_commands("autogpt.commands.execute_code")
     command_registry.import_commands("autogpt.commands.improve_code")
+    command_registry.import_commands("autogpt.commands.task_statuses")
     command_registry.import_commands("autogpt.app")
 
     ai_config = AIConfig(

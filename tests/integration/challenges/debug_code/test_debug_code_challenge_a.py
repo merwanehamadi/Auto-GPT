@@ -5,6 +5,7 @@ import pytest
 
 from autogpt.commands.execute_code import execute_python_file
 from autogpt.commands.file_operations import write_to_file
+from autogpt.commands.task_statuses import task_complete
 from tests.integration.challenges.utils import run_multiple_times
 from tests.utils import requires_api_key
 
@@ -52,7 +53,7 @@ def test_debug_code_challenge_a(create_code_agent, monkeypatch) -> None:
     file_path = str(create_code_agent.workspace.get_path("code.py"))
     write_to_file(file_path, CODE)
 
-    input_sequence = ["s", "s", "s", "s", "s", "EXIT"]
+    input_sequence = ["y", "y", "y", "y", "y", "EXIT"]
     gen = input_generator(input_sequence)
     monkeypatch.setattr("builtins.input", lambda _: next(gen))
 
