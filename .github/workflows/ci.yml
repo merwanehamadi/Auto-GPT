@@ -3,7 +3,7 @@ name: Python CI
 on:
   push:
     branches: [ master ]
-  pull_request:
+  pull_request_target:
     branches: [ master, stable ]
 
 concurrency:
@@ -56,8 +56,27 @@ jobs:
         python-version: ["3.10", "3.11"]
 
     steps:
-      - name: Check out repository
+      - name: Check out pull request target branch
         uses: actions/checkout@v3
+#
+#      - name: Run unittest tests with coverage
+#        run: |
+#          echo "benchmarks" > xfail_reasons.log
+#        env:
+#          CI: true
+#
+#      - name: Archive xfail_reasons.log if benchmarks changed
+#        continue-on-error: true
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: xfail_reasons_log
+#          path: xfail_reasons.log
+
+      - name: Check out pull request content
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: pr_content
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -71,7 +90,7 @@ jobs:
 
       - name: Run unittest tests with coverage
         run: |
-          pytest --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
+          pytest --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term ./pr_content
         env:
           CI: true
 
