@@ -22,7 +22,7 @@ def test_clone_auto_gpt_repository(workspace, mock_clone_from, config):
 
     clone_result = clone_repository(url=url, clone_path=clone_path)
 
-    assert clone_result == expected_output
+    assert False
     mock_clone_from.assert_called_once_with(
         url=f"{scheme}{config.github_username}:{config.github_api_key}@{repo}",
         to_path=clone_path,
