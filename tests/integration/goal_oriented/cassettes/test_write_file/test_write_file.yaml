@@ -823,4 +823,207 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are write_to_file-GPT, an AI designed to use the write_to_file command to write
+      ''Hello World'' into a file named \"hello_world.txt\" and then use the task_complete
+      command to complete the task.\nYour decisions must always be made independently
+      without seeking user assistance. Play to your strengths as an LLM and pursue
+      simple strategies with no legal complications.\n\nGOALS:\n\n1. Use the write_to_file
+      command to write ''Hello World'' into a file named \"hello_world.txt\".\n2.
+      Use the task_complete command to complete the task.\n3. Do not use andfsfdsy
+      other commands.\n\n\nConstraints:\n1. ~4000 word limit for short term memory.
+      Your short term memory is short, so immediately save important information to
+      files.\n2. If you are unsure how you previously did something or want to recall
+      past events, thinking about similar events will help you remember.\n3. No user
+      assistance\n4. Exclusively use the commands listed in double quotes e.g. \"command
+      name\"\n\nCommands:\n1. append_to_file: Append to file, args: \"filename\":
+      \"<filename>\", \"text\": \"<text>\"\n2. delete_file: Delete file, args: \"filename\":
+      \"<filename>\"\n3. list_files: List Files in Directory, args: \"directory\":
+      \"<directory>\"\n4. read_file: Read file, args: \"filename\": \"<filename>\"\n5.
+      write_to_file: Write to file, args: \"filename\": \"<filename>\", \"text\":
+      \"<text>\"\n6. delete_agent: Delete GPT Agent, args: \"key\": \"<key>\"\n7.
+      get_hyperlinks: Get text summary, args: \"url\": \"<url>\"\n8. get_text_summary:
+      Get text summary, args: \"url\": \"<url>\", \"question\": \"<question>\"\n9.
+      list_agents: List GPT Agents, args: () -> str\n10. message_agent: Message GPT
+      Agent, args: \"key\": \"<key>\", \"message\": \"<message>\"\n11. start_agent:
+      Start GPT Agent, args: \"name\": \"<name>\", \"task\": \"<short_task_desc>\",
+      \"prompt\": \"<prompt>\"\n12. task_complete: Task Complete (Shutdown), args:
+      \"reason\": \"<reason>\"\n\nResources:\n1. Internet access for searches and
+      information gathering.\n2. Long Term memory management.\n3. GPT-3.5 powered
+      Agents for delegation of simple tasks.\n4. File output.\n\nPerformance Evaluation:\n1.
+      Continuously review and analyze your actions to ensure you are performing to
+      the best of your abilities.\n2. Constructively self-criticize your big-picture
+      behavior constantly.\n3. Reflect on past decisions and strategies to refine
+      your approach.\n4. Every command has a cost, so be smart and efficient. Aim
+      to complete tasks in the least number of steps.\n5. Write all code to a file.\n\nYou
+      should only respond in JSON format as described below \nResponse Format: \n{\n    \"thoughts\":
+      {\n        \"text\": \"thought\",\n        \"reasoning\": \"reasoning\",\n        \"plan\":
+      \"- short bulleted\\n- list that conveys\\n- long-term plan\",\n        \"criticism\":
+      \"constructive self-criticism\",\n        \"speak\": \"thoughts summary to say
+      to user\"\n    },\n    \"command\": {\n        \"name\": \"command name\",\n        \"args\":
+      {\n            \"arg name\": \"value\"\n        }\n    }\n} \nEnsure the response
+      can be parsed by Python json.loads"}, {"role": "system", "content": "The current
+      time and date is Tue Jan  1 00:00:00 2000"}, {"role": "user", "content": "Determindfsdfse
+      whifdsfdsch next command to use, and respond using the format specified above:"}],
+      "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3424'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: '{"id":"chatcmpl-7FQmcmCqUDwkVwb0oivOdRkO9qk2T","object":"chat.completion","created":1683912230,"model":"gpt-3.5-turbo-0301","usage":{"prompt_tokens":771,"completion_tokens":224,"total_tokens":995},"choices":[{"message":{"role":"assistant","content":"{\n    \"thoughts\":
+        {\n        \"text\": \"To complete the first goal of writing ''Hello World''
+        into a file named ''hello_world.txt'', I will use the ''write_to_file'' command
+        with the appropriate arguments.\",\n        \"reasoning\": \"The ''write_to_file''
+        command is the most appropriate command for this task as it allows me to write
+        text to a file with a specified filename.\",\n        \"plan\": \"- Use the
+        ''write_to_file'' command with the arguments ''filename'': ''hello_world.txt''
+        and ''text'': ''Hello World''.\",\n        \"criticism\": \"I need to ensure
+        that I have the correct syntax for the ''write_to_file'' command and that
+        I am using the correct arguments.\",\n        \"speak\": \"I will use the
+        ''write_to_file'' command to write ''Hello World'' into a file named ''hello_world.txt''.\"\n    },\n    \"command\":
+        {\n        \"name\": \"write_to_file\",\n        \"args\": {\n            \"filename\":
+        \"hello_world.txt\",\n            \"text\": \"Hello World\"\n        }\n    }\n}"},"finish_reason":"stop","index":0}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Length:
+      - '1268'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 12 May 2023 17:24:09 GMT
+      Function-Execution-Id:
+      - ip0dqo19ss17
+      Server:
+      - Google Frontend
+      X-Cloud-Trace-Context:
+      - c22392cede891f5f32b553911b325da6;o=1
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are write_to_file-GPT, an AI designed to use the write_to_file command to write
+      ''Hello World'' into a file named \"hello_world.txt\" and then use the task_complete
+      command to complete the task.\nYour decisions must always be made independently
+      without seeking user assistance. Play to your strengths as an LLM and pursue
+      simple strategies with no legal complications.\n\nGOALS:\n\n1. Use the write_to_file
+      command to write ''Hello World'' into a file named \"hello_world.txt\".\n2.
+      Use the task_complete command to complete the task.\n3. Do not use andfsfdsy
+      other commands.\n\n\nConstraints:\n1. ~4000 word limit for short term memory.
+      Your short term memory is short, so immediately save important information to
+      files.\n2. If you are unsure how you previously did something or want to recall
+      past events, thinking about similar events will help you remember.\n3. No user
+      assistance\n4. Exclusively use the commands listed in double quotes e.g. \"command
+      name\"\n\nCommands:\n1. append_to_file: Append to file, args: \"filename\":
+      \"<filename>\", \"text\": \"<text>\"\n2. delete_file: Delete file, args: \"filename\":
+      \"<filename>\"\n3. list_files: List Files in Directory, args: \"directory\":
+      \"<directory>\"\n4. read_file: Read file, args: \"filename\": \"<filename>\"\n5.
+      write_to_file: Write to file, args: \"filename\": \"<filename>\", \"text\":
+      \"<text>\"\n6. delete_agent: Delete GPT Agent, args: \"key\": \"<key>\"\n7.
+      get_hyperlinks: Get text summary, args: \"url\": \"<url>\"\n8. get_text_summary:
+      Get text summary, args: \"url\": \"<url>\", \"question\": \"<question>\"\n9.
+      list_agents: List GPT Agents, args: () -> str\n10. message_agent: Message GPT
+      Agent, args: \"key\": \"<key>\", \"message\": \"<message>\"\n11. start_agent:
+      Start GPT Agent, args: \"name\": \"<name>\", \"task\": \"<short_task_desc>\",
+      \"prompt\": \"<prompt>\"\n12. task_complete: Task Complete (Shutdown), args:
+      \"reason\": \"<reason>\"\n\nResources:\n1. Internet access for searches and
+      information gathering.\n2. Long Term memory management.\n3. GPT-3.5 powered
+      Agents for delegation of simple tasks.\n4. File output.\n\nPerformance Evaluation:\n1.
+      Continuously review and analyze your actions to ensure you are performing to
+      the best of your abilities.\n2. Constructively self-criticize your big-picture
+      behavior constantly.\n3. Reflect on past decisions and strategies to refine
+      your approach.\n4. Every command has a cost, so be smart and efficient. Aim
+      to complete tasks in the least number of steps.\n5. Write all code to a file.\n\nYou
+      should only respond in JSON format as described below \nResponse Format: \n{\n    \"thoughts\":
+      {\n        \"text\": \"thought\",\n        \"reasoning\": \"reasoning\",\n        \"plan\":
+      \"- short bulleted\\n- list that conveys\\n- long-term plan\",\n        \"criticism\":
+      \"constructive self-criticism\",\n        \"speak\": \"thoughts summary to say
+      to user\"\n    },\n    \"command\": {\n        \"name\": \"command name\",\n        \"args\":
+      {\n            \"arg name\": \"value\"\n        }\n    }\n} \nEnsure the response
+      can be parsed by Python json.loads"}, {"role": "system", "content": "The current
+      time and date is Tue Jan  1 00:00:00 2000"}, {"role": "system", "content": "This
+      reminds you of these events from your past: \nI was created and nothing new
+      has happened."}, {"role": "user", "content": "Determindfsdfse whifdsfdsch next
+      command to use, and respond using the format specified above:"}, {"role": "assistant",
+      "content": "{\n    \"thoughts\": {\n        \"text\": \"To complete the first
+      goal of writing ''Hello World'' into a file named ''hello_world.txt'', I will
+      use the ''write_to_file'' command with the appropriate arguments.\",\n        \"reasoning\":
+      \"The ''write_to_file'' command is the most appropriate command for this task
+      as it allows me to write text to a file with a specified filename.\",\n        \"plan\":
+      \"- Use the ''write_to_file'' command with the arguments ''filename'': ''hello_world.txt''
+      and ''text'': ''Hello World''.\",\n        \"criticism\": \"I need to ensure
+      that I have the correct syntax for the ''write_to_file'' command and that I
+      am using the correct arguments.\",\n        \"speak\": \"I will use the ''write_to_file''
+      command to write ''Hello World'' into a file named ''hello_world.txt''.\"\n    },\n    \"command\":
+      {\n        \"name\": \"write_to_file\",\n        \"args\": {\n            \"filename\":
+      \"hello_world.txt\",\n            \"text\": \"Hello World\"\n        }\n    }\n}"},
+      {"role": "system", "content": "Command write_to_file returned: File written
+      to successfully."}, {"role": "user", "content": "Determindfsdfse whifdsfdsch
+      next command to use, and respond using the format specified above:"}], "temperature":
+      0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4794'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: '{"id":"chatcmpl-7FQmyoSfi1mevvbx6WVHHHiJedD9V","object":"chat.completion","created":1683912252,"model":"gpt-3.5-turbo-0301","usage":{"prompt_tokens":1070,"completion_tokens":199,"total_tokens":1269},"choices":[{"message":{"role":"assistant","content":"{\n    \"thoughts\":
+        {\n        \"text\": \"Now that I have written ''Hello World'' into a file
+        named ''hello_world.txt'', I will use the ''task_complete'' command to complete
+        the task.\",\n        \"reasoning\": \"The ''task_complete'' command is the
+        most appropriate command for this task as it allows me to signal that the
+        task has been completed and the agent can be shut down.\",\n        \"plan\":
+        \"- Use the ''task_complete'' command with the argument ''reason'': ''Task
+        completed successfully''.\",\n        \"criticism\": \"I need to ensure that
+        I have the correct syntax for the ''task_complete'' command and that I am
+        using the correct argument.\",\n        \"speak\": \"I will use the ''task_complete''
+        command to signal that the task has been completed successfully.\"\n    },\n    \"command\":
+        {\n        \"name\": \"task_complete\",\n        \"args\": {\n            \"reason\":
+        \"Task completed successfully\"\n        }\n    }\n}"},"finish_reason":"stop","index":0}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Length:
+      - '1219'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 12 May 2023 17:24:30 GMT
+      Function-Execution-Id:
+      - ip0djm78lgub
+      Server:
+      - Google Frontend
+      X-Cloud-Trace-Context:
+      - db0dfffadb355b18af6ef11f3e1aae79;o=1
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
 version: 1
