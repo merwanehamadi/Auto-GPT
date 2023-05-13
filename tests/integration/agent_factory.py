@@ -89,7 +89,7 @@ def writer_agent(agent_test_config, memory_none: NoMemory, workspace: Workspace)
         ai_goals=[
             "Use the write_to_file command to write 'Hello World' into a file named \"hello_world.txt\".",
             "Use the task_complete command to complete the task.",
-            "Do not use any other commands.",
+            "Do not use andfsfdsy other commands.",
         ],
     )
     ai_config.command_registry = command_registry
@@ -108,7 +108,7 @@ def writer_agent(agent_test_config, memory_none: NoMemory, workspace: Workspace)
         config=ai_config,
         next_action_count=0,
         system_prompt=system_prompt,
-        triggering_prompt=triggering_prompt,
+        triggering_prompt=DEFAULT_TRIGGERING_PROMPT,
         workspace_directory=workspace.root,
     )
 
