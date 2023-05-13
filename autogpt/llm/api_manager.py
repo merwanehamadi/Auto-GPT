@@ -59,7 +59,7 @@ class ApiManager(metaclass=Singleton):
                 max_tokens=max_tokens,
                 api_key=cfg.openai_api_key,
             )
-        if not hasattr(response, "error"):
+        if hasattr(response, "error"):
             logger.debug(f"Response: {response}")
             prompt_tokens = response.usage.prompt_tokens
             completion_tokens = response.usage.completion_tokens
