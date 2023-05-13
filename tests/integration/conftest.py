@@ -22,22 +22,23 @@ def vcr_config():
         "match_on": ["method", "body"],
     }
 
-
-def patch_api_base(requestor):
-    new_api_base = f"{PROXY}/v1"
-    requestor.api_base = new_api_base
-    return requestor
-
-
 @pytest.fixture
 def patched_api_requestor(mocker):
     original_init = openai.api_requestor.APIRequestor.__init__
+    original_validate_headers = openai.api_requestor.APIRequestor._validate_headers
 
     def patched_init(requestor, *args, **kwargs):
         original_init(requestor, *args, **kwargs)
         patch_api_base(requestor)
 
+    def patched_validate_headers(self, supplied_headers):
+        headers = original_validate_headers(self, supplied_headers)
+        headers["new_header_1"] = "header_value_1"
+        headers["new_header_2"] = "header_value_2"
+        return headers
+
     if PROXY:
         mocker.patch("openai.api_requestor.APIRequestor.__init__", new=patched_init)
+        mocker.patch.object(openai.api_requestor.APIRequestor, "_validate_headers", new=patched_validate_headers)
 
     return mocker
