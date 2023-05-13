@@ -11,7 +11,7 @@ from autogpt.workspace import Workspace
 pytest_plugins = ["tests.integration.agent_factory"]
 
 PROXY = os.environ.get("PROXY")
-PROXY = "http://localhost:8081"
+
 
 @pytest.fixture()
 def workspace_root(tmp_path: Path) -> Path:

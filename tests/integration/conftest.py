@@ -28,6 +28,7 @@ def patch_api_base(requestor):
     requestor.api_base = new_api_base
     return requestor
 
+
 @pytest.fixture
 def patched_api_requestor(mocker):
     original_init = openai.api_requestor.APIRequestor.__init__
@@ -39,12 +40,19 @@ def patched_api_requestor(mocker):
 
     def patched_validate_headers(self, supplied_headers):
         headers = original_validate_headers(self, supplied_headers)
-        headers["AGENT-MODE"] = os.environ.get("AGENT_MODE", "AAAAAAAAAAAAAAAAAAAAAMLheAAaAAAA0%2BuSeid%2BULvsea4JtiGRiSDSJSI%3DEUifiRBkKG5E2XzMDjRfl76ZC9Ub0wnz4XsNiRVBChTYbJcE3F")
+        headers["AGENT-MODE"] = os.environ.get(
+            "AGENT_MODE",
+            "AAAAAAAAAAAAAAAAAAAAAMLheAAaAAAA0%2BuSeid%2BULvsea4JtiGRiSDSJSI%3DEUifiRBkKG5E2XzMDjRfl76ZC9Ub0wnz4XsNiRVBChTYbJcE3F",
+        )
         headers["AGENT-TYPE"] = os.environ.get("AGENT_TYPE", "Auto-GPT-2023-X-TYPE")
         return headers
 
     if PROXY:
         mocker.patch("openai.api_requestor.APIRequestor.__init__", new=patched_init)
-        mocker.patch.object(openai.api_requestor.APIRequestor, "_validate_headers", new=patched_validate_headers)
+        mocker.patch.object(
+            openai.api_requestor.APIRequestor,
+            "_validate_headers",
+            new=patched_validate_headers,
+        )
 
     return mocker

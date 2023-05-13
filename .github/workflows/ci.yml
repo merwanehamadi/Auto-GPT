@@ -80,7 +80,7 @@ jobs:
           python -m pytest -s tests/integration/goal_oriented/test_write_file.py
         env:
           CI: true
-          PROXY: {{ vars.AGENT_MODE }}
+          PROXY: {{ secrets.PROXY }}
           AGENT_MODE: {{ secrets.AGENT_MODE }}
           AGENT_TYPE: {{ secrets.AGENT_TYPE }}
 
