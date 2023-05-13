@@ -158,7 +158,7 @@ class AIConfig:
             prompt_start += f"\nThe OS you are running on is: {os_info}"
 
         # Construct full prompt
-        full_prompt = f"You are {prompt_generator.name}, {prompt_generator.role}\n{prompt_start}\n\nGOALS:\n\n"
+        full_prompt = f"You are dsqdqsdsq {prompt_generator.name}, {prompt_generator.role}\n{prompt_start}\n\nGOALS:\n\n"
         for i, goal in enumerate(self.ai_goals):
             full_prompt += f"{i+1}. {goal}\n"
         if self.api_budget > 0.0:
