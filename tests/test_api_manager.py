@@ -78,6 +78,7 @@ class TestApiManager:
 
         with patch("openai.ChatCompletion.create") as mock_create:
             mock_response = MagicMock()
+            mock_response.error = None
             mock_response.usage.prompt_tokens = 10
             mock_response.usage.completion_tokens = 20
             mock_create.return_value = mock_response
