@@ -3,15 +3,32 @@ import pytest
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file, write_to_file
 from tests.integration.agent_utils import run_interaction_loop
-from tests.integration.challenges.utils import get_level_to_run
+from tests.integration.challenges.utils import get_level_to_run, record_test_result
 from tests.utils import requires_api_key
 
 LEVEL_CURRENTLY_BEATEN = 3  # real level beaten 30 and maybe more, but we can't record it, the cassette is too big
-MAX_LEVEL = 3
+MAX_LEVEL = 7
+
+from functools import wraps
+
+def run_until_failure(func):
+    @wraps(func)
+    def wrapper(memory_management_agent, user_selected_level, patched_api_requestor):
+        # Set a default value for user_selected_level if it's None
+        user_selected_level = user_selected_level if user_selected_level is not None else 1
+        for level in range(user_selected_level, MAX_LEVEL + 1):
+            try:
+                func(memory_management_agent, level, patched_api_requestor)
+            except AssertionError as e:
+                print(f"Test failed at level {level}")
+                break
+    return wrapper
 
 
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
+@record_test_result
+@run_until_failure  # Add this decorator
 def test_memory_challenge_a(
     memory_management_agent: Agent, user_selected_level: int, patched_api_requestor
 ) -> None:

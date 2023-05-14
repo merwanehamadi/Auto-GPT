@@ -6,7 +6,7 @@ import yaml
 
 from autogpt.commands.file_operations import read_file
 from tests.integration.agent_utils import run_interaction_loop
-from tests.integration.challenges.utils import run_multiple_times
+from tests.integration.challenges.utils import run_multiple_times, record_test_result
 from tests.utils import requires_api_key
 
 
@@ -24,7 +24,8 @@ def input_generator(input_sequence: list) -> Generator[str, None, None]:
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
 @run_multiple_times(3)
-def test_information_retrieval_challenge_a(kubernetes_agent, monkeypatch) -> None:
+@record_test_result
+def test_kubernetes_template_challenge_a(kubernetes_agent, monkeypatch) -> None:
     """
     Test the challenge_a function in a given agent by mocking user inputs
     and checking the output file content.

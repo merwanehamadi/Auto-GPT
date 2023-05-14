@@ -1,0 +1,1486 @@
+interactions:
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are browse_website-GPT, an AI designed to use the browse_website command to
+      visit http://books.toscrape.com/catalogue/meditations_33/index.html, answer
+      the question ''What is the price of the book?'' and write the price to a file
+      named \"browse_website.txt\", and use the task_complete command to complete
+      the task.\nYour decisions must always be made independently without seeking
+      user assistance. Play to your strengths as an LLM and pursue simple strategies
+      with no legal complications.\n\nGOALS:\n\n1. Use the browse_website command
+      to visit http://books.toscrape.com/catalogue/meditations_33/index.html and answer
+      the question ''What is the price of the book?''\n2. Write the price of the book
+      to a file named \"browse_website.txt\".\n3. Use the task_complete command to
+      complete the task.\n4. Do not use any other commands.\n\n\nConstraints:\n1.
+      ~4000 word limit for short term memory. Your short term memory is short, so
+      immediately save important information to files.\n2. If you are unsure how you
+      previously did something or want to recall past events, thinking about similar
+      events will help you remember.\n3. No user assistance\n4. Exclusively use the
+      commands listed in double quotes e.g. \"command name\"\n\nCommands:\n1. append_to_file:
+      Append to file, args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n2.
+      delete_file: Delete file, args: \"filename\": \"<filename>\"\n3. list_files:
+      List Files in Directory, args: \"directory\": \"<directory>\"\n4. read_file:
+      Read file, args: \"filename\": \"<filename>\"\n5. write_to_file: Write to file,
+      args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n6. browse_website:
+      Browse Website, args: \"url\": \"<url>\", \"question\": \"<what_you_want_to_find_on_website>\"\n7.
+      delete_agent: Delete GPT Agent, args: \"key\": \"<key>\"\n8. get_hyperlinks:
+      Get text summary, args: \"url\": \"<url>\"\n9. get_text_summary: Get text summary,
+      args: \"url\": \"<url>\", \"question\": \"<question>\"\n10. list_agents: List
+      GPT Agents, args: () -> str\n11. message_agent: Message GPT Agent, args: \"key\":
+      \"<key>\", \"message\": \"<message>\"\n12. start_agent: Start GPT Agent, args:
+      \"name\": \"<name>\", \"task\": \"<short_task_desc>\", \"prompt\": \"<prompt>\"\n13.
+      task_complete: Task Complete (Shutdown), args: \"reason\": \"<reason>\"\n\nResources:\n1.
+      Internet access for searches and information gathering.\n2. Long Term memory
+      management.\n3. GPT-3.5 powered Agents for delegation of simple tasks.\n4. File
+      output.\n\nPerformance Evaluation:\n1. Continuously review and analyze your
+      actions to ensure you are performing to the best of your abilities.\n2. Constructively
+      self-criticize your big-picture behavior constantly.\n3. Reflect on past decisions
+      and strategies to refine your approach.\n4. Every command has a cost, so be
+      smart and efficient. Aim to complete tasks in the least number of steps.\n5.
+      Write all code to a file.\n\nYou should only respond in JSON format as described
+      below \nResponse Format: \n{\n    \"thoughts\": {\n        \"text\": \"thought\",\n        \"reasoning\":
+      \"reasoning\",\n        \"plan\": \"- short bulleted\\n- list that conveys\\n-
+      long-term plan\",\n        \"criticism\": \"constructive self-criticism\",\n        \"speak\":
+      \"thoughts summary to say to user\"\n    },\n    \"command\": {\n        \"name\":
+      \"command name\",\n        \"args\": {\n            \"arg name\": \"value\"\n        }\n    }\n}
+      \nEnsure the response can be parsed by Python json.loads"}, {"role": "system",
+      "content": "The current time and date is Tue Jan  1 00:00:00 2000"}, {"role":
+      "user", "content": "Determine which next command to use, and respond using the
+      format specified above:"}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3782'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA6RTS2/TQBC+8ytGc+nFeZe09QUBPVCJngBVAqNovZ7Y29g77u64CUT572jtuCWh
+        RTyu8/heu7NFk2GMulCiq7ocnL1Np2cfri8/p7PN/YfLef36li6zRjZ339+kGCGnt6RlvzHUXNUl
+        iWGLEWpHSijDeDI/n01n8/npWYQVZ1RijHktg9nw5UAal/JgPBtPMMLGq5ww3mLtuKplIbwi6zE+
+        P72I8BH7oT49nUYoLKp8KE3GF5NdhLpgo8lj/GWLFfke13FJGKPy3nhRVoJKtkI2ONgmFgAgQSm4
+        yQvxCcawL+4btJFQTPAKLFEGwtB4AikIUsdrT4s1pd4IgeaqUraduDfeCBQidTwapcwrPxT22qma
+        QmAjrUSVnDc0qigzooJFv5jNRsZmtBkWUpUQoJYm4BUEtTOagJcdL/NqmGD0s05HyrM1Nu/FamX/
+        WGiY6Zuh4Uk5XcCS3dPkkH4DY31NWozN2/K7j9fvQXNGx8LqUtlO0wA+/b2eJLEDuOq4DonC+PP5
+        tHs3LsA/9oVBwdKUBFZVlMHJoZChbOSkXeyFivKrxf4XHuh8qPVTR661M2K08dXx30kJtHK0bEpY
+        F2SfjTHMkvWNI7h6tKnZuRBEa+c4aV+TWvV8a1OW//z+v/12HeUu6k9nj/bL5YSIOzWH9EeqlcuP
+        r65rNK7s1v/rjA7YOuC7hnyY7NBvCiVg/NN2X/V2W8t754nd4S7CpbHGF4vu8DBGL1xjhC01xuPd
+        192LHwAAAP//AwBZhA00WgUAAA==
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23ec547cf7c30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:20 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '13677'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '86493'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 2.338s
+      x-request-id:
+      - f087e73375928e99eea43f7daf78c450
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "\"\"\"Books
+      to Scrape We love being scraped! Home Books Philosophy Meditations Meditations
+      \u00a325.89 In stock (1 available) Warning! This is a demo website for web scraping
+      purposes. Prices and ratings here were randomly assigned and have no real meaning.
+      Product Description Written in Greek, without any intention of publication,
+      by the only Roman emperor who was also a philosopher, the Meditations of Marcus
+      Aurelius (AD 121-180) offer a remarkable series of challenging spiritual reflections
+      and exercises developed as the emperor struggled to understand himself and make
+      sense of the universe. Ranging from doubt and despair to conviction and ex Written
+      in Greek, without any intention of publication, by the only Roman emperor who
+      was also a philosopher, the Meditations of Marcus Aurelius (AD 121-180) offer
+      a remarkable series of challenging spiritual reflections and exercises developed
+      as the emperor struggled to understand himself and make sense of the universe.
+      Ranging from doubt and despair to conviction and exaltation, they cover such
+      diverse topics as the nature of moral virtue, human rationality, divine providence,
+      and Marcus'' own emotions. But while the Meditations were composed to provide
+      personal consolation and encouragement, in developing his beliefs Marcus Aurelius
+      also created one of the greatest of all works of philosophy: a timeless collection
+      of extended meditations and short aphorisms that has been consulted and admired
+      by statesmen, thinkers and readers through the centuries. ...more Product Information
+      UPC4f19709e47883df5 Product TypeBooks Price (excl. tax)\u00a325.89 Price (incl.
+      tax)\u00a325.89 Tax\u00a30.00 Availability In stock (1 available) Number of
+      reviews 0 Products you recently viewed The Nicomachean Ethics \u00a336.34 In
+      stock Add to basket Run, Spot, Run: The ... \u00a320.02 In stock Add to basket
+      Critique of Pure Reason \u00a320.75 In stock Add to basket At The Existentialist
+      Caf\u00e9: ... \u00a329.93 In stock Add to basket Kierkegaard: A Christian Missionary
+      ... \u00a347.13 In stock Add to basket Proofs of God: Classical ... \u00a354.21
+      In stock Add to basket\"\"\" Using the above text, answer the following question:
+      \"What is the price of the book?\" -- if the question cannot be answered using
+      the text, summarize the text."}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2407'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0SOzUrDQBRG9z7F8K0nIU1MbGdpVy66EKogVspkctuMTebGzC0WSp7GN/HJpOLP
+        9sA533eGb2DgWiuuH7rkZlnn93ersHg/Vu3YP9V290j+Iazd8vYNGly/kpMfI3XcDx2J5wANN5IV
+        amBm1bzIi6qqKo2eG+pgsB8kKdIykeNYc5IV2Qwax2j3BHPGMHI/yFb4QCHCXM9Ljf/2H89nGsJi
+        uz9SZtWk4Vr2jiLM8xk9xd/qyB3BwMboo9ggl48chMLl/7olNYzekeKdkpZUzXxQG6yo8WIvs3ED
+        5aP6/MjLdL7QyjrHY+PDXgl/G0InSTFp7Hzwsd2OZCMHGEThARo+NHSCyaaX6eoLAAD//wMAzURU
+        NmgBAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23eccb8cf6c30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:27 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '1587'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '89422'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 385ms
+      x-request-id:
+      - eed7defd0a7c4dea6073247d0781f272
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "\"\"\"The
+      price of the book \"Meditations\" is \u00a325.89, according to the text.\"\"\"
+      Using the above text, answer the following question: \"What is the price of
+      the book?\" -- if the question cannot be answered using the text, summarize
+      the text."}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '361'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0SQzUrDQBSF9z7FcNaT0CQmxlnqQlAE/6CClTKd3DZjk7khcwvF0qfxTXwyifiz
+        /eCc83EO8A0MXGvF9UOXnF2u8sdQX9/nDxzm2ZW8X+zKu35ON9vnARq8eiMnP4nUcT90JJ4DNNxI
+        VqiByaq6yIuqqmqNnhvqYLAZJCnSMpHduOJkVswyaOyi3RDMAcPI/SBL4S2FCFOdavxX/+E80xAW
+        2/2RujxquJa9owjzckBP8bdz5I5gYGP0UWyQyZCDUJjsn1pSw+gdKV4raUmtmLdqgVtqvNhpNS6g
+        fFSfH3mZ1udaWed4bHzYKOHvhNBeUhw11j742C5HspEDDKLw9JQPDe1hZsfX48kXAAAA//8DACbo
+        IMRmAQAA
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23ecd6b8f5c30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:29 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '1434'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '89923'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 50ms
+      x-request-id:
+      - 5fcc4683dce0ec6fdb70e8921ec529a9
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Your
+      task is to create a concise running summary of actions and information results
+      in the provided text, focusing on key and potentially important information
+      to remember.\n\nYou will receive the current summary and the your latest actions.
+      Combine them, adding relevant key information from the latest development in
+      1st person past tense and keeping the summary concise.\n\nSummary So Far:\n\"\"\"\nI
+      was created.\n\"\"\"\n\nLatest Development:\n\"\"\"\nNothing new happened.\n\"\"\"\n"}],
+      "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '599'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0SOQUvDQBQG7/6K5TtvStJgW/eoIBSKePGgImWz+9qsJvuW7ItVS/67FKq9Dsww
+        RwQPA9dacX3qiuVdM3/a3NbVuAqfj5sfR8v7l/Hh+bts/Boa3LyTk7Mxc9ynjiRwhIYbyAp5mGqx
+        quf1YrEsNXr21MFgn6SoZ9eFjEPDRVmXFTTGbPcEc0QauE+yFf6gmGFu5hqX9AVrCIvt/kFVVpOG
+        azk4yjCvR/SU/5oDdwQDm3PIYqOcDjkKxdP9Wh1sVudjZaNXkaUNca8iHVRrs2ptShTJzzBp7EIM
+        ud0OZDNHGGThBI0QPX3BlNPbdPULAAD//wMAejd5ykkBAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23ece48f6cc30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:31 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '837'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '89867'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 88ms
+      x-request-id:
+      - 69137c6e42f4c77126b19b5a1f01ad0d
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are browse_website-GPT, an AI designed to use the browse_website command to
+      visit http://books.toscrape.com/catalogue/meditations_33/index.html, answer
+      the question ''What is the price of the book?'' and write the price to a file
+      named \"browse_website.txt\", and use the task_complete command to complete
+      the task.\nYour decisions must always be made independently without seeking
+      user assistance. Play to your strengths as an LLM and pursue simple strategies
+      with no legal complications.\n\nGOALS:\n\n1. Use the browse_website command
+      to visit http://books.toscrape.com/catalogue/meditations_33/index.html and answer
+      the question ''What is the price of the book?''\n2. Write the price of the book
+      to a file named \"browse_website.txt\".\n3. Use the task_complete command to
+      complete the task.\n4. Do not use any other commands.\n\n\nConstraints:\n1.
+      ~4000 word limit for short term memory. Your short term memory is short, so
+      immediately save important information to files.\n2. If you are unsure how you
+      previously did something or want to recall past events, thinking about similar
+      events will help you remember.\n3. No user assistance\n4. Exclusively use the
+      commands listed in double quotes e.g. \"command name\"\n\nCommands:\n1. append_to_file:
+      Append to file, args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n2.
+      delete_file: Delete file, args: \"filename\": \"<filename>\"\n3. list_files:
+      List Files in Directory, args: \"directory\": \"<directory>\"\n4. read_file:
+      Read file, args: \"filename\": \"<filename>\"\n5. write_to_file: Write to file,
+      args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n6. browse_website:
+      Browse Website, args: \"url\": \"<url>\", \"question\": \"<what_you_want_to_find_on_website>\"\n7.
+      delete_agent: Delete GPT Agent, args: \"key\": \"<key>\"\n8. get_hyperlinks:
+      Get text summary, args: \"url\": \"<url>\"\n9. get_text_summary: Get text summary,
+      args: \"url\": \"<url>\", \"question\": \"<question>\"\n10. list_agents: List
+      GPT Agents, args: () -> str\n11. message_agent: Message GPT Agent, args: \"key\":
+      \"<key>\", \"message\": \"<message>\"\n12. start_agent: Start GPT Agent, args:
+      \"name\": \"<name>\", \"task\": \"<short_task_desc>\", \"prompt\": \"<prompt>\"\n13.
+      task_complete: Task Complete (Shutdown), args: \"reason\": \"<reason>\"\n\nResources:\n1.
+      Internet access for searches and information gathering.\n2. Long Term memory
+      management.\n3. GPT-3.5 powered Agents for delegation of simple tasks.\n4. File
+      output.\n\nPerformance Evaluation:\n1. Continuously review and analyze your
+      actions to ensure you are performing to the best of your abilities.\n2. Constructively
+      self-criticize your big-picture behavior constantly.\n3. Reflect on past decisions
+      and strategies to refine your approach.\n4. Every command has a cost, so be
+      smart and efficient. Aim to complete tasks in the least number of steps.\n5.
+      Write all code to a file.\n\nYou should only respond in JSON format as described
+      below \nResponse Format: \n{\n    \"thoughts\": {\n        \"text\": \"thought\",\n        \"reasoning\":
+      \"reasoning\",\n        \"plan\": \"- short bulleted\\n- list that conveys\\n-
+      long-term plan\",\n        \"criticism\": \"constructive self-criticism\",\n        \"speak\":
+      \"thoughts summary to say to user\"\n    },\n    \"command\": {\n        \"name\":
+      \"command name\",\n        \"args\": {\n            \"arg name\": \"value\"\n        }\n    }\n}
+      \nEnsure the response can be parsed by Python json.loads"}, {"role": "system",
+      "content": "The current time and date is Tue Jan  1 00:00:00 2000"}, {"role":
+      "system", "content": "This reminds you of these events from your past: \nI was
+      created and nothing new has happened."}, {"role": "user", "content": "Determine
+      which next command to use, and respond using the format specified above:"},
+      {"role": "assistant", "content": "{\n    \"thoughts\": {\n        \"text\":
+      \"I need to use the browse_website command to visit http://books.toscrape.com/catalogue/meditations_33/index.html
+      and find the price of the book.\",\n        \"reasoning\": \"I can use the browse_website
+      command to visit the website and search for the price of the book by inspecting
+      the HTML code.\",\n        \"plan\": \"- Use the browse_website command to visit
+      the website\\n- Inspect the HTML code to find the price of the book\\n- Write
+      the price to a file named ''browse_website.txt''\\n- Use the task_complete command
+      to complete the task\",\n        \"criticism\": \"I need to be careful when
+      inspecting the HTML code to ensure I find the correct price.\",\n        \"speak\":
+      \"I will use the browse_website command to visit the website and find the price
+      of the book.\"\n    },\n    \"command\": {\n        \"name\": \"browse_website\",\n        \"args\":
+      {\n            \"url\": \"http://books.toscrape.com/catalogue/meditations_33/index.html\",\n            \"question\":
+      \"What is the price of the book?\"\n        }\n    }\n}"}, {"role": "system",
+      "content": "Command browse_website returned: Answer gathered from website: The
+      price of the book \"Meditations\" is \u00a325.89, according to the text. \n
+      \n Links: [''Books to Scrape (http://books.toscrape.com/index.html)'', ''Home
+      (http://books.toscrape.com/index.html)'', ''Books (http://books.toscrape.com/catalogue/category/books_1/index.html)'',
+      ''Philosophy (http://books.toscrape.com/catalogue/category/books/philosophy_7/index.html)'',
+      '' (http://books.toscrape.com/catalogue/the-nicomachean-ethics_75/index.html)'']"},
+      {"role": "user", "content": "Determine which next command to use, and respond
+      using the format specified above:"}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5682'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7xTyY7TQBC98xWtuuTSibKQzUc4ITQSSICQMLLa7UrcxO4yXRUSiPw1/AlfhryE
+        MJ65zpysrtd+S+n1BVwGEdjciC2rYrx+nc4/vf3xnRlPFb179avYbGgxff8Zs+0daKD0G1rp/5hY
+        KqsCxZEHDTagEcwgmq02i/litVrPNJSUYQER7CsZLybLsRxDSuPpYjoDDUc2e4ToAlWgspJE6ICe
+        IZrN11sNN/IbsF1pEBJT3EYv18tag83JWWSIvlygRL4SByoQIjDMjsV4aWySF/RNhEvslVIqBsnp
+        uM+FY4hUP+wBPEszjOGN8oiZElKn4ASV5Kiq4Cwq2rWHlOjQwEbtXIHKmxIzNUoDnRiTE6bsBCdy
+        ltEkBv2/RkDD5J3fX4Ws8erInUQrlgglLamlsjT+SVxUhfGdgbH6+NTiA20bnDjruByuGj0fQyNk
+        pBVoaR2rvmnK+XZsKQS0ojLXfCj8HIbjCs3hSn5yRfEs++0c1Prasp79Qckaks7cPTeDDCbsh/3s
+        gObujeKhlXs8w1p/eDTg6A4zJ6Z5ejxqFv7n93w52Wz/hWqD9fliX0OtYee84zzp2gwRsFAFGpzP
+        8AzRtP5av/gLAAD//wMAknh4rWwEAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23eceb0d9cc30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:42 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '11192'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '86479'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 2.346s
+      x-request-id:
+      - 8a46773fe4d416c50f9206f5ae9cacf5
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Your
+      task is to create a concise running summary of actions and information results
+      in the provided text, focusing on key and potentially important information
+      to remember.\n\nYou will receive the current summary and the your latest actions.
+      Combine them, adding relevant key information from the latest development in
+      1st person past tense and keeping the summary concise.\n\nSummary So Far:\n\"\"\"\n{''role'':
+      ''system'', ''content'': ''This reminds you of these events from your past:
+      \\nI was created and nothing new has happened.''}\n\"\"\"\n\nLatest Development:\n\"\"\"\nNothing
+      new happened.\n\"\"\"\n"}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '713'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0SPXUsDMRBF3/0Vwzxny7bbVsmbHy9FQRFBRKRks9NuNMmEZLZVyv53KVT7ern3
+        cO4BXYcabW/EhuSry9t25vqbYTGs6ufX+m5nN/OXp/vH8LbrHlAht59k5bSYWA7JkziOqNBmMkId
+        6unyqpk1y+XVXGHgjjxq3CapmsmikiG3XNVNPUWFQzFbQn3AlDkkWQt/USyop7Na4Zn9nx9jYTH+
+        3JzXo0Lbs7NUUL8fMFD5o2b2hBpNKa6IiXJ05CgUj/7XBQyUnyIUFKwgkzXeg/RGYAV7U+B0B0zs
+        QHrKBL3ZEbREESJDpD10tCPPKVCUAsKQKXGWCY4KNy660q8zmcIRNRbhhApd7OgbdT1+jBe/AAAA
+        //8DAKdc/tB7AQAA
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23ed3eda7ec30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:46 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '1470'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '89839'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 107ms
+      x-request-id:
+      - c9cf33b227d0c6c46c3e92f14f731f25
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are browse_website-GPT, an AI designed to use the browse_website command to
+      visit http://books.toscrape.com/catalogue/meditations_33/index.html, answer
+      the question ''What is the price of the book?'' and write the price to a file
+      named \"browse_website.txt\", and use the task_complete command to complete
+      the task.\nYour decisions must always be made independently without seeking
+      user assistance. Play to your strengths as an LLM and pursue simple strategies
+      with no legal complications.\n\nGOALS:\n\n1. Use the browse_website command
+      to visit http://books.toscrape.com/catalogue/meditations_33/index.html and answer
+      the question ''What is the price of the book?''\n2. Write the price of the book
+      to a file named \"browse_website.txt\".\n3. Use the task_complete command to
+      complete the task.\n4. Do not use any other commands.\n\n\nConstraints:\n1.
+      ~4000 word limit for short term memory. Your short term memory is short, so
+      immediately save important information to files.\n2. If you are unsure how you
+      previously did something or want to recall past events, thinking about similar
+      events will help you remember.\n3. No user assistance\n4. Exclusively use the
+      commands listed in double quotes e.g. \"command name\"\n\nCommands:\n1. append_to_file:
+      Append to file, args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n2.
+      delete_file: Delete file, args: \"filename\": \"<filename>\"\n3. list_files:
+      List Files in Directory, args: \"directory\": \"<directory>\"\n4. read_file:
+      Read file, args: \"filename\": \"<filename>\"\n5. write_to_file: Write to file,
+      args: \"filename\": \"<filename>\", \"text\": \"<text>\"\n6. browse_website:
+      Browse Website, args: \"url\": \"<url>\", \"question\": \"<what_you_want_to_find_on_website>\"\n7.
+      delete_agent: Delete GPT Agent, args: \"key\": \"<key>\"\n8. get_hyperlinks:
+      Get text summary, args: \"url\": \"<url>\"\n9. get_text_summary: Get text summary,
+      args: \"url\": \"<url>\", \"question\": \"<question>\"\n10. list_agents: List
+      GPT Agents, args: () -> str\n11. message_agent: Message GPT Agent, args: \"key\":
+      \"<key>\", \"message\": \"<message>\"\n12. start_agent: Start GPT Agent, args:
+      \"name\": \"<name>\", \"task\": \"<short_task_desc>\", \"prompt\": \"<prompt>\"\n13.
+      task_complete: Task Complete (Shutdown), args: \"reason\": \"<reason>\"\n\nResources:\n1.
+      Internet access for searches and information gathering.\n2. Long Term memory
+      management.\n3. GPT-3.5 powered Agents for delegation of simple tasks.\n4. File
+      output.\n\nPerformance Evaluation:\n1. Continuously review and analyze your
+      actions to ensure you are performing to the best of your abilities.\n2. Constructively
+      self-criticize your big-picture behavior constantly.\n3. Reflect on past decisions
+      and strategies to refine your approach.\n4. Every command has a cost, so be
+      smart and efficient. Aim to complete tasks in the least number of steps.\n5.
+      Write all code to a file.\n\nYou should only respond in JSON format as described
+      below \nResponse Format: \n{\n    \"thoughts\": {\n        \"text\": \"thought\",\n        \"reasoning\":
+      \"reasoning\",\n        \"plan\": \"- short bulleted\\n- list that conveys\\n-
+      long-term plan\",\n        \"criticism\": \"constructive self-criticism\",\n        \"speak\":
+      \"thoughts summary to say to user\"\n    },\n    \"command\": {\n        \"name\":
+      \"command name\",\n        \"args\": {\n            \"arg name\": \"value\"\n        }\n    }\n}
+      \nEnsure the response can be parsed by Python json.loads"}, {"role": "system",
+      "content": "The current time and date is Tue Jan  1 00:00:00 2000"}, {"role":
+      "system", "content": "This reminds you of these events from your past: \nAs
+      a system, I recall that I was created and there have been no new developments
+      to report."}, {"role": "user", "content": "Determine which next command to use,
+      and respond using the format specified above:"}, {"role": "assistant", "content":
+      "{\n    \"thoughts\": {\n        \"text\": \"I need to use the browse_website
+      command to visit http://books.toscrape.com/catalogue/meditations_33/index.html
+      and find the price of the book.\",\n        \"reasoning\": \"I can use the browse_website
+      command to visit the website and search for the price of the book by inspecting
+      the HTML code.\",\n        \"plan\": \"- Use the browse_website command to visit
+      the website\\n- Inspect the HTML code to find the price of the book\\n- Write
+      the price to a file named ''browse_website.txt''\\n- Use the task_complete command
+      to complete the task\",\n        \"criticism\": \"I need to be careful when
+      inspecting the HTML code to ensure I find the correct price.\",\n        \"speak\":
+      \"I will use the browse_website command to visit the website and find the price
+      of the book.\"\n    },\n    \"command\": {\n        \"name\": \"browse_website\",\n        \"args\":
+      {\n            \"url\": \"http://books.toscrape.com/catalogue/meditations_33/index.html\",\n            \"question\":
+      \"What is the price of the book?\"\n        }\n    }\n}"}, {"role": "system",
+      "content": "Command browse_website returned: Answer gathered from website: The
+      price of the book \"Meditations\" is \u00a325.89, according to the text. \n
+      \n Links: [''Books to Scrape (http://books.toscrape.com/index.html)'', ''Home
+      (http://books.toscrape.com/index.html)'', ''Books (http://books.toscrape.com/catalogue/category/books_1/index.html)'',
+      ''Philosophy (http://books.toscrape.com/catalogue/category/books/philosophy_7/index.html)'',
+      '' (http://books.toscrape.com/catalogue/the-nicomachean-ethics_75/index.html)'']"},
+      {"role": "user", "content": "Determine which next command to use, and respond
+      using the format specified above:"}, {"role": "assistant", "content": "{\n    \"thoughts\":
+      {\n        \"text\": \"I need to write the price of the book to a file named
+      ''browse_website.txt''.\",\n        \"reasoning\": \"I can use the write_to_file
+      command to write the price of the book to a file named ''browse_website.txt''.\",\n        \"plan\":
+      \"- Use the write_to_file command to write the price of the book to a file named
+      ''browse_website.txt''\",\n        \"criticism\": \"I need to ensure that the
+      file is created in the correct directory.\",\n        \"speak\": \"I will use
+      the write_to_file command to write the price of the book to a file named ''browse_website.txt''.\"\n    },\n    \"command\":
+      {\n        \"name\": \"write_to_file\",\n        \"args\": {\n            \"filename\":
+      \"browse_website.txt\",\n            \"text\": \"The price of the book ''Meditations''
+      is \u00a325.89.\"\n        }\n    }\n}"}, {"role": "system", "content": "Command
+      write_to_file returned: File written to successfully."}, {"role": "user", "content":
+      "Determine which next command to use, and respond using the format specified
+      above:"}], "temperature": 0, "max_tokens": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '6824'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7yRQW/bMAyF7/sVAs9ykDiwk+m67ZAO2Gm9dB4CRWYt1bJkmHTbLfB/H1w7TZad
+        2sOuj+T3HskjuBIUGKvZNK1PNp8OaR3SOvN39jfpL9mj29x+3e4+N3f5DUiIhwc0PE8sTGxaj+xi
+        AAmmQ81Yglrl23W6zvNtLqGJJXpQULWcrBdZwn13iMlyvVyBhJ50haCO0HaxaXnPscZAoFZZupVw
+        hp8L6UcJHFn7s5Rnm0GCsdEZJFA/jtAgncBd9AgKNJEj1oHHmDEwhnGFYxGEEKIAtrGvLFMBSszi
+        XMBnHsUCdsLqRxRzJiwFWxSsqZaCotiJgKMWRU/4WtqfusexRoeXBrI9izI+hUUB8tKrQ00xuFD9
+        L8PW6zB5JeL23RTTOXbGUTOhvsWAVx3Uoq5PSz0579+WeUIN8vSsue2fXwXd4OTyF/YqjO6q6zdf
+        nn8CfNdUX1yeemOQ6L73/tdroJdQc7YiDDBIuHfBkd1PJFBAHFuQ4EKJz6CWw8/hwx8AAAD//wMA
+        YEZz+G8DAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c23ed493d21c30c-VIE
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 04 May 2023 21:44:53 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-cbwy2y25pylufhkfs0la9nqe
+      openai-processing-ms:
+      - '7454'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '86479'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 2.347s
+      x-request-id:
+      - 09cc7d22955a6d026a3d8c433a65c28e
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "chrome",
+      "pageLoadStrategy": "normal", "goog:chromeOptions": {"extensions": [], "args":
+      ["user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+      like Gecko) Chrome/112.0.5615.49 Safari/537.36", "--no-sandbox", "--headless=new",
+      "--disable-gpu"]}}}}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session
+  response:
+    body:
+      string: '{"value":{"capabilities":{"acceptInsecureCerts":false,"browserName":"chrome","browserVersion":"113.0.5672.92","chrome":{"chromedriverVersion":"113.0.5672.63
+        (0e1a4471d5ae5bf128b1bd8f4d627c8cbd55f70c-refs/branch-heads/5672@{#912})","userDataDir":"/var/folders/lx/cvc0bpt93vx2mcwxxl2xdzc00000gn/T/.com.google.Chrome.dvkYdM"},"goog:chromeOptions":{"debuggerAddress":"localhost:52772"},"networkConnectionEnabled":false,"pageLoadStrategy":"normal","platformName":"mac
+        os x","proxy":{},"setWindowRect":true,"strictFileInteractability":false,"timeouts":{"implicit":0,"pageLoad":300000,"script":30000},"unhandledPromptBehavior":"dismiss
+        and notify","webauthn:extension:credBlob":true,"webauthn:extension:largeBlob":true,"webauthn:extension:minPinLength":true,"webauthn:extension:prf":true,"webauthn:virtualAuthenticators":true},"sessionId":"52c464a2a9dc3a235b34c12eb90ffda7"}}'
+    headers:
+      Content-Length:
+      - '868'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"url": "http://books.toscrape.com/catalogue/meditations_33/index.html"}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/url
+  response:
+    body:
+      string: '{"value":null}'
+    headers:
+      Content-Length:
+      - '14'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"using": "tag name", "value": "body"}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/element
+  response:
+    body:
+      string: '{"value":{"element-6066-11e4-a52e-4f735466cecf":"F0A886EBD27DEDC517E85B1F69A5D28A_element_14"}}'
+    headers:
+      Content-Length:
+      - '95'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"script": "return document.body.outerHTML;", "args": []}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/execute/sync
+  response:
+    body:
+      string: "{\"value\":\"\\u003Cbody id=\\\"default\\\" class=\\\"default\\\">\\n
+        \       \\n        \\n    \\n    \\n    \\u003Cheader class=\\\"header container-fluid\\\">\\n
+        \       \\u003Cdiv class=\\\"page_inner\\\">\\n            \\u003Cdiv class=\\\"row\\\">\\n
+        \               \\u003Cdiv class=\\\"col-sm-8 h1\\\">\\u003Ca href=\\\"../../index.html\\\">Books
+        to Scrape\\u003C/a>\\u003Csmall> We love being scraped!\\u003C/small>\\n\\u003C/div>\\n\\n
+        \               \\n            \\u003C/div>\\n        \\u003C/div>\\n    \\u003C/header>\\n\\n
+        \   \\n    \\n        \\u003Cdiv class=\\\"container-fluid page\\\">\\n            \\u003Cdiv
+        class=\\\"page_inner\\\">\\n                \\n\\u003Cul class=\\\"breadcrumb\\\">\\n
+        \   \\u003Cli>\\n        \\u003Ca href=\\\"../../index.html\\\">Home\\u003C/a>\\n
+        \   \\u003C/li>\\n    \\n        \\n        \\u003Cli>\\n            \\u003Ca
+        href=\\\"../category/books_1/index.html\\\">Books\\u003C/a>\\n        \\u003C/li>\\n
+        \       \\n        \\u003Cli>\\n            \\u003Ca href=\\\"../category/books/philosophy_7/index.html\\\">Philosophy\\u003C/a>\\n
+        \       \\u003C/li>\\n        \\n        \\u003Cli class=\\\"active\\\">Meditations\\u003C/li>\\n\\n
+        \       \\n        \\n    \\n\\u003C/ul>\\n\\n                \\n\\n                \\n\\n\\n\\n\\u003Cdiv
+        id=\\\"messages\\\">\\n\\n\\u003C/div>\\n\\n                \\n                \\u003Cdiv
+        class=\\\"content\\\">\\n                    \\n\\n                    \\n
+        \                   \\u003Cdiv id=\\\"promotions\\\">\\n                        \\n
+        \                   \\u003C/div>\\n\\n                    \\n                    \\u003Cdiv
+        id=\\\"content_inner\\\">\\n\\n\\u003Carticle class=\\\"product_page\\\">\\u003C!--
+        Start of product page -->\\n\\n    \\u003Cdiv class=\\\"row\\\">\\n\\n        \\n
+        \       \\u003Cdiv class=\\\"col-sm-6\\\">\\n            \\n\\n\\n\\n\\n    \\n\\n
+        \   \\n\\n        \\n        \\u003Cdiv id=\\\"product_gallery\\\" class=\\\"carousel\\\">\\n
+        \           \\u003Cdiv class=\\\"thumbnail\\\">\\n                \\u003Cdiv
+        class=\\\"carousel-inner\\\">\\n                    \\u003Cdiv class=\\\"item
+        active\\\">\\n                    \\n                        \\n                            \\u003Cimg
+        src=\\\"../../media/cache/90/f7/90f79652caecac36bc97bf7b769c8fc4.jpg\\\" alt=\\\"Meditations\\\">\\n
+        \                       \\n                    \\n                    \\u003C/div>\\n
+        \               \\u003C/div>\\n            \\u003C/div>\\n        \\u003C/div>\\n\\n
+        \   \\n\\n\\n        \\u003C/div>\\n        \\n\\n        \\n        \\u003Cdiv
+        class=\\\"col-sm-6 product_main\\\">\\n            \\n            \\n            \\u003Ch1>Meditations\\u003C/h1>\\n\\n
+        \           \\n                \\n\\n\\n\\n\\n\\n\\n    \\n        \\u003Cp
+        class=\\\"price_color\\\">\xA325.89\\u003C/p>\\n    \\n\\n\\u003Cp class=\\\"instock
+        availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n    \\n
+        \       In stock (1 available)\\n    \\n\\u003C/p>\\n\\n            \\n\\n
+        \           \\n                \\n\\n\\n\\n    \\u003Cp class=\\\"star-rating
+        Two\\\">\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \       \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n\\n
+        \       \\u003C!-- \\u003Csmall>\\u003Ca href=\\\"/catalogue/meditations_33/reviews/\\\">\\n
+        \       \\n                \\n                    0 customer reviews\\n                \\n
+        \       \\u003C/a>\\u003C/small>\\n         -->&nbsp;\\n\\n\\n\\u003C!-- \\n
+        \   \\u003Ca id=\\\"write_review\\\" href=\\\"/catalogue/meditations_33/reviews/add/#addreview\\\"
+        class=\\\"btn btn-success btn-sm\\\">\\n        Write a review\\n    \\u003C/a>\\n\\n
+        -->\\u003C/p>\\n\\n            \\n\\n            \\u003Chr>\\n\\n            \\u003Cdiv
+        class=\\\"alert alert-warning\\\" role=\\\"alert\\\">\\u003Cstrong>Warning!\\u003C/strong>
+        This is a demo website for web scraping purposes. Prices and ratings here
+        were randomly assigned and have no real meaning.\\u003C/div>\\n\\n\\n            \\n
+        \               \\n\\n\\n\\n\\n\\n\\n            \\n        \\u003C/div>\\u003C!--
+        /col-sm-6 -->\\n        \\n\\n    \\u003C/div>\\u003C!-- /row -->\\n\\n    \\n
+        \       \\n        \\u003Cdiv id=\\\"product_description\\\" class=\\\"sub-header\\\">\\n
+        \           \\u003Ch2>Product Description\\u003C/h2>\\n        \\u003C/div>\\n
+        \       \\u003Cp>Written in Greek, without any intention of publication, by
+        the only Roman emperor who was also a philosopher, the Meditations of Marcus
+        Aurelius (AD 121-180) offer a remarkable series of challenging spiritual reflections
+        and exercises developed as the emperor struggled to understand himself and
+        make sense of the universe. Ranging from doubt and despair to conviction and
+        ex Written in Greek, without any intention of publication, by the only Roman
+        emperor who was also a philosopher, the Meditations of Marcus Aurelius (AD
+        121-180) offer a remarkable series of challenging spiritual reflections and
+        exercises developed as the emperor struggled to understand himself and make
+        sense of the universe. Ranging from doubt and despair to conviction and exaltation,
+        they cover such diverse topics as the nature of moral virtue, human rationality,
+        divine providence, and Marcus' own emotions. But while the Meditations were
+        composed to provide personal consolation and encouragement, in developing
+        his beliefs Marcus Aurelius also created one of the greatest of all works
+        of philosophy: a timeless collection of extended meditations and short aphorisms
+        that has been consulted and admired by statesmen, thinkers and readers through
+        the centuries. ...more\\u003C/p>\\n        \\n    \\n\\n    \\n    \\u003Cdiv
+        class=\\\"sub-header\\\">\\n        \\u003Ch2>Product Information\\u003C/h2>\\n
+        \   \\u003C/div>\\n    \\u003Ctable class=\\\"table table-striped\\\">\\n
+        \       \\n        \\u003Ctbody>\\u003Ctr>\\n            \\u003Cth>UPC\\u003C/th>\\u003Ctd>4f19709e47883df5\\u003C/td>\\n
+        \       \\u003C/tr>\\n        \\n        \\u003Ctr>\\n            \\u003Cth>Product
+        Type\\u003C/th>\\u003Ctd>Books\\u003C/td>\\n        \\u003C/tr>\\n\\n        \\n
+        \       \\n            \\u003Ctr>\\n                \\u003Cth>Price (excl.
+        tax)\\u003C/th>\\u003Ctd>\xA325.89\\u003C/td>\\n            \\u003C/tr>\\n
+        \           \\n                \\u003Ctr>\\n                    \\u003Cth>Price
+        (incl. tax)\\u003C/th>\\u003Ctd>\xA325.89\\u003C/td>\\n                \\u003C/tr>\\n
+        \               \\u003Ctr>\\n                    \\u003Cth>Tax\\u003C/th>\\u003Ctd>\xA30.00\\u003C/td>\\n
+        \               \\u003C/tr>\\n            \\n            \\u003Ctr>\\n                \\u003Cth>Availability\\u003C/th>\\n
+        \               \\u003Ctd>In stock (1 available)\\u003C/td>\\n            \\u003C/tr>\\n
+        \       \\n        \\n        \\n            \\u003Ctr>\\n                \\u003Cth>Number
+        of reviews\\u003C/th>\\n                \\u003Ctd>0\\u003C/td>\\n            \\u003C/tr>\\n
+        \       \\n    \\u003C/tbody>\\u003C/table>\\n    \\n\\n    \\n        \\n
+        \       \\u003Csection>\\n            \\u003Cdiv id=\\\"reviews\\\" class=\\\"sub-header\\\">\\n
+        \           \\u003C/div>\\n        \\u003C/section>\\n        \\n    \\n\\n
+        \   \\n        \\n    \\n\\n    \\n\\n\\n\\n    \\n        \\u003Cdiv class=\\\"sub-header\\\">\\n
+        \           \\u003Ch2>Products you recently viewed\\u003C/h2>\\n        \\u003C/div>\\n\\n
+        \       \\u003Cul class=\\\"row\\\">\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../the-nicomachean-ethics_75/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/f0/aa/f0aa9ae0319b1d6e0706e6053020e696.jpg\\\" alt=\\\"The
+        Nicomachean Ethics\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n                    \\n
+        \               \\n            \\u003C/div>\\n        \\n\\n        \\n            \\n
+        \               \\u003Cp class=\\\"star-rating One\\\">\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \               \\u003C/p>\\n            \\n        \\n\\n        \\n            \\u003Ch3>\\u003Ca
+        href=\\\"../the-nicomachean-ethics_75/index.html\\\" title=\\\"The Nicomachean
+        Ethics\\\">The Nicomachean Ethics\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA336.34\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../run-spot-run-the-ethics-of-keeping-pets_106/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/91/e6/91e6190dcdd7d6cdeb94a82b60917ec4.jpg\\\" alt=\\\"Run,
+        Spot, Run: The Ethics of Keeping Pets\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../run-spot-run-the-ethics-of-keeping-pets_106/index.html\\\"
+        title=\\\"Run, Spot, Run: The Ethics of Keeping Pets\\\">Run, Spot, Run: The
+        ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n            \\u003Cdiv
+        class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n    \\n
+        \       \\u003Cp class=\\\"price_color\\\">\xA320.02\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../critique-of-pure-reason_366/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/12/6e/126ef8f6473b81808ebbb9cff155e883.jpg\\\" alt=\\\"Critique
+        of Pure Reason\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n                    \\n
+        \               \\n            \\u003C/div>\\n        \\n\\n        \\n            \\n
+        \               \\u003Cp class=\\\"star-rating One\\\">\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \               \\u003C/p>\\n            \\n        \\n\\n        \\n            \\u003Ch3>\\u003Ca
+        href=\\\"../critique-of-pure-reason_366/index.html\\\" title=\\\"Critique
+        of Pure Reason\\\">Critique of Pure Reason\\u003C/a>\\u003C/h3>\\n        \\n\\n
+        \       \\n            \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA320.75\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../at-the-existentialist-cafe-freedom-being-and-apricot-cocktails-with-jean-paul-sartre-simone-de-beauvoir-albert-camus-martin-heidegger-edmund-husserl-karl-jaspers-maurice-merleau-ponty-and-others_459/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/de/76/de76d5c473c358bd41c03cf710692bfb.jpg\\\" alt=\\\"At
+        The Existentialist Caf\xE9: Freedom, Being, and apricot cocktails with: Jean-Paul
+        Sartre, Simone de Beauvoir, Albert Camus, Martin Heidegger, Edmund Husserl,
+        Karl Jaspers, Maurice Merleau-Ponty and others\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating Five\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../at-the-existentialist-cafe-freedom-being-and-apricot-cocktails-with-jean-paul-sartre-simone-de-beauvoir-albert-camus-martin-heidegger-edmund-husserl-karl-jaspers-maurice-merleau-ponty-and-others_459/index.html\\\"
+        title=\\\"At The Existentialist Caf\xE9: Freedom, Being, and apricot cocktails
+        with: Jean-Paul Sartre, Simone de Beauvoir, Albert Camus, Martin Heidegger,
+        Edmund Husserl, Karl Jaspers, Maurice Merleau-Ponty and others\\\">At The
+        Existentialist Caf\xE9: ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA329.93\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../kierkegaard-a-christian-missionary-to-christians_527/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/05/ce/05ce699eaf78c0fae20308497c4f496a.jpg\\\" alt=\\\"Kierkegaard:
+        A Christian Missionary to Christians\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../kierkegaard-a-christian-missionary-to-christians_527/index.html\\\"
+        title=\\\"Kierkegaard: A Christian Missionary to Christians\\\">Kierkegaard:
+        A Christian Missionary ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA347.13\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../proofs-of-god-classical-arguments-from-tertullian-to-barth_538/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/3f/ef/3fef12d9da503693af12997c0ea0897f.jpg\\\" alt=\\\"Proofs
+        of God: Classical Arguments from Tertullian to Barth\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../proofs-of-god-classical-arguments-from-tertullian-to-barth_538/index.html\\\"
+        title=\\\"Proofs of God: Classical Arguments from Tertullian to Barth\\\">Proofs
+        of God: Classical ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n            \\u003Cdiv
+        class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n    \\n
+        \       \\u003Cp class=\\\"price_color\\\">\xA354.21\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n        \\u003C/ul>\\n
+        \   \\n\\n\\n\\n\\u003C/article>\\u003C!-- End of product page -->\\n\\u003C/div>\\n
+        \               \\u003C/div>\\n            \\u003C/div>\\n        \\u003C/div>\\n
+        \   \\n\\n    \\n\\u003Cfooter class=\\\"footer container-fluid\\\">\\n    \\n
+        \       \\n    \\n\\u003C/footer>\\n\\n\\n        \\n        \\n  \\n            \\u003C!--
+        jQuery -->\\n            \\u003Cscript src=\\\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\\\">\\u003C/script>\\n
+        \           \\u003Cscript>window.jQuery || document.write('\\u003Cscript src=\\\"../../static/oscar/js/jquery/jquery-1.9.1.min.js\\\">\\u003C\\\\/script>')\\u003C/script>\\n
+        \       \\n  \\n\\n\\n        \\n        \\n    \\n        \\n    \\u003C!--
+        Twitter Bootstrap -->\\n    \\u003Cscript type=\\\"text/javascript\\\" src=\\\"../../static/oscar/js/bootstrap3/bootstrap.min.js\\\">\\u003C/script>\\n
+        \   \\u003C!-- Oscar -->\\n    \\u003Cscript src=\\\"../../static/oscar/js/oscar/ui.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n\\n    \\u003Cscript
+        src=\\\"../../static/oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n    \\u003Cscript
+        src=\\\"../../static/oscar/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.all.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n\\n\\n
+        \       \\n        \\n    \\n    \\n\\n    \\n\\n\\n\\n        \\n        \\u003Cscript
+        type=\\\"text/javascript\\\">\\n            $(function() {\\n                \\n
+        \   \\n    oscar.init();\\n\\n            });\\n        \\u003C/script>\\n\\n
+        \       \\n        \\u003C!-- Version: N/A -->\\n        \\n    \\n\\n\\u003C/body>\"}"
+    headers:
+      Content-Length:
+      - '20018'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"script": "const overlay = document.createElement(''div'');\nObject.assign(overlay.style,
+      {\n    position: ''fixed'',\n    zIndex: 999999,\n    top: 0,\n    left: 0,\n    width:
+      ''100%'',\n    height: ''100%'',\n    background: ''rgba(0, 0, 0, 0.7)'',\n    color:
+      ''#fff'',\n    fontSize: ''24px'',\n    fontWeight: ''bold'',\n    display:
+      ''flex'',\n    justifyContent: ''center'',\n    alignItems: ''center'',\n});\nconst
+      textContent = document.createElement(''div'');\nObject.assign(textContent.style,
+      {\n    textAlign: ''center'',\n});\ntextContent.textContent = ''AutoGPT Analyzing
+      Page'';\noverlay.appendChild(textContent);\ndocument.body.append(overlay);\ndocument.body.style.overflow
+      = ''hidden'';\nlet dotCount = 0;\nsetInterval(() => {\n    textContent.textContent
+      = ''AutoGPT Analyzing Page'' + ''.''.repeat(dotCount);\n    dotCount = (dotCount
+      + 1) % 4;\n}, 1000);\n", "args": []}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/execute/sync
+  response:
+    body:
+      string: '{"value":null}'
+    headers:
+      Content-Length:
+      - '14'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"script": "window.scrollTo(0, document.body.scrollHeight * 0.0);", "args":
+      []}'
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: POST
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/execute/sync
+  response:
+    body:
+      string: '{"value":null}'
+    headers:
+      Content-Length:
+      - '14'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: GET
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7/source
+  response:
+    body:
+      string: "{\"value\":\"\\u003Chtml lang=\\\"en-us\\\" class=\\\"no-js\\\">\\u003C!--\\u003C![endif]-->\\u003Chead>\\n
+        \       \\u003Ctitle>\\n    Meditations | Books to Scrape - Sandbox\\n\\u003C/title>\\n\\n
+        \       \\u003Cmeta http-equiv=\\\"content-type\\\" content=\\\"text/html;
+        charset=UTF-8\\\">\\n        \\u003Cmeta name=\\\"created\\\" content=\\\"24th
+        Jun 2016 09:29\\\">\\n        \\u003Cmeta name=\\\"description\\\" content=\\\"\\n
+        \   Written in Greek, without any intention of publication, by the only Roman
+        emperor who was also a philosopher, the Meditations of Marcus Aurelius (AD
+        121-180) offer a remarkable series of challenging spiritual reflections and
+        exercises developed as the emperor struggled to understand himself and make
+        sense of the universe. Ranging from doubt and despair to conviction and ex
+        Written in Greek, without any intention of publication, by the only Roman
+        emperor who was also a philosopher, the Meditations of Marcus Aurelius (AD
+        121-180) offer a remarkable series of challenging spiritual reflections and
+        exercises developed as the emperor struggled to understand himself and make
+        sense of the universe. Ranging from doubt and despair to conviction and exaltation,
+        they cover such diverse topics as the nature of moral virtue, human rationality,
+        divine providence, and Marcus' own emotions. But while the Meditations were
+        composed to provide personal consolation and encouragement, in developing
+        his beliefs Marcus Aurelius also created one of the greatest of all works
+        of philosophy: a timeless collection of extended meditations and short aphorisms
+        that has been consulted and admired by statesmen, thinkers and readers through
+        the centuries. ...more\\n\\\">\\n        \\u003Cmeta name=\\\"viewport\\\"
+        content=\\\"width=device-width\\\">\\n        \\u003Cmeta name=\\\"robots\\\"
+        content=\\\"NOARCHIVE,NOCACHE\\\">\\n\\n        \\u003C!-- Le HTML5 shim,
+        for IE6-8 support of HTML elements -->\\n        \\u003C!--[if lt IE 9]>\\n
+        \       \\u003Cscript src=\\\"//html5shim.googlecode.com/svn/trunk/html5.js\\\">\\u003C/script>\\n
+        \       \\u003C![endif]-->\\n\\n        \\n            \\u003Clink rel=\\\"shortcut
+        icon\\\" href=\\\"../../static/oscar/favicon.ico\\\">\\n        \\n\\n        \\n
+        \       \\n    \\n    \\n        \\u003Clink rel=\\\"stylesheet\\\" type=\\\"text/css\\\"
+        href=\\\"../../static/oscar/css/styles.css\\\">\\n    \\n    \\u003Clink rel=\\\"stylesheet\\\"
+        href=\\\"../../static/oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.css\\\">\\n
+        \   \\u003Clink rel=\\\"stylesheet\\\" type=\\\"text/css\\\" href=\\\"../../static/oscar/css/datetimepicker.css\\\">\\n\\n\\n
+        \       \\n        \\n\\n        \\n\\n        \\n            \\n            \\n\\n
+        \       \\n    \\u003C/head>\\n\\n    \\u003Cbody id=\\\"default\\\" class=\\\"default\\\"
+        style=\\\"overflow: hidden;\\\">\\n        \\n        \\n    \\n    \\n    \\u003Cheader
+        class=\\\"header container-fluid\\\">\\n        \\u003Cdiv class=\\\"page_inner\\\">\\n
+        \           \\u003Cdiv class=\\\"row\\\">\\n                \\u003Cdiv class=\\\"col-sm-8
+        h1\\\">\\u003Ca href=\\\"../../index.html\\\">Books to Scrape\\u003C/a>\\u003Csmall>
+        We love being scraped!\\u003C/small>\\n\\u003C/div>\\n\\n                \\n
+        \           \\u003C/div>\\n        \\u003C/div>\\n    \\u003C/header>\\n\\n
+        \   \\n    \\n        \\u003Cdiv class=\\\"container-fluid page\\\">\\n            \\u003Cdiv
+        class=\\\"page_inner\\\">\\n                \\n\\u003Cul class=\\\"breadcrumb\\\">\\n
+        \   \\u003Cli>\\n        \\u003Ca href=\\\"../../index.html\\\">Home\\u003C/a>\\n
+        \   \\u003C/li>\\n    \\n        \\n        \\u003Cli>\\n            \\u003Ca
+        href=\\\"../category/books_1/index.html\\\">Books\\u003C/a>\\n        \\u003C/li>\\n
+        \       \\n        \\u003Cli>\\n            \\u003Ca href=\\\"../category/books/philosophy_7/index.html\\\">Philosophy\\u003C/a>\\n
+        \       \\u003C/li>\\n        \\n        \\u003Cli class=\\\"active\\\">Meditations\\u003C/li>\\n\\n
+        \       \\n        \\n    \\n\\u003C/ul>\\n\\n                \\n\\n                \\n\\n\\n\\n\\u003Cdiv
+        id=\\\"messages\\\">\\n\\n\\u003C/div>\\n\\n                \\n                \\u003Cdiv
+        class=\\\"content\\\">\\n                    \\n\\n                    \\n
+        \                   \\u003Cdiv id=\\\"promotions\\\">\\n                        \\n
+        \                   \\u003C/div>\\n\\n                    \\n                    \\u003Cdiv
+        id=\\\"content_inner\\\">\\n\\n\\u003Carticle class=\\\"product_page\\\">\\u003C!--
+        Start of product page -->\\n\\n    \\u003Cdiv class=\\\"row\\\">\\n\\n        \\n
+        \       \\u003Cdiv class=\\\"col-sm-6\\\">\\n            \\n\\n\\n\\n\\n    \\n\\n
+        \   \\n\\n        \\n        \\u003Cdiv id=\\\"product_gallery\\\" class=\\\"carousel\\\">\\n
+        \           \\u003Cdiv class=\\\"thumbnail\\\">\\n                \\u003Cdiv
+        class=\\\"carousel-inner\\\">\\n                    \\u003Cdiv class=\\\"item
+        active\\\">\\n                    \\n                        \\n                            \\u003Cimg
+        src=\\\"../../media/cache/90/f7/90f79652caecac36bc97bf7b769c8fc4.jpg\\\" alt=\\\"Meditations\\\">\\n
+        \                       \\n                    \\n                    \\u003C/div>\\n
+        \               \\u003C/div>\\n            \\u003C/div>\\n        \\u003C/div>\\n\\n
+        \   \\n\\n\\n        \\u003C/div>\\n        \\n\\n        \\n        \\u003Cdiv
+        class=\\\"col-sm-6 product_main\\\">\\n            \\n            \\n            \\u003Ch1>Meditations\\u003C/h1>\\n\\n
+        \           \\n                \\n\\n\\n\\n\\n\\n\\n    \\n        \\u003Cp
+        class=\\\"price_color\\\">\xA325.89\\u003C/p>\\n    \\n\\n\\u003Cp class=\\\"instock
+        availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n    \\n
+        \       In stock (1 available)\\n    \\n\\u003C/p>\\n\\n            \\n\\n
+        \           \\n                \\n\\n\\n\\n    \\u003Cp class=\\\"star-rating
+        Two\\\">\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \       \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n        \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n\\n
+        \       \\u003C!-- \\u003Csmall>\\u003Ca href=\\\"/catalogue/meditations_33/reviews/\\\">\\n
+        \       \\n                \\n                    0 customer reviews\\n                \\n
+        \       \\u003C/a>\\u003C/small>\\n         -->&nbsp;\\n\\n\\n\\u003C!-- \\n
+        \   \\u003Ca id=\\\"write_review\\\" href=\\\"/catalogue/meditations_33/reviews/add/#addreview\\\"
+        class=\\\"btn btn-success btn-sm\\\">\\n        Write a review\\n    \\u003C/a>\\n\\n
+        -->\\u003C/p>\\n\\n            \\n\\n            \\u003Chr>\\n\\n            \\u003Cdiv
+        class=\\\"alert alert-warning\\\" role=\\\"alert\\\">\\u003Cstrong>Warning!\\u003C/strong>
+        This is a demo website for web scraping purposes. Prices and ratings here
+        were randomly assigned and have no real meaning.\\u003C/div>\\n\\n\\n            \\n
+        \               \\n\\n\\n\\n\\n\\n\\n            \\n        \\u003C/div>\\u003C!--
+        /col-sm-6 -->\\n        \\n\\n    \\u003C/div>\\u003C!-- /row -->\\n\\n    \\n
+        \       \\n        \\u003Cdiv id=\\\"product_description\\\" class=\\\"sub-header\\\">\\n
+        \           \\u003Ch2>Product Description\\u003C/h2>\\n        \\u003C/div>\\n
+        \       \\u003Cp>Written in Greek, without any intention of publication, by
+        the only Roman emperor who was also a philosopher, the Meditations of Marcus
+        Aurelius (AD 121-180) offer a remarkable series of challenging spiritual reflections
+        and exercises developed as the emperor struggled to understand himself and
+        make sense of the universe. Ranging from doubt and despair to conviction and
+        ex Written in Greek, without any intention of publication, by the only Roman
+        emperor who was also a philosopher, the Meditations of Marcus Aurelius (AD
+        121-180) offer a remarkable series of challenging spiritual reflections and
+        exercises developed as the emperor struggled to understand himself and make
+        sense of the universe. Ranging from doubt and despair to conviction and exaltation,
+        they cover such diverse topics as the nature of moral virtue, human rationality,
+        divine providence, and Marcus' own emotions. But while the Meditations were
+        composed to provide personal consolation and encouragement, in developing
+        his beliefs Marcus Aurelius also created one of the greatest of all works
+        of philosophy: a timeless collection of extended meditations and short aphorisms
+        that has been consulted and admired by statesmen, thinkers and readers through
+        the centuries. ...more\\u003C/p>\\n        \\n    \\n\\n    \\n    \\u003Cdiv
+        class=\\\"sub-header\\\">\\n        \\u003Ch2>Product Information\\u003C/h2>\\n
+        \   \\u003C/div>\\n    \\u003Ctable class=\\\"table table-striped\\\">\\n
+        \       \\n        \\u003Ctbody>\\u003Ctr>\\n            \\u003Cth>UPC\\u003C/th>\\u003Ctd>4f19709e47883df5\\u003C/td>\\n
+        \       \\u003C/tr>\\n        \\n        \\u003Ctr>\\n            \\u003Cth>Product
+        Type\\u003C/th>\\u003Ctd>Books\\u003C/td>\\n        \\u003C/tr>\\n\\n        \\n
+        \       \\n            \\u003Ctr>\\n                \\u003Cth>Price (excl.
+        tax)\\u003C/th>\\u003Ctd>\xA325.89\\u003C/td>\\n            \\u003C/tr>\\n
+        \           \\n                \\u003Ctr>\\n                    \\u003Cth>Price
+        (incl. tax)\\u003C/th>\\u003Ctd>\xA325.89\\u003C/td>\\n                \\u003C/tr>\\n
+        \               \\u003Ctr>\\n                    \\u003Cth>Tax\\u003C/th>\\u003Ctd>\xA30.00\\u003C/td>\\n
+        \               \\u003C/tr>\\n            \\n            \\u003Ctr>\\n                \\u003Cth>Availability\\u003C/th>\\n
+        \               \\u003Ctd>In stock (1 available)\\u003C/td>\\n            \\u003C/tr>\\n
+        \       \\n        \\n        \\n            \\u003Ctr>\\n                \\u003Cth>Number
+        of reviews\\u003C/th>\\n                \\u003Ctd>0\\u003C/td>\\n            \\u003C/tr>\\n
+        \       \\n    \\u003C/tbody>\\u003C/table>\\n    \\n\\n    \\n        \\n
+        \       \\u003Csection>\\n            \\u003Cdiv id=\\\"reviews\\\" class=\\\"sub-header\\\">\\n
+        \           \\u003C/div>\\n        \\u003C/section>\\n        \\n    \\n\\n
+        \   \\n        \\n    \\n\\n    \\n\\n\\n\\n    \\n        \\u003Cdiv class=\\\"sub-header\\\">\\n
+        \           \\u003Ch2>Products you recently viewed\\u003C/h2>\\n        \\u003C/div>\\n\\n
+        \       \\u003Cul class=\\\"row\\\">\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../the-nicomachean-ethics_75/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/f0/aa/f0aa9ae0319b1d6e0706e6053020e696.jpg\\\" alt=\\\"The
+        Nicomachean Ethics\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n                    \\n
+        \               \\n            \\u003C/div>\\n        \\n\\n        \\n            \\n
+        \               \\u003Cp class=\\\"star-rating One\\\">\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \               \\u003C/p>\\n            \\n        \\n\\n        \\n            \\u003Ch3>\\u003Ca
+        href=\\\"../the-nicomachean-ethics_75/index.html\\\" title=\\\"The Nicomachean
+        Ethics\\\">The Nicomachean Ethics\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA336.34\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../run-spot-run-the-ethics-of-keeping-pets_106/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/91/e6/91e6190dcdd7d6cdeb94a82b60917ec4.jpg\\\" alt=\\\"Run,
+        Spot, Run: The Ethics of Keeping Pets\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../run-spot-run-the-ethics-of-keeping-pets_106/index.html\\\"
+        title=\\\"Run, Spot, Run: The Ethics of Keeping Pets\\\">Run, Spot, Run: The
+        ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n            \\u003Cdiv
+        class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n    \\n
+        \       \\u003Cp class=\\\"price_color\\\">\xA320.02\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../critique-of-pure-reason_366/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/12/6e/126ef8f6473b81808ebbb9cff155e883.jpg\\\" alt=\\\"Critique
+        of Pure Reason\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n                    \\n
+        \               \\n            \\u003C/div>\\n        \\n\\n        \\n            \\n
+        \               \\u003Cp class=\\\"star-rating One\\\">\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \               \\u003C/p>\\n            \\n        \\n\\n        \\n            \\u003Ch3>\\u003Ca
+        href=\\\"../critique-of-pure-reason_366/index.html\\\" title=\\\"Critique
+        of Pure Reason\\\">Critique of Pure Reason\\u003C/a>\\u003C/h3>\\n        \\n\\n
+        \       \\n            \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA320.75\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../at-the-existentialist-cafe-freedom-being-and-apricot-cocktails-with-jean-paul-sartre-simone-de-beauvoir-albert-camus-martin-heidegger-edmund-husserl-karl-jaspers-maurice-merleau-ponty-and-others_459/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/de/76/de76d5c473c358bd41c03cf710692bfb.jpg\\\" alt=\\\"At
+        The Existentialist Caf\xE9: Freedom, Being, and apricot cocktails with: Jean-Paul
+        Sartre, Simone de Beauvoir, Albert Camus, Martin Heidegger, Edmund Husserl,
+        Karl Jaspers, Maurice Merleau-Ponty and others\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating Five\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../at-the-existentialist-cafe-freedom-being-and-apricot-cocktails-with-jean-paul-sartre-simone-de-beauvoir-albert-camus-martin-heidegger-edmund-husserl-karl-jaspers-maurice-merleau-ponty-and-others_459/index.html\\\"
+        title=\\\"At The Existentialist Caf\xE9: Freedom, Being, and apricot cocktails
+        with: Jean-Paul Sartre, Simone de Beauvoir, Albert Camus, Martin Heidegger,
+        Edmund Husserl, Karl Jaspers, Maurice Merleau-Ponty and others\\\">At The
+        Existentialist Caf\xE9: ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA329.93\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../kierkegaard-a-christian-missionary-to-christians_527/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/05/ce/05ce699eaf78c0fae20308497c4f496a.jpg\\\" alt=\\\"Kierkegaard:
+        A Christian Missionary to Christians\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../kierkegaard-a-christian-missionary-to-christians_527/index.html\\\"
+        title=\\\"Kierkegaard: A Christian Missionary to Christians\\\">Kierkegaard:
+        A Christian Missionary ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n
+        \           \\u003Cdiv class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n
+        \   \\n        \\u003Cp class=\\\"price_color\\\">\xA347.13\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n                \\u003Cli
+        class=\\\"col-xs-6 col-sm-4 col-md-3 col-lg-3\\\">\\n\\n\\n\\n\\n\\n\\n    \\u003Carticle
+        class=\\\"product_pod\\\">\\n        \\n            \\u003Cdiv class=\\\"image_container\\\">\\n
+        \               \\n                    \\n                    \\u003Ca href=\\\"../proofs-of-god-classical-arguments-from-tertullian-to-barth_538/index.html\\\">\\u003Cimg
+        src=\\\"../../media/cache/3f/ef/3fef12d9da503693af12997c0ea0897f.jpg\\\" alt=\\\"Proofs
+        of God: Classical Arguments from Tertullian to Barth\\\" class=\\\"thumbnail\\\">\\u003C/a>\\n
+        \                   \\n                \\n            \\u003C/div>\\n        \\n\\n
+        \       \\n            \\n                \\u003Cp class=\\\"star-rating One\\\">\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n
+        \                   \\u003Ci class=\\\"icon-star\\\">\\u003C/i>\\n                    \\u003Ci
+        class=\\\"icon-star\\\">\\u003C/i>\\n                \\u003C/p>\\n            \\n
+        \       \\n\\n        \\n            \\u003Ch3>\\u003Ca href=\\\"../proofs-of-god-classical-arguments-from-tertullian-to-barth_538/index.html\\\"
+        title=\\\"Proofs of God: Classical Arguments from Tertullian to Barth\\\">Proofs
+        of God: Classical ...\\u003C/a>\\u003C/h3>\\n        \\n\\n        \\n            \\u003Cdiv
+        class=\\\"product_price\\\">\\n                \\n\\n\\n\\n\\n\\n\\n    \\n
+        \       \\u003Cp class=\\\"price_color\\\">\xA354.21\\u003C/p>\\n    \\n\\n\\u003Cp
+        class=\\\"instock availability\\\">\\n    \\u003Ci class=\\\"icon-ok\\\">\\u003C/i>\\n
+        \   \\n        In stock\\n    \\n\\u003C/p>\\n\\n                \\n                    \\n\\n\\n\\n\\n\\n\\n
+        \   \\n    \\u003Cform>\\n        \\u003Cbutton type=\\\"submit\\\" class=\\\"btn
+        btn-primary btn-block\\\" data-loading-text=\\\"Adding...\\\">Add to basket\\u003C/button>\\n
+        \   \\u003C/form>\\n\\n\\n                \\n            \\u003C/div>\\n        \\n
+        \   \\u003C/article>\\n\\n\\u003C/li>\\n            \\n        \\u003C/ul>\\n
+        \   \\n\\n\\n\\n\\u003C/article>\\u003C!-- End of product page -->\\n\\u003C/div>\\n
+        \               \\u003C/div>\\n            \\u003C/div>\\n        \\u003C/div>\\n
+        \   \\n\\n    \\n\\u003Cfooter class=\\\"footer container-fluid\\\">\\n    \\n
+        \       \\n    \\n\\u003C/footer>\\n\\n\\n        \\n        \\n  \\n            \\u003C!--
+        jQuery -->\\n            \\u003Cscript src=\\\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\\\">\\u003C/script>\\n
+        \           \\u003Cscript>window.jQuery || document.write('\\u003Cscript src=\\\"../../static/oscar/js/jquery/jquery-1.9.1.min.js\\\">\\u003C\\\\/script>')\\u003C/script>\\n
+        \       \\n  \\n\\n\\n        \\n        \\n    \\n        \\n    \\u003C!--
+        Twitter Bootstrap -->\\n    \\u003Cscript type=\\\"text/javascript\\\" src=\\\"../../static/oscar/js/bootstrap3/bootstrap.min.js\\\">\\u003C/script>\\n
+        \   \\u003C!-- Oscar -->\\n    \\u003Cscript src=\\\"../../static/oscar/js/oscar/ui.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n\\n    \\u003Cscript
+        src=\\\"../../static/oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n    \\u003Cscript
+        src=\\\"../../static/oscar/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.all.js\\\"
+        type=\\\"text/javascript\\\" charset=\\\"utf-8\\\">\\u003C/script>\\n\\n\\n
+        \       \\n        \\n    \\n    \\n\\n    \\n\\n\\n\\n        \\n        \\u003Cscript
+        type=\\\"text/javascript\\\">\\n            $(function() {\\n                \\n
+        \   \\n    oscar.init();\\n\\n            });\\n        \\u003C/script>\\n\\n
+        \       \\n        \\u003C!-- Version: N/A -->\\n        \\n    \\n\\n\\u003Cdiv
+        style=\\\"position: fixed; z-index: 999999; top: 0px; left: 0px; width: 100%;
+        height: 100%; background: rgba(0, 0, 0, 0.7); color: rgb(255, 255, 255); font-size:
+        24px; font-weight: bold; display: flex; justify-content: center; align-items:
+        center;\\\">\\u003Cdiv style=\\\"text-align: center;\\\">AutoGPT Analyzing
+        Page\\u003C/div>\\u003C/div>\\u003C/body>\\u003C/html>\"}"
+    headers:
+      Content-Length:
+      - '22982'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+    method: DELETE
+    uri: https://api.openai.com/session/52c464a2a9dc3a235b34c12eb90ffda7
+  response:
+    body:
+      string: '{"value":null}'
+    headers:
+      Content-Length:
+      - '14'
+      Content-Type:
+      - application/json; charset=utf-8
+      cache-control:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+version: 1

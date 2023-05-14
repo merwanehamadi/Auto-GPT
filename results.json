@@ -1,0 +1,21 @@
+{
+    "basic_abilities": {
+        "write_file": {
+            "beaten": true
+        },
+        "browse_website": {
+            "beaten": true
+        }
+    },
+    "memory": {
+        "memory_challenge_a": {
+            "beaten": false
+        },
+        "memory_challenge_b": {
+            "beaten": false
+        },
+        "memory_challenge_c": {
+            "beaten": false
+        }
+    }
+}

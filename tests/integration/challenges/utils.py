@@ -1,3 +1,5 @@
+import json
+import os
 import random
 from functools import wraps
 from typing import Optional
@@ -61,3 +63,40 @@ def run_multiple_times(times):
         return wrapper
 
     return decorator
+
+def record_test_result(test_func):
+    @wraps(test_func)
+    def wrapper(*args, **kwargs):
+        # Extract folder name and method name
+        full_path = os.path.dirname(os.path.abspath(test_func.__code__.co_filename))
+        folder_name = os.path.basename(full_path)  # Get the final part of the path
+        method_name = test_func.__name__.replace("test_", "")  # Remove "test_" prefix
+        test_result = False
+        filename = 'results.json'
+        results = {}
+
+        # If file exists, load existing results
+        if os.path.isfile(filename):
+            with open(filename, 'r') as file:
+                results = json.load(file)
+
+        # Run the test and catch any assertion errors
+        try:
+            test_func(*args, **kwargs)
+            test_result = True
+        except AssertionError:
+            pass
+        finally:
+            # Update results with new test result
+            if folder_name not in results:
+                results[folder_name] = {}
+
+            results[folder_name][method_name] = {
+                "beaten": test_result
+            }
+
+            # Write updated results back to file
+            with open(filename, 'w') as file:
+                json.dump(results, file, indent=4)
+
+    return wrapper

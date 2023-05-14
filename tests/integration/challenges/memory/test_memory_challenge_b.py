@@ -3,7 +3,7 @@ import pytest
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file, write_to_file
 from tests.integration.agent_utils import run_interaction_loop
-from tests.integration.challenges.utils import generate_noise, get_level_to_run
+from tests.integration.challenges.utils import generate_noise, get_level_to_run, record_test_result
 from tests.utils import requires_api_key
 
 LEVEL_CURRENTLY_BEATEN = None
@@ -13,6 +13,7 @@ NOISE = 1000
 
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
+@record_test_result
 def test_memory_challenge_b(
     memory_management_agent: Agent, user_selected_level: int, patched_api_requestor
 ) -> None:
