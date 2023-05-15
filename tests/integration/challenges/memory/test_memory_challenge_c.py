@@ -1,4 +1,5 @@
 import pytest
+from pytest_mock import MockerFixture
 
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file, write_to_file
@@ -14,7 +15,7 @@ NOISE = 1000
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
 def test_memory_challenge_c(
-    memory_management_agent: Agent, user_selected_level: int, patched_api_requestor
+    memory_management_agent: Agent, user_selected_level: int, patched_api_requestor: MockerFixture
 ) -> None:
     """
     Instead of reading task Ids from files as with the previous challenges, the agent now must remember

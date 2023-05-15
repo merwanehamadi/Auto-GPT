@@ -1,4 +1,5 @@
 import pytest
+from pytest_mock import MockerFixture
 
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file
@@ -8,7 +9,7 @@ from tests.utils import requires_api_key
 
 @requires_api_key("OPENAI_API_KEY")
 @pytest.mark.vcr
-def test_browse_website(browser_agent: Agent, patched_api_requestor) -> None:
+def test_browse_website(browser_agent: Agent, patched_api_requestor: MockerFixture) -> None:
     file_path = browser_agent.workspace.get_path("browse_website.txt")
     try:
         run_interaction_loop(browser_agent, 120)

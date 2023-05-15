@@ -3,6 +3,7 @@ from functools import wraps
 from typing import Generator
 
 import pytest
+from pytest_mock import MockerFixture
 
 from autogpt.commands.file_operations import read_file, write_to_file
 from tests.integration.agent_utils import run_interaction_loop
@@ -26,7 +27,7 @@ def input_generator(input_sequence: list) -> Generator[str, None, None]:
 @requires_api_key("OPENAI_API_KEY")
 @run_multiple_times(3)
 def test_information_retrieval_challenge_a(
-    get_company_revenue_agent, monkeypatch, patched_api_requestor
+    get_company_revenue_agent, monkeypatch, patched_api_requestor: MockerFixture
 ) -> None:
     """
     Test the challenge_a function in a given agent by mocking user inputs and checking the output file content.

@@ -11,7 +11,7 @@ from tests.utils import requires_api_key
 
 @requires_api_key("OPENAI_API_KEY")
 @pytest.mark.vcr
-def test_write_file(writer_agent: Agent, patched_api_requestor) -> None:
+def test_write_file(writer_agent: Agent, patched_api_requestor: MockerFixture) -> None:
     file_path = str(writer_agent.workspace.get_path("hello_world.txt"))
     try:
         run_interaction_loop(writer_agent, 200)
