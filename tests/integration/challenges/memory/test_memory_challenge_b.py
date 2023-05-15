@@ -5,8 +5,8 @@ from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file, write_to_file
 from tests.integration.challenges.utils import (
     generate_noise,
-    get_level_to_run,
     run_interaction_loop,
+    run_test_based_on_level,
 )
 from tests.utils import requires_api_key
 
@@ -17,11 +17,12 @@ NOISE = 1000
 
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
+@run_test_based_on_level
 def test_memory_challenge_b(
     memory_management_agent: Agent,
-    user_selected_level: int,
     patched_api_requestor: MockerFixture,
     monkeypatch: pytest.MonkeyPatch,
+    level_to_run: int = 1,
 ) -> None:
     """
     The agent reads a series of files, each containing a task_id and noise. After reading 'n' files,
@@ -31,13 +32,11 @@ def test_memory_challenge_b(
         memory_management_agent (Agent)
         user_selected_level (int)
     """
-    current_level = get_level_to_run(
-        user_selected_level, LEVEL_CURRENTLY_BEATEN, MAX_LEVEL
-    )
-    task_ids = [str(i * 1111) for i in range(1, current_level + 1)]
-    create_instructions_files(memory_management_agent, current_level, task_ids)
 
-    run_interaction_loop(monkeypatch, memory_management_agent, current_level + 2)
+    task_ids = [str(i * 1111) for i in range(1, level_to_run + 1)]
+    create_instructions_files(memory_management_agent, level_to_run, task_ids)
+
+    run_interaction_loop(monkeypatch, memory_management_agent, level_to_run + 2)
 
     file_path = str(memory_management_agent.workspace.get_path("output.txt"))
     content = read_file(file_path)

@@ -1,3 +1,5 @@
+import inspect
+
 import pytest
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
@@ -16,6 +18,6 @@ def pytest_configure(config: Config) -> None:
 
 
 @pytest.fixture
-def user_selected_level(request: FixtureRequest) -> int:
+def level_to_run(request: FixtureRequest) -> int:
     ## used for challenges in the goal oriented tests
     return request.config.option.level

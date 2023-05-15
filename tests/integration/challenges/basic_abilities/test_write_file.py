@@ -1,9 +1,16 @@
+import functools
+import json
+import os
+
 import pytest
 from pytest_mock import MockerFixture
 
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file
-from tests.integration.challenges.utils import run_interaction_loop
+from tests.integration.challenges.utils import (
+    run_interaction_loop,
+    run_test_based_on_level,
+)
 from tests.utils import requires_api_key
 
 CYCLE_COUNT = 3
@@ -11,10 +18,12 @@ CYCLE_COUNT = 3
 
 @requires_api_key("OPENAI_API_KEY")
 @pytest.mark.vcr
+@run_test_based_on_level
 def test_write_file(
     writer_agent: Agent,
     patched_api_requestor: MockerFixture,
     monkeypatch: pytest.MonkeyPatch,
+    level_to_run: int,
 ) -> None:
     file_path = str(writer_agent.workspace.get_path("hello_world.txt"))
     run_interaction_loop(monkeypatch, writer_agent, CYCLE_COUNT)

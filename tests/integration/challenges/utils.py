@@ -1,42 +1,13 @@
 import contextlib
+import functools
+import json
+import os
 import random
-from functools import wraps
-from typing import Any, Callable, Dict, Generator, Optional, Tuple
+from typing import Any, Callable, Dict, Generator, List, Optional, Tuple, Union
 
 import pytest
 
 from autogpt.agent import Agent
-
-
-def get_level_to_run(
-    user_selected_level: int,
-    level_currently_beaten: int,
-    max_level: int,
-) -> int:
-    """
-    Determines the appropriate level to run for a challenge, based on user-selected level, level currently beaten, and maximum level.
-
-    Args:
-        user_selected_level (int | None): The level selected by the user. If not provided, the level currently beaten is used.
-        level_currently_beaten (int | None): The highest level beaten so far. If not provided, the test will be skipped.
-        max_level (int): The maximum level allowed for the challenge.
-
-    Returns:
-        int: The level to run for the challenge.
-
-    Raises:
-        ValueError: If the user-selected level is greater than the maximum level allowed.
-    """
-    if user_selected_level is None:
-        if level_currently_beaten == -1:
-            pytest.skip(
-                "No one has beaten any levels so we cannot run the test in our pipeline"
-            )
-        # by default we run the level currently beaten.
-        return level_currently_beaten
-    if user_selected_level > max_level:
-        raise ValueError(f"This challenge was not designed to go beyond {max_level}")
-    return user_selected_level
 
 
 def generate_noise(noise_size: int) -> str:
@@ -56,7 +27,7 @@ def run_multiple_times(times: int) -> Callable:
     """
 
     def decorator(test_func: Callable[..., Any]) -> Callable[..., Any]:
-        @wraps(test_func)
+        @functools.wraps(test_func)
         def wrapper(*args: Tuple[Any, ...], **kwargs: Dict[str, Any]) -> None:
             for _ in range(times):
                 test_func(*args, **kwargs)
@@ -91,3 +62,34 @@ def run_interaction_loop(
     setup_mock_input(monkeypatch, cycle_count)
     with contextlib.suppress(SystemExit):
         agent.start_interaction_loop()
+
+
+def run_test_based_on_level(func: Callable[..., Any]) -> Callable[..., Any]:
+    @functools.wraps(func)
+    def wrapper(*args: Tuple[Any, ...], **kwargs: Dict[str, Any]) -> Any:
+        # Read results.json and parse its content
+        with open("results.json", "r") as f:
+            results = json.load(f)
+
+        # Extract folder name and find the corresponding key in the JSON content
+        folder_name = os.path.dirname(os.path.abspath(func.__code__.co_filename)).split(
+            os.sep
+        )[-1]
+        folder_key = next((key for key in results.keys() if folder_name in key), None)
+
+        if folder_key:
+            folder_key = folder_key[0]
+            # Extract method name and find it in the dictionary
+            method_name: str = func.__name__.replace("test_", "")
+            if method_name in results[folder_key]:
+                test_info = results[folder_key][method_name]
+                # If current_level_beaten is -1, skip the test
+                if test_info["current_level_beaten"] == -1:
+                    pytest.skip("This test has not been unlocked yet.")
+                # If max_level is not 1, pass the level to the test function
+                if test_info["max_level"] != 1:
+                    kwargs["level_to_run"] = test_info["current_level_beaten"]
+
+        return func(*args, **kwargs)
+
+    return wrapper
