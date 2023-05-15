@@ -2,7 +2,7 @@ import json
 import os
 import random
 from functools import wraps
-from typing import Optional
+from typing import Optional, Generator
 
 import pytest
 
@@ -100,3 +100,25 @@ def record_test_result(test_func):
                 json.dump(results, file, indent=4)
 
     return wrapper
+
+def setup_mock_input(monkeypatch, cycle_count):
+    """
+    Sets up the mock input for testing.
+
+    :param monkeypatch: pytest's monkeypatch utility for modifying builtins.
+    :param cycle_count: The number of cycles to mock.
+    """
+    input_sequence = ["y"] * (cycle_count - 1) + ["EXIT"]
+
+    def input_generator() -> Generator[str, None, None]:
+        """
+        Creates a generator that yields input strings from the given sequence.
+        """
+        yield from input_sequence
+
+    gen = input_generator()
+    monkeypatch.setattr("builtins.input", lambda _: next(gen))
+
+def run_interaction_loop(monkeypatch, writer_agent, cycle_count):
+    setup_mock_input(monkeypatch, cycle_count)
+    writer_agent.start_interaction_loop()

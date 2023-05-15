@@ -689,4 +689,93 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Below
+      is a message from me, an AI Agent, assuming the role of an AI designed to use
+      the write_to_file command to write ''Hello World'' into a file named \"hello_world.txt\"
+      and then use the task_complete command to complete the task.. whilst keeping
+      knowledge of my slight limitations as an AI Agent Please evaluate my thought
+      process, reasoning, and plan, and provide a concise paragraph outlining potential
+      improvements. Consider adding or removing ideas that do not align with my role
+      and explaining why, prioritizing thoughts based on their significance, or simply
+      refining my overall thought process.The task requires me to write ''Hello World''
+      into a file named ''hello_world.txt'', and the write_to_file command is the
+      appropriate command for this task.- Use the write_to_file command to write ''Hello
+      World'' into a file named ''hello_world.txt''."}], "temperature": 0, "max_tokens":
+      0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '957'
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1xTS28TMRC+8ytGvnDZRAmhCd1bLkAlJB4qJ4oirz2769brMZ5xHlT578i7SStx
+        Hdvfc/ysnFW1Mr0WM0Q/23y6x3U7fP/2eNz/6W+/9M3m4yb/uL1fmO6vqhQ1j2jk8mJuaIgexVFQ
+        lTIJtaBV9XL94f1yvbxZv6vUQBa9qlUXZbaa38wkp4Zmi9ViqSqVWXeo6mcVEw1RdkJPGFjVy826
+        Uq/Yr/PVolJCov3LaLVYnytlenIGWdW/ntWAfIVN5FHVSjM7Fh2kiKQgGIqBGfxkBOkRRPPT7kKH
+        YGgYdLAgBC+z6635Q3gIWwYdYHsH2w6DVDCcQHrKXS8QExnkcm4hoWYKLnTAiAPoGBPF5LQgtJRG
+        yM7tMUzA8JkOuMdUgRM4UPYWGoQGA7bOOO0nOYGdxQSRiocyxZQoMUivBQZ9AjImJ7A5Fd5CgUc0
+        uYQI1L7YqICz6UEztM4jREyDYy6XHHNGBkrTifYJtT0BHh2LC90c7q7qtGcqEnv0sc2jPheMzxYn
+        UdDrYH2R4QIYfYn6kJzgTmg3wl+jbrXzXBAmtVhyjJj8aQ5ba12Rr70/jdkUlw1CZvyPVYPp0TyN
+        MIFzwimVwjqSHTQX26WfNnt/GrVIyb/4aCnhte9rdlMxX/eYtPdjz9HrkhGwJO26XlpKB53s2De2
+        palxI5osoK294DCCG2KiPQ4YhC/5uVD+yyWWhN7pxnknp2l3qMksoazSpbbrur3l10rn6lyp1gXH
+        /W7aNlUrFoqqUi5YPKp6cf59fvMPAAD//wMAZbmP9uQDAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 7c7c21453d6e96d1-SJC
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 15 May 2023 14:39:33 GMT
+      Server:
+      - cloudflare
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0301
+      openai-organization:
+      - user-adtx4fhfg1qsiyzdoaxciooj
+      openai-processing-ms:
+      - '11040'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '3500'
+      x-ratelimit-limit-tokens:
+      - '90000'
+      x-ratelimit-remaining-requests:
+      - '3499'
+      x-ratelimit-remaining-tokens:
+      - '89772'
+      x-ratelimit-reset-requests:
+      - 17ms
+      x-ratelimit-reset-tokens:
+      - 152ms
+      x-request-id:
+      - 1fde9a4514ab3e72b2e8e550cada8435
+    status:
+      code: 200
+      message: OK
 version: 1

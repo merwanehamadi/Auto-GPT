@@ -1,7 +1,7 @@
 {
     "basic_abilities": {
         "write_file": {
-            "beaten": true
+            "beaten": false
         },
         "browse_website": {
             "beaten": true

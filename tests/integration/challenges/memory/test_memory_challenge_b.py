@@ -1,9 +1,11 @@
+import contextlib
+
 import pytest
 
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file, write_to_file
 from tests.integration.agent_utils import run_interaction_loop
-from tests.integration.challenges.utils import generate_noise, get_level_to_run, record_test_result
+from tests.integration.challenges.utils import generate_noise, get_level_to_run, record_test_result, setup_mock_input
 from tests.utils import requires_api_key
 
 LEVEL_CURRENTLY_BEATEN = None
@@ -15,7 +17,7 @@ NOISE = 1000
 @requires_api_key("OPENAI_API_KEY")
 @record_test_result
 def test_memory_challenge_b(
-    memory_management_agent: Agent, user_selected_level: int, patched_api_requestor
+    memory_management_agent: Agent, user_selected_level: int, patched_api_requestor, monkeypatch
 ) -> None:
     """
     The agent reads a series of files, each containing a task_id and noise. After reading 'n' files,
@@ -28,16 +30,16 @@ def test_memory_challenge_b(
     current_level = get_level_to_run(
         user_selected_level, LEVEL_CURRENTLY_BEATEN, MAX_LEVEL
     )
+
     task_ids = [str(i * 1111) for i in range(1, current_level + 1)]
     create_instructions_files(memory_management_agent, current_level, task_ids)
 
-    try:
-        run_interaction_loop(memory_management_agent, 60)
-    except SystemExit:
-        file_path = str(memory_management_agent.workspace.get_path("output.txt"))
-        content = read_file(file_path)
-        for task_id in task_ids:
-            assert task_id in content, f"Expected the file to contain {task_id}"
+    run_interaction_loop(monkeypatch, memory_management_agent, current_level * 2)
+
+    file_path = str(memory_management_agent.workspace.get_path("output.txt"))
+    content = read_file(file_path)
+    for task_id in task_ids:
+        assert task_id in content, f"Expected the file to contain {task_id}"
 
 
 def create_instructions_files(
