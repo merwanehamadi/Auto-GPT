@@ -85,7 +85,7 @@ def writer_agent(agent_test_config, memory_none: NoMemory, workspace: Workspace)
 
     ai_config = AIConfig(
         ai_name="write_to_file-GPT",
-        ai_role="an AI designed to use the write_to_file command to write 'Hello World' into a file named \"hello_world.txt\" and then use the task_complete command to complete the task.",
+        ai_role="AI designed to use the write_to_file command to write 'Hello World' into a file named \"hello_world.txt\" and then use the task_complete command to complete the task.",
         ai_goals=[
             "Use the write_to_file command to write 'Hello World' into a file named \"hello_world.txt\".",
             "Use the task_complete command to complete the task.",
@@ -193,7 +193,7 @@ def kubernetes_agent(memory_local_cache, workspace: Workspace):
 
     ai_config = AIConfig(
         ai_name="Kubernetes",
-        ai_role=" autonomous agent that specializes in creating Kubernetes deployment templates.",
+        ai_role="utonomous agent that specializes in creating Kubernetes deployment templates.",
         ai_goals=[
             "Write a simple kubernetes deployment file and save it as a kube.yaml.",
             # You should make a simple nginx web server that uses docker and exposes the port 80.
