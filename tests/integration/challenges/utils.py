@@ -1,6 +1,6 @@
 import random
 from functools import wraps
-from typing import Optional
+from typing import Callable, Optional, Any, Tuple, Dict
 
 import pytest
 
@@ -36,7 +36,7 @@ def get_level_to_run(
     return user_selected_level
 
 
-def generate_noise(noise_size) -> str:
+def generate_noise(noise_size: int) -> str:
     return "".join(
         random.choices(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
@@ -45,16 +45,16 @@ def generate_noise(noise_size) -> str:
     )
 
 
-def run_multiple_times(times):
+def run_multiple_times(times: int) -> Callable:
     """
     Decorator that runs a test function multiple times.
 
     :param times: The number of times the test function should be executed.
     """
 
-    def decorator(test_func):
+    def decorator(test_func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(test_func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Tuple[Any, ...], **kwargs: Dict[str, Any]) -> None:
             for _ in range(times):
                 test_func(*args, **kwargs)
 

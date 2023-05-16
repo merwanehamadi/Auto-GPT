@@ -2,6 +2,7 @@ import os
 
 import openai
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 
 from tests.conftest import PROXY
 from tests.vcr.vcr_filter import before_record_request, before_record_response
