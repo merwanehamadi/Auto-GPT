@@ -110,10 +110,10 @@ jobs:
         if:  ${{ env.TIMESTAMP_COMMIT != null }}
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: Update cassettes
+          commit-message: Update cassettes and challenges score
           branch: cassette-diff-PR-${{ github.event.pull_request.number }}-${{ env.TIMESTAMP_COMMIT }}
           title: "Update cassette-diff-PR${{ github.event.pull_request.number }}-${{ env.TIMESTAMP_COMMIT }}"
-          body: "This PR updates the cassettes. Please merge it."
+          body: "This PR updates the cassettes and the challenges score if it changed. Please merge it."
 
 
       - name: Check PR
