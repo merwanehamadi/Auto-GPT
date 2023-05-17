@@ -97,7 +97,7 @@ jobs:
         id: stage_files
         run: |
           git add tests
-          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git diff --cached --quiet tests && echo "No changes to commit" && exit 0
           git config user.email "github-actions@github.com"
           git config user.name "GitHub Actions"
           git commit -m "Add new cassettes"
