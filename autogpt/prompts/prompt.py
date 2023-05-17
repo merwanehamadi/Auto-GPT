@@ -63,7 +63,7 @@ def build_default_prompt_generator() -> PromptGenerator:
         "Reflect on past decisions and strategies to refine your approach."
     )
     prompt_generator.add_performance_evaluation(
-        "Every command has a cost, so be smart and efficient. Aim to complete tasks in"
+        "Every command has cost, so be smart and efficient. Aim to complete tasks in"
         " the least number of steps."
     )
     prompt_generator.add_performance_evaluation("Write all code to a file.")
