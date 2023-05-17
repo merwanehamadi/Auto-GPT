@@ -2,9 +2,9 @@ name: Python CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, ci-test* ]
   pull_request_target:
-    branches: [ master, stable ]
+    branches: [ master, stable, ci-test* ]
 
 concurrency:
   group: ${{ format('ci-{0}', github.head_ref && format('pr-{0}', github.event.pull_request.number) || github.sha) }}
@@ -66,10 +66,19 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        run: |
+          python -m pytest -s tests/integration/challenges/basic_abilities/test_write_file.py
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Set up GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          gh repo set-default merwanehamadi/Auto-GPT
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -83,7 +92,7 @@ jobs:
 
       - name: Run unittest tests with coverage
         run: |
-          pytest -s tests/integration/challenges/basic_abilities/test_write_file.py
+          python -m pytest -s tests/integration/challenges/basic_abilities/test_write_file.py
         env:
           CI: true
           PROXY: ${{ secrets.PROXY }}
@@ -96,17 +105,8 @@ jobs:
       - name: Stage new files, commit, and check for new cassettes
         id: stage_files
         run: |
-          git fetch origin ${{ github.base_ref }}
-
-          git add tests
-          git diff --cached --quiet && echo "No changes to commit" && exit 0
-          git config user.email "github-actions@github.com"
-          git config user.name "GitHub Actions"
-          git commit -m "Add new cassettes"
-          TIMESTAMP_COMMIT=$(date +%Y%m%d%H%M%S) # generate a timestamp
-          echo "TIMESTAMP_COMMIT=TIMESTAMP_COMMIT" >> $GITHUB_ENV
-
           # Check for new cassettes added in PR after the commit
+          git fetch origin ${{ github.base_ref }}
           NEW_CASSETTES_ADDED_IN_PR=$(git diff --name-only $(git merge-base ${{ github.event.pull_request.base.sha }} HEAD)..HEAD -- 'tests/**/cassettes/**/*.yaml' | wc -l)
           if [[ "$NEW_CASSETTES_ADDED_IN_PR" -gt 0 ]]
           then 
@@ -120,24 +120,18 @@ jobs:
         if: ${{ env.NEW_CASSETTES_ADDED_IN_PR}}
         run: |
           echo "This step will run the challenges soon."
+      
 
-      - name: Create PR
-        id: create_pr
-        if:  ${{ env.TIMESTAMP_COMMIT != null }}
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: Update cassettes and challenges score
-          branch: cassette-diff-PR-${{ github.event.pull_request.number }}-${{ env.TIMESTAMP_COMMIT }}
-          title: "Update cassette-diff-PR${{ github.event.pull_request.number }}-${{ env.TIMESTAMP_COMMIT }}"
-          body: "This PR updates the cassettes and the challenges score if it changed. Please merge it."
-
-      - name: Comment PR URL in the current PR
-        if:  ${{ env.TIMESTAMP_COMMIT != null }}
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          message: |
-            Please click [HERE](${{ steps.create_pr.outputs.pull-request-url }}) and merge this PR to update the cassettes.
+      - name: Stage new files, commit, and check for new cassettes
+        id: stage_files
+        run: |
+          git diff --cached --quiet -- test/ && echo "No changes to commit in test folder" && exit 0
+          git add tests
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+          git commit -m "Add new cassettes"
+          TIMESTAMP_COMMIT=$(date +%Y%m%d%H%M%S) # generate a timestamp
+          echo "TIMESTAMP_COMMIT=TIMESTAMP_COMMIT" >> $GITHUB_ENV
 
       - name: Fail if new PR created
         if:  ${{ env.TIMESTAMP_COMMIT != null }}
