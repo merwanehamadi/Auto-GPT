@@ -115,7 +115,6 @@ jobs:
             echo "NEW_CASSETTES_ADDED_IN_PR=false" >> $GITHUB_ENV
           fi
       
-            - name: Stage new files, commit, and check for new cassettes
 
       - name: Beat new challenges
         if: ${{ env.NEW_CASSETTES_ADDED_IN_PR}}
