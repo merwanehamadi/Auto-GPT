@@ -38,10 +38,12 @@ def review_diff(pr_link: str) -> str:
     diff = response.text
 
     # now we need to make llm call to evaluate the reponse
-    response = _process_diff(diff)
-    print(f"diff response: {response}")
+    llm_response = _process_diff(diff)
+    print(f"diff response: {llm_response}")
+    _push_review(pr_link, llm_response)
 
     return "Successfully reviewed PR."
+
 
 def _process_diff(diff):
     """
@@ -77,3 +79,46 @@ Below are guidelines for acceptable PRs.
 
     response = create_chat_completion(model=model, messages=messages, temperature=0)
     return response
+
+
+def _push_review(review, pr_link):
+    """
+    Push review to github
+    link: https://api.github.com/repos/{{owner}}/{{repo}}/pulls/{{pull_number}}/reviews
+    Body: {
+        "event": "APPROVE",
+        "body": "review"
+    }
+        Body: {
+        "event": "REQUEST_CHANGES",
+        "body": "review"
+    }
+    Post for both
+    The response either starts with either "acceptable" or "request changes"
+    If it doesn't we throw an error and let AutoGPT process it.
+    We then get the response after that and then push it to github with the API requests shown above
+    """
+    accepted = False
+    review = review.strip()
+    if review.lower().startswith("acceptable"):
+        accepted = True
+        tail_of_review = review[len("acceptable"):]
+    elif review.lower().startswith("request changes"):
+        tail_of_review = review[len("request changes"):]
+    else:
+        raise ValueError(f"Invalid response: {review}. It must start with either 'acceptable' or 'request changes'")
+
+    # now we need to push the review to github
+    body = {
+        "event": "APPROVE" if accepted else "REQUEST_CHANGES",
+        "body": tail_of_review,
+    }
+
+    response = requests.post(
+        f"{pr_link}/reviews",
+        json=body
+    )
+    if response.status_code != 200:
+        raise ValueError(f'Invalid response status: {response.status_code}. '
+                         f'Response text is: {response.text} ')
+
