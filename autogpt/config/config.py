@@ -83,6 +83,7 @@ class Config(metaclass=Singleton):
 
         self.github_api_key = os.getenv("GITHUB_API_KEY")
         self.github_username = os.getenv("GITHUB_USERNAME")
+        self.github_personal_access_token = os.getenv("GITHUB_PAT")
 
         self.google_api_key = os.getenv("GOOGLE_API_KEY")
         self.custom_search_engine_id = os.getenv("CUSTOM_SEARCH_ENGINE_ID")

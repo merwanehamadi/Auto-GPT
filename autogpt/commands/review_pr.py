@@ -77,3 +77,69 @@ Below are guidelines for acceptable PRs.
 
     response = create_chat_completion(model=model, messages=messages, temperature=0)
     return response
+
+
+@command(
+    "close_github_PR",
+    "Close GitHub PR",
+    '"owner": "<owner>", "repo": "<repo>", "pull_number": "<pull_number>"',
+    CFG.github_personal_access_token,
+    "Configure GITHUB_PAT env variable pls",
+)
+@validate_url
+def close_github_pr(owner, repo, pull_number) -> str:
+    """Closes a pull request on GitHub.
+
+    Args:
+        owner: The owner of the GitHub repository.
+        repo: The name of the GitHub repository.
+        pull_number: The number of the pull request to close.
+        github_token: A Personal Access Token with the `repo` scope.
+
+    Returns:
+        A response object from the GitHub API.
+    """
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
+    headers = {
+        "Authorization": f"token {github_token}",
+        "Content-Type": "application/json",
+    }
+    data = {"state": "closed"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(data))
+    return response
+
+
+
+@command(
+    "comment_github_PR",
+    "Comment on a GitHub PR",
+    '"owner": "<owner>", "repo": "<repo>", "pull_number": "<pull_number>", "comment": "<comment>"',
+    CFG.github_personal_access_token,
+    "Configure GITHUB_PAT env variable pls",
+)
+@validate_url
+def create_github_comment(owner, repo, issue_number, comment) -> str:
+    """Comments on a pull request on GitHub.
+
+    Args:
+        owner: The owner of the GitHub repository.
+        repo: The name of the GitHub repository.
+        pull_number: The number of the pull request to close.
+        github_token: A Personal Access Token with the `repo` scope.
+
+    Returns:
+        A response object from the GitHub API.
+    """
+    url = f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_number}/comments"
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {CFG.github_personal_access_token}",
+        "X-GitHub-Api-Version": "2022-11-28"
+    }
+    data = {
+        "body": comment
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response
