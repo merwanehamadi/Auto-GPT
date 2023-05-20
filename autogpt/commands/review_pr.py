@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import requests
 
 from autogpt.commands.command import command
@@ -12,7 +14,7 @@ from autogpt.config import Config
     "Review PR",
     '"pr_link": "<link_to_pr>"',
 )
-def review_diff(pr_link: str) -> str:
+def review_pr(pr_link: str) -> str:
     """
     A function that takes in code and suggestions and returns a response from create
       chat completion api call.
@@ -40,7 +42,7 @@ def review_diff(pr_link: str) -> str:
     # now we need to make llm call to evaluate the reponse
     llm_response = _process_diff(diff)
     print(f"diff response: {llm_response}")
-    _push_review(pr_link, llm_response)
+    _push_review(llm_response, pr_link)
 
     return "Successfully reviewed PR."
 
@@ -116,9 +118,17 @@ def _push_review(review, pr_link):
 
     response = requests.post(
         f"{pr_link}/reviews",
-        json=body
+        json=body,
+        headers={
+            "Authorization": f"Bearer {os.getenv('GITHUB_PAT')}",
+            "Cookie": f"logged_in=no",
+            "Content-Type": "application/json",
+        }
     )
     if response.status_code != 200:
         raise ValueError(f'Invalid response status: {response.status_code}. '
                          f'Response text is: {response.text} ')
 
+
+if __name__ == "__main__":
+    review_pr("https://github.com/merwanehamadi/Auto-GPT/pull/254")
