@@ -220,8 +220,9 @@ def kubernetes_agent(memory_local_cache, workspace: Workspace):
 
 def get_pr_review_agent(pr_number, repo, workspace: Workspace):
     command_registry = CommandRegistry()
-    command_registry.import_commands("autogpt.commands.file_operations")
+    # command_registry.import_commands("autogpt.commands.file_operations")
     command_registry.import_commands("autogpt.app")
+    command_registry.import_commands("autogpt.commands.review_pr")
     ai_name = "PR-Review Bot"
     ai_config = AIConfig(
         ai_name=ai_name,
