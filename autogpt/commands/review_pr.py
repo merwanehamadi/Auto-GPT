@@ -152,5 +152,20 @@ def extract_github_info(url):
         return None
 
 
+def extract_github_info(url):
+    pattern = r'https://github.com/([^/]+)/([^/]+)/pull/(\d+)'
+    match = re.match(pattern, url)
+
+    if match:
+        owner, repo, pull_id = match.groups()
+        return {
+            'owner': owner,
+            'repo': repo,
+            'pull_id': int(pull_id)
+        }
+    else:
+        return None
+
+
 if __name__ == "__main__":
     review_pr("https://github.com/merwanehamadi/Auto-GPT/pull/116")
