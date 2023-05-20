@@ -39,7 +39,7 @@ def review_diff(pr_link: str) -> str:
 
     # now we need to make llm call to evaluate the reponse
     response = _process_diff(diff)
-
+    print(f"diff response: {response}")
 
     return "Successfully reviewed PR."
 
