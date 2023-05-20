@@ -42,8 +42,8 @@ def review_pr(pr_link: str) -> str:
     diff = response.text
 
     # now we need to make llm call to evaluate the reponse
-    # llm_response = _process_diff(diff)
-    llm_response = "acceptable stuff here"
+    llm_response = _process_diff(diff)
+    # llm_response = "acceptable stuff here"
     print(f"diff response: {llm_response}")
     _push_review(llm_response, pr_link)
 
