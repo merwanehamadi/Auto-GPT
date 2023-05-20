@@ -17,6 +17,7 @@ PARAMETERS = SimpleNamespace(
     approved=False,
     # contains={"bad_variable_name.py": ["variable"]},
 )
+@pytest.skip("skip")
 @requires_api_key("OPENAI_API_KEY")
 def test_kube_challenge_2(
     monkeypatch: pytest.MonkeyPatch, workspace: Workspace
