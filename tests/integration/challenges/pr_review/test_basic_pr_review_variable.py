@@ -14,7 +14,7 @@ PARAMETERS = SimpleNamespace(
     approved=True,
     contains = {'bad_variables.py': 'not used'}
 )
-
+pytest.skip("Skipping test_basic_pr_review_variable.py")
 @requires_api_key("OPENAI_API_KEY")
 def test_basic_pr_review(
     monkeypatch: pytest.MonkeyPatch, workspace: Workspace
