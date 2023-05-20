@@ -5,12 +5,12 @@ from tests.integration.challenges.pr_review.base import run_tests
 from tests.utils import requires_api_key
 PR_LINK = "https://github.com/merwanehamadi/Auto-GPT/pull/116"
 PARAMETERS = SimpleNamespace(
-    source_branch_name="kube-challenge-2",
+    source_branch_name="unused-variable",
     source_repo_user="merwanehamadi",
 
     # PR information
-    title="kube-challenge-2",
-    body="kube-challenge-2",
+    title="unused-variable",
+    body="unused-variable",
     # time allowed to run
     cycle_count=3,
     # PR success criteria
