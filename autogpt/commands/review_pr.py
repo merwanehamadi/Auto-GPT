@@ -125,7 +125,7 @@ def _push_review(review, pr_link):
         f"https://api.github.com/repos/{info['owner']}/{info['repo']}/pulls/{info['pull_id']}/reviews",
         data=json.dumps(body),
         headers={
-            "Authorization": f"Bearer {os.getenv('GITHUB_PAT')}",
+            "Authorization": f"Bearer {os.getenv('GITHUB_REVIEWER_TOKEN')}",
             "Cookie": f"logged_in=no",
             "Content-Type": "application/json",
             'X-GitHub-Api-Version': '2022-11-28',
