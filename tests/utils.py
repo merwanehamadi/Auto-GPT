@@ -22,7 +22,7 @@ def dummy_openai_api_key():
 
 def requires_api_key(env_var):
     def decorator(func):
-        @functools.wraps(func)
+        @functools.wraps(func)fds
         def wrapper(*args, **kwargs):
             if env_var == "OPENAI_API_KEY":
                 if not os.environ.get(env_var) and env_var == "OPENAI_API_KEY":
