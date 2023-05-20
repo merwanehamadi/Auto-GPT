@@ -5,7 +5,7 @@ from github import Github
 
 from tests.integration.agent_factory import get_pr_review_agent
 from tests.integration.challenges.utils import run_interaction_loop
-
+from collections import defaultdict
 PR_TARGET_BRANCH = "hackathon-pr-target"
 PR_TARGET_REPO_USER = "merwanehamadi"
 REPO_NAME = "Auto-GPT"
@@ -67,6 +67,9 @@ def check_pr(pr_number, parameters):
         if review.state == "APPROVED":
             approvals += 1
 
+    # Get file comments
+    check_comments(parameters, pr, pr_number)
+
     print(
         f"The PR number {pr_number} in the repository {PR_TARGET_REPO} has {approvals} approvals."
     )
@@ -74,6 +77,19 @@ def check_pr(pr_number, parameters):
         assert approvals > 0
     else:
         assert approvals == 0
+
+    return True  # All conditions were satisfied
+
+
+def check_comments(parameters, pr, pr_number):
+    file_comments = defaultdict(list)  # Store comments per file
+    for comment in pr.get_comments():
+        file_comments[comment.path].append(comment.body)
+    # Verify if all required comments are present
+    for file, required_comments in parameters.contains.items():
+        for required_comment in required_comments:
+            assert any(required_comment in comment for comment in file_comments[file]), \
+                f"Missing required comment '{required_comment}' in file {file} for PR number {pr_number} in the repository {PR_TARGET_REPO}."
 
 
 def run_tests(parameters, monkeypatch, workspace):

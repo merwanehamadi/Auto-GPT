@@ -18,7 +18,6 @@ PARAMETERS = SimpleNamespace(
     cycle_count=3,
     # PR success criteria
     approved=False,
-    contains={"bad_variable_name.py": ["variable"]},
 )
 
 
