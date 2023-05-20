@@ -226,9 +226,11 @@ def get_pr_review_agent(pr_number, repo, workspace: Workspace):
     ai_name = "PR-Review Bot"
     ai_config = AIConfig(
         ai_name=ai_name,
-        ai_role="an autonomous agent that specializes in reviewing pull requests.",
+        ai_role=f"an autonomous agent that specializes in reviewing pull requests. The link to the PR is: <{repo}/pull/{pr_number}>",
         ai_goals=[
-            "TODO",
+            "Review the PR by giving the PR link to the review_pr command.",
+            "Continue to do this until no error is returned from the command",
+            "Exit the program on successfull completion of a review"
         ],
     )
     ai_config.command_registry = command_registry
