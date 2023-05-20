@@ -137,20 +137,6 @@ def _push_review(review, pr_link):
         raise ValueError(f'Invalid response status: {response.status_code}. '
                          f'Response text is: {response.text} ')
 
-def extract_github_info(url):
-    pattern = r'https://github.com/([^/]+)/([^/]+)/pull/(\d+)'
-    match = re.match(pattern, url)
-
-    if match:
-        owner, repo, pull_id = match.groups()
-        return {
-            'owner': owner,
-            'repo': repo,
-            'pull_id': int(pull_id)
-        }
-    else:
-        return None
-
 
 def extract_github_info(url):
     pattern = r'https://github.com/([^/]+)/([^/]+)/pull/(\d+)'
