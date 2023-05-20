@@ -1,3 +1,5 @@
+plz
+
 # Website and Documentation Site 📰📖
 Check out *https://agpt.co*, the official news & updates site for Auto-GPT!
 The documentation also has a place here, at *https://docs.agpt.co*
