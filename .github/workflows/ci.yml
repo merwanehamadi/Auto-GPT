@@ -96,13 +96,15 @@ jobs:
       - name: Stage new files, commit, and check for new cassettes
         id: stage_files
         run: |
-          echo '${{ secrets.PAT_REVIEW }}' | gh auth login --with-token
           git fetch origin ${{ github.base_ref }}
           git diff --cached --quiet tests && echo "No changes to commit" && exit 0
           git add tests
-          git config user.email "github-actions@github.com"
-          git config user.name "GitHub Actions"
+          echo '${{ secrets.PAT_REVIEW }}' | gh auth login --with-token
+          gh pr checkout ${{ github.event.pull_request.number }}
+          git config --global user.name "Auto-GPT-Bot"
+          git config --global user.email "github-bot@agpt.co"
           git commit -m "Add new cassettes"
+          git push origin ${{ github.head_ref }}
           TIMESTAMP_COMMIT=$(date +%Y%m%d%H%M%S) # generate a timestamp
           echo "TIMESTAMP_COMMIT=$TIMESTAMP_COMMIT" >> $GITHUB_ENV
           # Check for new cassettes added in PR after the commit
@@ -113,6 +115,7 @@ jobs:
           else 
             echo "NEW_CASSETTES_ADDED_IN_PR=false" >> $GITHUB_ENV
           fi
+      
 
       - name: Beat new challenges
         if: ${{ env.NEW_CASSETTES_ADDED_IN_PR}}
