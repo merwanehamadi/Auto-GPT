@@ -1,8 +1,8 @@
 import pytest
 from pytest_mock import MockerFixture
 
-from autogpt.commands.file_operations import read_file, write_to_file
-from tests.integration.challenges.utils import run_interaction_loop, run_multiple_times
+from autogpt.commands.file_operations import read_file
+from tests.integration.challenges.utils import run_interaction_loop
 from tests.utils import requires_api_key
 
 CYCLE_COUNT = 3
@@ -12,11 +12,12 @@ from autogpt.agent import Agent
 @pytest.mark.skip("This challenge hasn't been beaten yet.")
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
-@run_multiple_times(3)
+@pytest.mark.parametrize("execution_number", range(3))
 def test_information_retrieval_challenge_a(
     get_company_revenue_agent: Agent,
     monkeypatch: pytest.MonkeyPatch,
     patched_api_requestor: MockerFixture,
+    execution_number: int,
 ) -> None:
     """
     Test the challenge_a function in a given agent by mocking user inputs and checking the output file content.

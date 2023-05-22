@@ -3,18 +3,18 @@ import yaml
 
 from autogpt.agent import Agent
 from autogpt.commands.file_operations import read_file
-from tests.integration.challenges.utils import run_interaction_loop, run_multiple_times
+from tests.integration.challenges.utils import run_interaction_loop
 from tests.utils import requires_api_key
 
 CYCLE_COUNT = 6
 
 
+@pytest.mark.parametrize("execution_number", range(3))
 @pytest.mark.skip("This challenge hasn't been beaten yet.")
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
-@run_multiple_times(3)
 def test_kubernetes_template_challenge_a(
-    kubernetes_agent: Agent, monkeypatch: pytest.MonkeyPatch
+    kubernetes_agent: Agent, monkeypatch: pytest.MonkeyPatch, execution_number: int
 ) -> None:
     """
     Test the challenge_a function in a given agent by mocking user inputs
