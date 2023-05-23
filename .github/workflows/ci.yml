@@ -116,6 +116,7 @@ jobs:
         run: |
           git diff --cached --quiet tests && echo "No changes to commit" && exit 0
           find tests -type f -name '*.yaml' -print0 | xargs -0 git add
+          git add tests/integration/challenges/current_score.json
           echo '${{ secrets.PAT_REVIEW }}' | gh auth login --with-token
           gh repo set-default ${{ github.repository }}
           gh pr checkout ${{ github.event.pull_request.number }}
