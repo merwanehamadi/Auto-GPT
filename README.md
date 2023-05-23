@@ -96,6 +96,8 @@ Your support is greatly appreciated. Development of this free, open-source proje
 - 🔌 Extensibility with Plugins
 
 ## Quickstart
+[![](https://uohmivykqgnnbiouffke.supabase.co/storage/v1/object/public/landingpage/createdevenv2.svg)](https://console.brev.dev/environment/new?os=ejmrvoj8m&us=62ga2fflb&repo=https://github.com/merwanehamadi/Auto-GPT&instance=t3.large&diskStorage=60&region=us-west-2&setupRepo=https://github.com/brevdev/template-setup-scripts&setupPath=autogpt.sh)
+
 
 0. Check out the [wiki](https://github.com/Significant-Gravitas/Nexus/wiki)
 1. Get an OpenAI [API Key](https://platform.openai.com/account/api-keys)
