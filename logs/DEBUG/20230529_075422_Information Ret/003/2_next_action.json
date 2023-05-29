@@ -1,0 +1,15 @@
+{
+    "thoughts": {
+        "text": "I have completed the task of finding and saving the revenue of Tesla in 2022. I can now end this session.",
+        "reasoning": "I will use the task_complete command to end this session because I have completed the task I was assigned to do.",
+        "plan": "- Use the task_complete command to end this session.",
+        "criticism": "I need to ensure that I have completed all necessary tasks before ending this session.",
+        "speak": "I will use the task_complete command to end this session."
+    },
+    "command": {
+        "name": "task_complete",
+        "args": {
+            "reason": "Task completed successfully."
+        }
+    }
+}

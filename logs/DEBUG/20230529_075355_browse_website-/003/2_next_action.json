@@ -1,0 +1,15 @@
+{
+    "thoughts": {
+        "text": "I have completed the task. I will use the task_complete command to shut down the agent.",
+        "reasoning": "The task has been completed successfully. The task_complete command will allow me to shut down the agent and end the task.",
+        "plan": "- Use the task_complete command to shut down the agent",
+        "criticism": "I need to ensure that the task has been completed successfully before shutting down the agent.",
+        "speak": "I have completed the task. I will use the task_complete command to shut down the agent."
+    },
+    "command": {
+        "name": "task_complete",
+        "args": {
+            "reason": "The price of the book has been found and saved to a file."
+        }
+    }
+}

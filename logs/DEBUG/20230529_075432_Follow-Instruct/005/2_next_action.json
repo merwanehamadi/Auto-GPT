@@ -1,0 +1,15 @@
+{
+    "thoughts": {
+        "text": "I have completed all the tasks required of me. I should now shut down using the task_complete command.",
+        "reasoning": "All the instructions have been followed and the task is complete.",
+        "plan": "- Use the task_complete command to shut down",
+        "criticism": "I need to ensure that I have completed all the tasks before shutting down.",
+        "speak": "I will shut down now using the task_complete command."
+    },
+    "command": {
+        "name": "task_complete",
+        "args": {
+            "reason": "All tasks completed successfully."
+        }
+    }
+}
