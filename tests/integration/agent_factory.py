@@ -177,7 +177,7 @@ def kubernetes_agent(memory_json_file, workspace: Workspace):
     command_registry = CommandRegistry()
     command_registry.import_commands("autogpt.commands.file_operations")
     command_registry.import_commands("autogpt.app")
-
+    #random
     ai_config = AIConfig(
         ai_name="Kubernetes",
         ai_role="an autonomous agent that specializes in creating Kubernetes deployment templates.",
