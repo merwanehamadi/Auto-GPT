@@ -13,6 +13,12 @@ concurrency:
   group: ${{ format('ci-{0}', github.head_ref && format('pr-{0}', github.event.pull_request.number) || github.sha) }}
   cancel-in-progress: ${{ github.event_name == 'pull_request_target' }}
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PR_NUM: ${{ github.event.pull_request.number }}
+  CURRENT_DATE_TIME: ${{ steps.date.outputs.date }}
+
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -73,6 +79,37 @@ jobs:
         python-version: ["3.10"]
 
     steps:
+      - name: Get the current date and time
+        run: echo "CURRENT_DATE_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      - name: Checkout v3
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: "update-score-${{ env.PR_NUM }}-${{ env.CURRENT_DATE_TIME }}"
+
+      - name: Update Score
+        run: |
+          echo "update current score" >> tests/integration/challenges/current_score.json
+
+      - name: Commit and push
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add -A
+          git commit -m "Update score"
+          git push -u origin "update-score-${{ env.PR_NUM }}-${{ env.CURRENT_DATE_TIME }}"
+
+      - name: Create Pull Request
+        run: |
+          PR_BODY='{
+            "title": "Update Score In Pull Request Number ${{ env.PR_NUM }} ${{ env.CURRENT_DATE_TIME }}",
+            "head": "${{ github.repository_owner }}:update-score-${{ env.PR_NUM }}-${{ env.CURRENT_DATE_TIME }}",
+            "base": "${{ github.event.pull_request.user.login }}:${{ github.event.pull_request.head.ref }}",
+            "body": "This pull request updates the current score of Auto-GPT. Please check the files changed and merge the pull request."
+          }'
+          PR_URL=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$PR_BODY" | jq -r .html_url)
+          echo $PR_URL
       - name: Check out repository
         uses: actions/checkout@v3
         with:
@@ -81,6 +118,38 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           submodules: true
           token: ${{ secrets.PAT_REVIEW }}
+
+      - name: Make some changes
+        run: |
+          echo "This is a change" > change.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "Auto-GPT-Bot"
+          git config --global user.email "github-bot@agpt.co"
+          git checkout -b source-branch
+          git add .
+          git commit -m "Add change.txt"
+          git push origin source-branch
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }} # Make sure to replace this with your own PAT.
+        run: |
+          PR_BODY='{
+            "title": "pull-request-title",
+            "head": "source-branch",
+            "base": "target-branch"
+          }'
+
+          PR_RESPONSE=$(curl \
+            -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            https://api.github.com/repos/${{ github.event.pull_request.head.repo.full_name }}/pulls \
+            -d "${PR_BODY}")
+
+          echo "Pull Request Response -> ${PR_RESPONSE}"
 
       - name: Use cassettes previously sent
         if: ${{ github.event_name == 'pull_request_target' }}
