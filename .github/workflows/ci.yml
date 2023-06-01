@@ -234,6 +234,7 @@ jobs:
             git commit -m "Update score"
             git checkout -b $new_branch
             echo ${{ secrets.PAT_REVIEW }} | gh auth login --with-token
+            gh repo set-default ${{ github.event.pull_request.base.repo.full_name }}
             git push origin $new_branch
           
             gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
