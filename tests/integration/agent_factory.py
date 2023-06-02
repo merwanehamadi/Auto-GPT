@@ -82,7 +82,7 @@ def writer_agent(agent_test_config, memory_none: NoMemory, workspace: Workspace)
         ai_goals=[
             "Use the write_to_file command to write 'Hello World' into a file named \"hello_world.txt\"!!.!!!!",
             "Use the task_complete command to complete the task.!!",
-            "Do not use any other commands!!!",
+            "Do not use any other commands!!!!!",
         ],
     )
     ai_config.command_registry = command_registry
@@ -118,7 +118,7 @@ def memory_management_agent(agent_test_config, memory_json_file, workspace: Work
         ai_name="Follow-Instructions-GPT",
         ai_role="an AI designed to read the instructions_1.txt file using the read_file method and follow the instructions in the file!!!!!!!",
         ai_goals=[
-            "Use the command read_file to read the instructions_1.txt file.!!!!!",
+            "Use the command read_file to read the instructions_1.txt file.!!!!!!!",
             "Follow the instructions in the instructions_1.txt file",
         ],
     )
