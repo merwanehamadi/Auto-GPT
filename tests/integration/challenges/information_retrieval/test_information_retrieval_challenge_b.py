@@ -17,6 +17,9 @@ CYCLE_COUNT = 3
 
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
+@pytest.mark.skip(
+    "This test uses the browse website functionality, which VCR doesn't support yet, this means it's slower, costs money and is less reliable. It will be unskipped once VCR support browse_website"
+)
 @challenge
 def test_information_retrieval_challenge_b(
     get_nobel_prize_agent: Agent,
