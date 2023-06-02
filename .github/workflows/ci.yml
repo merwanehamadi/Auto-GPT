@@ -82,14 +82,11 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_REVIEW }}
 
-      - name: Get mirror branch submodule
-        run: |
-          mirror_branch_submodule="${{ github.event.pull_request.user.login }}-${{ github.event.pull_request.head.ref }}"
-          echo "MIRROR_BRANCH_SUBMODULE=${{ env.MIRROR_BRANCH_SUBMODULE}}" >> $GITHUB_ENV
-
-      - name: Use cassettes previously sent
+      - name: Use cassettes previously sent [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
+          mirror_branch_submodule="${{ github.event.pull_request.user.login }}-${{ github.event.pull_request.head.ref }}"
+          echo "MIRROR_BRANCH_SUBMODULE=$mirror_branch_submodule" >> $GITHUB_ENV
           git config --global user.name "Github Actions"
           git config --global user.email "github-actions@github.com"
           cd tests/Auto-GPT-test-cassettes
@@ -131,7 +128,7 @@ jobs:
           AGENT_MODE: ${{ vars.AGENT_MODE }}
           AGENT_TYPE: ${{ vars.AGENT_TYPE }}
 
-      - name: Update cassette submodule to push target if push event
+      - name: Update cassette submodule to push target [Push event only]
         if: ${{ github.event_name == 'push' }}
         run: |
           current_branch=$(echo ${{ github.ref }} | sed -e "s/refs\/heads\///g")
@@ -165,7 +162,7 @@ jobs:
             echo "No cassettes changes to commit"
           fi
 
-      - name: Identify differences between cassettes of current PR and target branch.
+      - name: Identify differences between cassettes of current PR and target branch [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
           cassettes_modified=$(git diff --name-only --diff-filter=M -- tests/Auto-GPT-test-cassettes)
@@ -178,7 +175,7 @@ jobs:
             echo "Cassettes were not modified"
           fi
 
-      - name: Attempt to beat Challenges if cassettes changed
+      - name: Attempt to beat Challenges if cassettes changed [PR event only]
         if: ${{ env.CASSETTES_MODIFIED == 'true' }}
         run: |
           pytest -n auto tests/integration/challenges/memory/test_memory_challenge_c.py tests/integration/challenges/basic_abilities/test_write_file.py --beat-challenges --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
@@ -192,7 +189,7 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
-      - name: Update cassette submodule to a mirror branch.
+      - name: Update cassette submodule to a mirror branch [PR event only]
         if: ${{ env.CASSETTES_MODIFIED == 'true' }}
         run: |
           cd tests/Auto-GPT-test-cassettes
@@ -209,7 +206,7 @@ jobs:
             exit 0
           fi
 
-      - name: Create Pull Request to update the score
+      - name: Create Pull Request to update the score [PR event only]
         run: |
           current_date_time=$(date +'%Y%m%d%H%M%S')
           current_score_branch="update-score-${{ github.event.pull_request.number }}-$current_date_time"
@@ -238,7 +235,7 @@ jobs:
             echo "The current score didn't change."
           fi
 
-      - name: Apply or remove behaviour change label and comment
+      - name: Apply or remove behaviour change label and comment [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
           TOKEN=${{ secrets.PAT_REVIEW }}
