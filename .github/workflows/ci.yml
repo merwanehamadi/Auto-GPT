@@ -168,15 +168,14 @@ jobs:
       - name: Identify differences between cassettes of current PR and target branch.
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
-          mirror_branch_submodule="${{ github.event.pull_request.user.login }}-${{ github.event.pull_request.head.ref }}"
-
-          cd tests/Auto-GPT-test-cassettes
-          cassettes_modified=$(git diff --name-only --diff-filter=M)
+          cassettes_modified=$(git diff --name-only --diff-filter=M -- tests/Auto-GPT-test-cassettes)
 
           if [ -n "$cassettes_modified" ]; then
             echo "CASSETTES_MODIFIED=true" >> $GITHUB_ENV
+            echo "Cassettes were modified"
           else
             echo "CASSETTES_MODIFIED=false" >> $GITHUB_ENV
+            echo "Cassettes were not modified"
           fi
 
       - name: Attempt to beat Challenges if cassettes changed
