@@ -91,14 +91,13 @@ jobs:
           git config --global user.email "github-actions@github.com"
           cd tests/Auto-GPT-test-cassettes
 
-          if git ls-remote --exit-code --heads origin ${{ env.MIRROR_BRANCH_SUBMODULE}} ; then
-            git fetch origin ${{ env.MIRROR_BRANCH_SUBMODULE}}:${{ env.MIRROR_BRANCH_SUBMODULE}}
+          if git ls-remote --exit-code --heads origin $mirror_branch_submodule ; then
+            git fetch origin $mirror_branch_submodule:$mirror_branch_submodule
             git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
 
-            git checkout ${{ env.MIRROR_BRANCH_SUBMODULE}}
+            git checkout $mirror_branch_submodule
 
-            if git merge --no-ff ${{ github.event.pull_request.base.ref }}; then
-              git reset --hard origin ${{ env.MIRROR_BRANCH_SUBMODULE}}
+            if git merge --no-commit --no-ff ${{ github.event.pull_request.base.ref }}; then
               echo "No merge conflict detected. We can use the cassettes previously sent. Commit: $(git rev-parse HEAD)"
             else
               echo "Merge conflict detected. This means we cannot use the cassettes previously sent, so we will take the cassettes of ${{ github.event.pull_request.base.ref }}."
@@ -106,7 +105,7 @@ jobs:
               git checkout ${{ github.event.pull_request.base.ref }}
             fi
           else
-            echo "Branch ${{ env.MIRROR_BRANCH_SUBMODULE}} does not exist. We will use the cassettes of ${{ github.event.pull_request.base.ref }}"
+            echo "Branch $mirror_branch_submodule does not exist. We will use the cassettes of ${{ github.event.pull_request.base.ref }}"
           fi
 
       - name: Set up Python ${{ matrix.python-version }}
