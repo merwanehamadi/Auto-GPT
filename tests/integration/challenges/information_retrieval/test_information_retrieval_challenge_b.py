@@ -37,7 +37,7 @@ def test_information_retrieval_challenge_b(
     :param level_to_run: The level to run.
     :param config: The config object.
     """
-
+    # dummy change
     with contextlib.suppress(SystemExit):
         run_interaction_loop(monkeypatch, get_nobel_prize_agent, CYCLE_COUNT)
 
