@@ -113,7 +113,7 @@ def memory_management_agent(agent_test_config, memory_json_file, workspace: Work
     command_registry.import_commands("autogpt.commands.file_operations")
     command_registry.import_commands("autogpt.app")
     command_registry.import_commands("autogpt.commands.task_statuses")
-
+    # dummy comment
     ai_config = AIConfig(
         ai_name="Follow-Instructions-GPT",
         ai_role="an AI designed to read the instructions_1.txt file using the read_file method and follow the instructions in the file!!!!",
