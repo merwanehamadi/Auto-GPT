@@ -98,21 +98,35 @@ jobs:
             git commit -m "Update score"
             git checkout -b $current_score_branch
 
-
             git remote add base https://github.com/${{ github.event.pull_request.base.repo.full_name }}.git
 
             git push base $current_score_branch
             echo "Base branch: ${{ github.event.pull_request.head.ref }}"
-            
-            branches_to_delete=$(gh api repos/${{ github.repository_owner }}/${{ github.repository }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
+
+            branches_to_delete=$(gh api repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
 
             if [ ! -z "$branches_to_delete" ]; then
-              echo "$branches_to_delete" | xargs -I {} gh api -X DELETE /repos/${{ github.repository_owner }}/${{ github.repository }}/git/{}
+              echo "$branches_to_delete" | xargs -I {} gh api -X DELETE /repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/{}
             else
               echo "No matching branches found to delete."
             fi
 
-            
+
+            pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
+            --head "${{ github.event.pull_request.base.repo.owner.login }}:$current_score_branch" \
+            --base "${{ github.event.pull_request.head.ref }}" \
+            --body "This pull request updates the current score of Auto-GPT. Please check the files changed and merge the pull request." \
+            --repo ${{ github.event.pull_request.head.repo.full_name }})
+
+
+            echo "SCORE_CHANGED=true" >> $GITHUB_ENV
+            echo "PR_URL=$pr_url" >> $GITHUB_ENV
+          else
+            echo "The current score didn't change."
+          fi
+          
+          
+          
             pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
             --head "${{ github.repository_owner }}:$current_score_branch" \
             --base "${{ github.event.pull_request.head.ref }}" \
