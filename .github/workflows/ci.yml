@@ -100,21 +100,39 @@ jobs:
 
             git remote add base https://github.com/${{ github.event.pull_request.base.repo.full_name }}.git
             branches_to_delete=$(gh api repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
+
             if [ ! -z "$branches_to_delete" ]; then
-              echo "$branches_to_delete" | xargs -I {} gh api -X DELETE /repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/{}
+              for branch in $branches_to_delete
+              do
+                # remove 'refs/heads/' from the branch name
+                branch_short=${branch#refs/heads/}
+
+                # get PRs associated with this branch
+                prs=$(gh api repos/${{ github.repository }}/pulls -q ".[] | select(.head.ref == \"$branch_short\") | .number")
+
+                # iterate through all PRs
+                for pr in $prs
+                do
+                  # close the PR
+                  gh api repos/${{ github.repository }}/pulls/$pr -X PATCH -F state="closed"
+                done
+
+                # delete the branch
+                gh api -X DELETE /repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/$branch
+              done
             else
               echo "No matching branches found to delete."
             fi
-            
+
             git push base $current_score_branch
             echo "Base branch: ${{ github.event.pull_request.head.ref }}"
-
 
             echo "SCORE_CHANGED=true" >> $GITHUB_ENV
             echo "PR_URL=$pr_url" >> $GITHUB_ENV
           else
             echo "The current score didn't change."
           fi
+      
 
       - name: Apply or remove behaviour change label and comment [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
