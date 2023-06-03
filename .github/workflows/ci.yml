@@ -120,7 +120,7 @@ jobs:
 
       - name: Run pytest tests with coverage
         run: |
-          pytest -n auto tests/integration/challenges/basic_abilities/test_write_file.py tests/integration/challenges/memory/test_memory_challenge_b.py --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
+          pytest -n auto tests/integration/challenges/basic_abilities/test_write_file.py tests/integration/challenges/memory/test_memory_challenge_c.py --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
           python tests/integration/challenges/utils/build_current_score.py
         env:
           CI: true
@@ -180,7 +180,7 @@ jobs:
       - name: Attempt to beat Challenges if cassettes changed [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
         run: |
-          pytest -n auto tests/integration/challenges/basic_abilities/test_write_file.py tests/integration/challenges/memory/test_memory_challenge_b.py --beat-challenges --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
+          pytest -n auto tests/integration/challenges/basic_abilities/test_write_file.py tests/integration/challenges/memory/test_memory_challenge_c.py --beat-challenges --cov=autogpt --cov-report term-missing --cov-branch --cov-report xml --cov-report term
           python tests/integration/challenges/utils/build_current_score.py
         env:
           CI: true
