@@ -109,39 +109,17 @@ jobs:
             git push base $current_score_branch
             echo "Base branch: ${{ github.event.pull_request.head.ref }}"
 
-            branches_to_delete=$(gh api repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
-
-            
-
-
             pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
             --head "${{ github.event.pull_request.base.repo.owner.login }}:$current_score_branch" \
             --base "${{ github.event.pull_request.head.ref }}" \
             --body "This pull request updates the current score of Auto-GPT. Please check the files changed and merge the pull request." \
             --repo ${{ github.event.pull_request.head.repo.full_name }})
 
-
             echo "SCORE_CHANGED=true" >> $GITHUB_ENV
             echo "PR_URL=$pr_url" >> $GITHUB_ENV
           else
             echo "The current score didn't change."
           fi
-          
-          
-          
-            pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
-            --head "${{ github.repository_owner }}:$current_score_branch" \
-            --base "${{ github.event.pull_request.head.ref }}" \
-            --body "This pull request updates the current score of Auto-GPT. Please check the files changed and merge the pull request." \
-            --repo ${{ github.event.pull_request.head.repo.full_name }})
-            
-            
-            echo "SCORE_CHANGED=true" >> $GITHUB_ENV
-            echo "PR_URL=$pr_url" >> $GITHUB_ENV
-          else
-            echo "The current score didn't change."
-          fi
-          
 
       - name: Apply or remove behaviour change label and comment [PR event only]
         if: ${{ github.event_name == 'pull_request_target' }}
