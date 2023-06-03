@@ -293,6 +293,7 @@ jobs:
           fi
           
           if [[ "${{ env.SCORE_CHANGED }}" == "true" ]]; then
+            echo ""
             echo "Pipeline failed so you don't forget to merge the PR with the challenge score updated"
             exit 1
           fi
