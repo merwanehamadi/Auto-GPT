@@ -294,6 +294,6 @@ jobs:
           
           if [[ "${{ env.SCORE_CHANGED }}" == "true" ]]; then
             echo "::set-output name=LINE_BREAK" # This is to create a line break
-            echo SCORE_CHANGED_MESSAGE
+            echo "$SCORE_CHANGED_MESSAGE"
             exit 1
           fi
