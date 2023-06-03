@@ -2,6 +2,7 @@
 """Tests for JSONFileMemory class"""
 import orjson
 import pytest
+from pytest_mock import MockerFixture
 
 from autogpt.config import Config
 from autogpt.memory.vector import JSONFileMemory, MemoryItem
@@ -80,7 +81,9 @@ def test_json_memory_get(config: Config, memory_item: MemoryItem, mock_get_embed
 
 @pytest.mark.vcr
 @requires_api_key("OPENAI_API_KEY")
-def test_json_memory_get_relevant(config: Config, patched_api_requestor: None) -> None:
+def test_json_memory_get_relevant(
+    config: Config, patched_api_requestor: MockerFixture
+) -> None:
     index = JSONFileMemory(config)
     mem1 = MemoryItem.from_text_file("Sample text", "sample.txt")
     mem2 = MemoryItem.from_text_file("Grocery list:\n- Pancake mix", "groceries.txt")
