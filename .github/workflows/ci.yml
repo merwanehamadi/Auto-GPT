@@ -271,7 +271,7 @@ jobs:
           REPO=${{ github.repository }}
           echo $TOKEN | gh auth login --with-token
           COMMENT_BODY=""
-          SCORE_CHANGED_MESSAGE="The score has been updated, please merge this pull request: ${{ env.PR_URL }}. The tests will fail until the pull request is merged."
+          SCORE_CHANGED_MESSAGE="The pipeline will fail until you merge the updated score: ${{ env.PR_URL }}"
 
           if ${{ env.CASSETTES_MODIFIED == 'true'}}; then
             echo "Adding label and comment..."
@@ -293,7 +293,7 @@ jobs:
           fi
           
           if [[ "${{ env.SCORE_CHANGED }}" == "true" ]]; then
-            echo "::set-output name=LINE_BREAK::"
-            echo "######################## Pipeline failed so you don't forget to merge the PR with the challenge score updated.########################"
+            echo "::set-output name=LINE_BREAK" # This is to create a line break
+            echo SCORE_CHANGED_MESSAGE
             exit 1
           fi
