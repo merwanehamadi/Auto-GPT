@@ -126,6 +126,12 @@ jobs:
 
             git push base $current_score_branch
             echo "Base branch: ${{ github.event.pull_request.head.ref }}"
+          
+            pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
+            --head "${{ github.event.pull_request.base.repo.owner.login }}:$current_score_branch" \
+            --base "${{ github.event.pull_request.head.ref }}" \
+            --body "This pull request updates the current score of Auto-GPT. Please check the files changed and merge the pull request." \
+            --repo ${{ github.event.pull_request.head.repo.full_name }})
 
             echo "SCORE_CHANGED=true" >> $GITHUB_ENV
             echo "PR_URL=$pr_url" >> $GITHUB_ENV
