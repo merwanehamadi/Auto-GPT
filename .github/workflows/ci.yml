@@ -99,17 +99,19 @@ jobs:
             git checkout -b $current_score_branch
 
             git remote add base https://github.com/${{ github.event.pull_request.base.repo.full_name }}.git
-
-            git push base $current_score_branch
-            echo "Base branch: ${{ github.event.pull_request.head.ref }}"
-
-            branches_to_delete=$(gh api repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
-
+            
             if [ ! -z "$branches_to_delete" ]; then
               echo "$branches_to_delete" | xargs -I {} gh api -X DELETE /repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/{}
             else
               echo "No matching branches found to delete."
             fi
+            
+            git push base $current_score_branch
+            echo "Base branch: ${{ github.event.pull_request.head.ref }}"
+
+            branches_to_delete=$(gh api repos/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}/git/refs --jq ".[] | select(.ref | startswith(\"refs/heads/update-score-${{ github.event.pull_request.number }}\")) | .ref")
+
+            
 
 
             pr_url=$(gh pr create --title "Update Score In Pull Request Number ${{ github.event.pull_request.number }}" \
