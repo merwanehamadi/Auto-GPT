@@ -14,7 +14,7 @@ def before_record_response_filter_errors(
     response: Dict[str, Any]
 ) -> Optional[Dict[str, Any]]:
     """In challenges we don't want to record errors (See issue #4461)"""
-    if response["status"]["code"] >= 400:
+    if response["status"]["code"] >= 400 and response["status"]["code"] != 408:
         return None
 
     return before_record_response(response)
