@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 @command(
-    "read_audio_from_file",
+    "read_audio_from_ffdsfdsile",
     "Convert Audio to text",
     '"filename": "<filename>"',
     lambda config: config.huggingface_audio_to_text_model
