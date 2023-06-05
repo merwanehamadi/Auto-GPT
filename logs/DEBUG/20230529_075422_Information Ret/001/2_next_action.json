@@ -1,0 +1,15 @@
+{
+    "thoughts": {
+        "text": "I need to search for the revenue of Tesla in 2022. I can use the google command to search for this information.",
+        "reasoning": "I will use the google command to search for the revenue of Tesla in 2022 because it is the most efficient way to find this information.",
+        "plan": "- Use the google command to search for the revenue of Tesla in 2022.",
+        "criticism": "I need to ensure that I am using the correct search terms to find the information I need.",
+        "speak": "I will use the google command to search for the revenue of Tesla in 2022."
+    },
+    "command": {
+        "name": "google",
+        "args": {
+            "query": "tesla revenue 2022"
+        }
+    }
+}
