@@ -167,7 +167,7 @@ jobs:
             echo "Cassettes changed: $cassette_diff"
             echo "cassettes_changed=true" >> $GITHUB_OUTPUT
           else
-            echo "Cassettes did not change.
+            echo "Cassettes did not change."
             echo "cassettes_changed=false" >> $GITHUB_OUTPUT
           fi
 
