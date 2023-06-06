@@ -148,8 +148,7 @@ jobs:
 
       - name: Run pytest with coverage
         run: |
-          echo "test" >> tests/Auto-GPT-test-cassettes/test_write_file/test_write_file.yaml
-          echo "test" >> tests/challenges/current_score.json
+          echo "do nothing"
         env:
           CI: true
           PROXY: ${{ secrets.PROXY }}
@@ -170,8 +169,7 @@ jobs:
       - name: Attempt to beat Challenges if cassettes changed
         if: ${{ startsWith(github.event_name, 'pull_request') }} && "${{ steps.get_cassettes_diff.outputs.updated }}" == "true"
         run: |
-          echo "test" >> tests/Auto-GPT-test-cassettes/test_write_file/test_write_file.yaml
-          echo "test" >> tests/challenges/current_score.json
+          echo "do nothing"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
