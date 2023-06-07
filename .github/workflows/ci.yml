@@ -213,7 +213,8 @@ jobs:
             if [ "${{ startsWith(github.event_name, 'pull_request') }}" = "true" ]; then
               updated_score_branch="update-score-${{ github.event.pull_request.number }}"
               git checkout -b $updated_score_branch
-              git remote add base_repo https://github.com/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}.git
+              git remote add base_repo \
+                https://github.com/${{ github.event.pull_request.base.repo.owner.login }}/${{ github.event.pull_request.base.repo.name }}.git
               git push -f base_repo $updated_score_branch
               echo "updated_score_branch=$updated_score_branch" >> $GITHUB_OUTPUT
             else
