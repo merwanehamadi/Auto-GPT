@@ -221,6 +221,7 @@ def get_nobel_prize_agent(agent_test_config, memory_json_file, workspace: Worksp
     command_registry.import_commands("autogpt.commands.file_operations")
     command_registry.import_commands("autogpt.app")
     command_registry.import_commands("autogpt.commands.web_selenium")
+    command_registry.import_commands("autogpt.commands.task_statuses")
 
     ai_config = AIConfig(
         ai_name="Get-PhysicsNobelPrize",
