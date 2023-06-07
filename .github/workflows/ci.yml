@@ -174,7 +174,7 @@ jobs:
       - name: Attempt to beat Challenges if cassettes changed
         if: startsWith(github.event_name, 'pull_request') && steps.get_cassettes_diff.outputs.cassettes_changed == 'true'
         run: |
-          pytest -n auto tests/challenges/basic_abilities/test_write_file.py tests/challenges/memory/test_memory_challenge_c.py --cov=autogpt --cov-branch --cov-report term-missing --cov-report xml
+          pytest -n auto tests/challenges/basic_abilities/test_write_file.py tests/challenges/memory/test_memory_challenge_c.py --beat-challenges --cov=autogpt --cov-branch --cov-report term-missing --cov-report xml
           python tests/challenges/utils/build_current_score.py
         env:
           CI: true
