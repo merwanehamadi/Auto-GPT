@@ -309,7 +309,7 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/$REPO/issues/${{ github.event.pull_request.number }}/labels \
             -d '{"labels":["behaviour change"]}'
-            COMMENT_BODY="You changed AutoGPT's behaviour. The cassettes have been updated and will be merged to the submodule when this Pull Request gets merged. "
+            COMMENT_BODY="You changed Auto-GPT's behaviour. The cassettes have been updated and will be merged to the submodule when this Pull Request gets merged. "
             echo "Added comment and label informing of cassette update."
           else
             echo "Cassettes did not change so no label or comment added."
