@@ -1,11 +1,8 @@
 name: PR Closed CI
 
 on:
-  pull_request:
-    branches: [ stable, master ]
-    types: [closed]
   pull_request_target:
-    branches: [ master, ci-test* ]
+    branches: [ stable, master, ci-test* ]
     types: [closed]
 
 jobs:
