@@ -54,7 +54,7 @@ def browser_agent(agent_test_config, memory_none: NoMemory, workspace: Workspace
     ai_config.command_registry = command_registry
 
     system_prompt = ai_config.construct_full_prompt()
-
+    # dummy
     agent = Agent(
         ai_name="",
         memory=memory_none,
