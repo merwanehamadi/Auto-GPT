@@ -36,9 +36,7 @@ def challenge(func: Callable[..., Any]) -> Callable[..., None]:
                     func(*args, **kwargs)
                     challenge.succeeded = True
                 except AssertionError as err:
-                    original_error = AssertionError(
-                        f"{CHALLENGE_FAILED_MESSAGE}\n{err}"
-                    )
+                    original_error = err
                     challenge.succeeded = False
             else:
                 challenge.skipped = True
