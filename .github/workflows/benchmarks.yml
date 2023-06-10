@@ -1,0 +1,59 @@
+name: Python CI
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: master
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - id: get_date
+        name: Get date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Set up Python dependency cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}-${{ steps.get_date.outputs.date }}
+
+      - name: Install Python dependencies
+        run: |
+          rm -rf tests/Auto-GPT-test-cassettes
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest with coverage
+        run: |
+          pytest -n auto tests/challenges
+        env:
+          CI: true
+          PROXY: ${{ secrets.PROXY }}
+          AGENT_MODE: ${{ secrets.AGENT_MODE }}
+          AGENT_TYPE: ${{ secrets.AGENT_TYPE }}
+          PLAIN_OUTPUT: True
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-logs
+          path: logs/
