@@ -37,12 +37,12 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          rm -rf tests/Auto-GPT-test-cassettes
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run pytest with coverage
         run: |
+          rm -rf tests/Auto-GPT-test-cassettes
           pytest -n auto tests/challenges
         env:
           CI: true
