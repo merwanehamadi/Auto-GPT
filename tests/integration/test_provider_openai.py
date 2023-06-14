@@ -1,8 +1,10 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from _pytest.logging import LogCaptureFixture
 
 from autogpt.llm.api_manager import COSTS, ApiManager
+from autogpt.llm.base import MessageDict
 from autogpt.llm.providers import openai
 
 api_manager = ApiManager()
@@ -19,7 +21,7 @@ def mock_costs():
     with patch.dict(
         COSTS,
         {
-            "gpt-3.5-turbo": {"prompt": 0.002, "completion": 0.002},
+            "gpt-3.5-turbo-16k-0613": {"prompt": 0.002, "completion": 0.002},
             "text-embedding-ada-002": {"prompt": 0.0004, "completion": 0},
         },
         clear=True,
@@ -29,13 +31,13 @@ def mock_costs():
 
 class TestProviderOpenAI:
     @staticmethod
-    def test_create_chat_completion_debug_mode(caplog):
+    def test_create_chat_completion_debug_mode(caplog: LogCaptureFixture):
         """Test if debug mode logs response."""
         messages = [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": "Who won the world series in 2020?"},
+            MessageDict(role="system", content="You are a helpful assistant."),
+            MessageDict(role="user", content="Who won the world series in 2020?"),
         ]
-        model = "gpt-3.5-turbo"
+        model = "gpt-3.5-turbo-16k-0613"
         with patch("openai.ChatCompletion.create") as mock_create:
             mock_response = MagicMock()
             del mock_response.error
@@ -51,7 +53,7 @@ class TestProviderOpenAI:
     def test_create_chat_completion_empty_messages():
         """Test if empty messages result in zero tokens and cost."""
         messages = []
-        model = "gpt-3.5-turbo"
+        model = "gpt-3.5-turbo-16k-0613"
 
         with patch("openai.ChatCompletion.create") as mock_create:
             mock_response = MagicMock()

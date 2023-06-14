@@ -1,4 +1,5 @@
 import functools
+import json
 import time
 from typing import List
 from unittest.mock import patch
@@ -19,56 +20,36 @@ from autogpt.llm.base import (
 )
 from autogpt.logs import logger
 
+MODELS_MAPPING = {
+    "gpt-3.5-turbo-0301": "gpt-3.5-turbo-16k-0613",
+    "gpt-3.5-turbo": "gpt-3.5-turbo-16k-0613",
+    "gpt-3.5-turbo-16k": "gpt-3.5-turbo-16k-0613",
+    "gpt-4": "gpt-4-0613",
+    "gpt-4-0314": "gpt-4-0613",
+    "gpt-4-32k": "gpt-4-32k-0613",
+    "gpt-4-32k-0314": "gpt-4-32k-0613",
+}
+
 OPEN_AI_CHAT_MODELS = {
     info.name: info
     for info in [
         ChatModelInfo(
-            name="gpt-3.5-turbo",
-            prompt_token_cost=0.002,
-            completion_token_cost=0.002,
-            max_tokens=4096,
+            name="gpt-3.5-turbo-16k-0613",
+            prompt_token_cost=0.003,
+            completion_token_cost=0.004,
+            max_tokens=16384,
         ),
         ChatModelInfo(
-            name="gpt-3.5-turbo-0301",
-            prompt_token_cost=0.002,
-            completion_token_cost=0.002,
-            max_tokens=4096,
-        ),
-        ChatModelInfo(
-            name="gpt-4",
+            name="gpt-4-0613",
             prompt_token_cost=0.03,
             completion_token_cost=0.06,
             max_tokens=8192,
         ),
         ChatModelInfo(
-            name="gpt-4-0314",
-            prompt_token_cost=0.03,
-            completion_token_cost=0.06,
-            max_tokens=8192,
-        ),
-        ChatModelInfo(
-            name="gpt-4-32k",
+            name="gpt-4-32k-0613",
             prompt_token_cost=0.06,
             completion_token_cost=0.12,
             max_tokens=32768,
-        ),
-        ChatModelInfo(
-            name="gpt-4-32k-0314",
-            prompt_token_cost=0.06,
-            completion_token_cost=0.12,
-            max_tokens=32768,
-        ),
-    ]
-}
-
-OPEN_AI_TEXT_MODELS = {
-    info.name: info
-    for info in [
-        TextModelInfo(
-            name="text-davinci-003",
-            prompt_token_cost=0.02,
-            completion_token_cost=0.02,
-            max_tokens=4097,
         ),
     ]
 }
@@ -88,7 +69,6 @@ OPEN_AI_EMBEDDING_MODELS = {
 
 OPEN_AI_MODELS: dict[str, ChatModelInfo | EmbeddingModelInfo | TextModelInfo] = {
     **OPEN_AI_CHAT_MODELS,
-    **OPEN_AI_TEXT_MODELS,
     **OPEN_AI_EMBEDDING_MODELS,
 }
 
@@ -197,13 +177,18 @@ def create_chat_completion(
         OpenAIObject: The ChatCompletion response from OpenAI
 
     """
-    completion: OpenAIObject = openai.ChatCompletion.create(
-        messages=messages,
-        **kwargs,
-    )
-    if not hasattr(completion, "error"):
-        logger.debug(f"Response: {completion}")
-    return completion
+    try:
+        logger.debug(f"Messages sent to OpenAI: {json.dumps(messages, indent=4)}")
+        completion: OpenAIObject = openai.ChatCompletion.create(
+            messages=messages, **kwargs
+        )
+        if not hasattr(completion, "error"):
+            logger.debug(f"Response: {completion}")
+
+        return completion
+    except Exception as e:
+        logger.error(f"Error response from OpenAI: {e}")
+        raise e
 
 
 @meter_api

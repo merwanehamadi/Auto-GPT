@@ -7,7 +7,7 @@ from colorama import Fore, Style
 
 from autogpt.config import Config
 from autogpt.config.ai_config import AIConfig
-from autogpt.json_utils.utilities import extract_json_from_response, validate_json
+from autogpt.llm.base import MessageCycle
 from autogpt.llm.chat import chat_with_ai
 from autogpt.llm.providers.openai import OPEN_AI_CHAT_MODELS
 from autogpt.llm.utils import count_string_tokens
@@ -20,11 +20,14 @@ from autogpt.log_cycle.log_cycle import (
 from autogpt.logs import logger, print_assistant_thoughts
 from autogpt.memory.message_history import MessageHistory
 from autogpt.memory.vector import VectorMemory
+from autogpt.models.command_function import CommandFunction
 from autogpt.models.command_registry import CommandRegistry
 from autogpt.speech import say_text
 from autogpt.spinner import Spinner
 from autogpt.utils import clean_input
 from autogpt.workspace import Workspace
+
+CONTINUE_STRING = "What do you want to do next?"
 
 
 class Agent:
@@ -86,7 +89,7 @@ class Agent:
 
     def start_interaction_loop(self):
         # Avoid circular imports
-        from autogpt.app import execute_command, get_command
+        from autogpt.app import execute_command
 
         # Interaction Loop
         self.cycle_count = 0
@@ -116,7 +119,7 @@ class Agent:
                 self.ai_config.ai_name,
                 self.created_at,
                 self.cycle_count,
-                [m.raw() for m in self.history],
+                [m.raw() for m in self.history.messages],
                 FULL_MESSAGE_HISTORY_FILE_NAME,
             )
             if (
@@ -130,51 +133,76 @@ class Agent:
                     f"{self.config.continuous_limit}",
                 )
                 break
-            # Send message to AI, get response
+
+            # STEP 1: Get AI Response
             with Spinner("Thinking... ", plain_output=self.config.plain_output):
                 assistant_reply = chat_with_ai(
-                    self.config,
-                    self,
-                    self.system_prompt,
-                    self.triggering_prompt,
-                    self.fast_token_limit,
-                    self.config.fast_llm_model,
+                    config=self.config,
+                    agent=self,
+                    system_prompt=self.system_prompt,
+                    triggering_prompt=self.triggering_prompt,
+                    token_limit=self.fast_token_limit,
+                    model=self.config.fast_llm_model,
+                    functions=self.get_functions_from_commands(),
                 )
 
-            try:
-                assistant_reply_json = extract_json_from_response(assistant_reply)
-                validate_json(assistant_reply_json)
-            except json.JSONDecodeError as e:
-                logger.error(f"Exception while validating assistant reply JSON: {e}")
-                assistant_reply_json = {}
+            reply_content = assistant_reply.content
+            reply_content_json = {}
+            if reply_content:
+                # Sometimes the content can be duplicated, and this will contain 2 objects in one string
+                # TODO: Why is this?
+                reply_content = reply_content.split("}\n{")[0]
 
-            for plugin in self.config.plugins:
-                if not plugin.can_handle_post_planning():
-                    continue
-                assistant_reply_json = plugin.post_planning(assistant_reply_json)
+                # TODO: Sometimes the content doesn't close the last bracket. Why?
+                if not reply_content.endswith("}"):
+                    reply_content += "}"
 
-            # Print Assistant thoughts
-            if assistant_reply_json != {}:
-                # Get command name and arguments
+                for plugin in self.config.plugins:
+                    if not plugin.can_handle_post_planning():
+                        continue
+                    reply_content = plugin.post_planning(reply_content)
+
                 try:
-                    print_assistant_thoughts(
-                        self.ai_name, assistant_reply_json, self.config.speak_mode
-                    )
-                    command_name, arguments = get_command(assistant_reply_json)
-                    if self.config.speak_mode:
-                        say_text(f"I want to execute {command_name}")
+                    reply_content_json = json.loads(reply_content)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Could not decode response JSON")
+                    logger.debug(f"Invalid response JSON: {reply_content_json}")
+                    continue
 
-                    arguments = self._resolve_pathlike_command_args(arguments)
+                print_assistant_thoughts(
+                    self.ai_name, reply_content_json, self.config.speak_mode
+                )
+                # TODO: Validate
+            else:
+                logger.warn("AI Response did not include content")
 
-                except Exception as e:
-                    logger.error("Error: \n", str(e))
-            self.log_cycle_handler.log_cycle(
-                self.ai_config.ai_name,
-                self.created_at,
-                self.cycle_count,
-                assistant_reply_json,
-                NEXT_ACTION_FILE_NAME,
-            )
+            function_call = assistant_reply.function_call
+            if function_call:
+                # TODO: What should happen when there's no function call? The AI does this sometimes. Maybe when it
+                #  thinks it's done
+                command_name = function_call.get("name")
+                # FIXME: Some call is sending a string, some arent?
+                arguments = function_call.get("arguments")
+                if type(arguments) == str:
+                    try:
+                        arguments = json.loads(function_call.get("arguments"))
+                        self.log_cycle_handler.log_cycle(
+                            self.ai_config.ai_name,
+                            self.created_at,
+                            self.cycle_count,
+                            reply_content_json
+                            | {"command": {"name": command_name, "args": arguments}},
+                            NEXT_ACTION_FILE_NAME,
+                        )
+                    except json.JSONDecodeError as e:
+                        logger.error(
+                            f"Error: Could not parse arguments (probably due to improper escaping)"
+                        )
+                        logger.debug(str(function_call.get(arguments)))
+                        arguments = {}
+
+            if self.config.speak_mode:
+                say_text(f"I want to execute {command_name}")
 
             # First log new-line so user can differentiate sections better in console
             logger.typewriter_log("\n")
@@ -185,6 +213,7 @@ class Agent:
                 f"ARGUMENTS = {Fore.CYAN}{arguments}{Style.RESET_ALL}",
             )
 
+            # Step 2: Gather user input
             if not self.config.continuous_mode and self.next_action_count == 0:
                 # ### GET USER AUTHORIZATION TO EXECUTE COMMAND ###
                 # Get key press: Prompt the user to press enter to continue or escape
@@ -195,6 +224,7 @@ class Agent:
                     "'n' to exit program, or enter feedback for "
                     f"{self.ai_name}..."
                 )
+                # User input loop, continue until the authorise key ('y') is pressed
                 while True:
                     if self.config.chat_messages_enabled:
                         console_input = clean_input("Waiting for your response...")
@@ -202,20 +232,24 @@ class Agent:
                         console_input = clean_input(
                             Fore.MAGENTA + "Input:" + Style.RESET_ALL
                         )
+
                     if console_input.lower().strip() == self.config.authorise_key:
-                        user_input = "GENERATE NEXT COMMAND JSON"
+                        user_input = CONTINUE_STRING
                         break
-                    elif console_input.lower().strip() == "":
+
+                    # We didn't get the authorise key
+                    if console_input.lower().strip() == "":
                         logger.warn("Invalid input format.")
                         continue
-                    elif console_input.lower().startswith(
+
+                    if console_input.lower().startswith(
                         f"{self.config.authorise_key} -"
                     ):
                         try:
                             self.next_action_count = abs(
                                 int(console_input.split(" ")[1])
                             )
-                            user_input = "GENERATE NEXT COMMAND JSON"
+                            user_input = CONTINUE_STRING
                         except ValueError:
                             logger.warn(
                                 "Invalid input format. Please enter 'y -n' where n is"
@@ -223,22 +257,23 @@ class Agent:
                             )
                             continue
                         break
-                    elif console_input.lower() == self.config.exit_key:
+
+                    if console_input.lower() == self.config.exit_key:
                         user_input = "EXIT"
                         break
-                    else:
-                        user_input = console_input
-                        command_name = "human_feedback"
-                        self.log_cycle_handler.log_cycle(
-                            self.ai_config.ai_name,
-                            self.created_at,
-                            self.cycle_count,
-                            user_input,
-                            USER_INPUT_FILE_NAME,
-                        )
-                        break
 
-                if user_input == "GENERATE NEXT COMMAND JSON":
+                    user_input = console_input
+                    command_name = "human_feedback"
+                    self.log_cycle_handler.log_cycle(
+                        self.ai_config.ai_name,
+                        self.created_at,
+                        self.cycle_count,
+                        user_input,
+                        USER_INPUT_FILE_NAME,
+                    )
+                    break
+
+                if user_input == CONTINUE_STRING:
                     logger.typewriter_log(
                         "-=-=-=-=-=-=-= COMMAND AUTHORISED BY USER -=-=-=-=-=-=-=",
                         Fore.MAGENTA,
@@ -255,11 +290,13 @@ class Agent:
                     f"{Fore.CYAN}AUTHORISED COMMANDS LEFT: {Style.RESET_ALL}{self.next_action_count}"
                 )
 
-            # Execute command
+            # Step 2: Execute command
             if command_name is not None and command_name.lower().startswith("error"):
-                result = f"Could not execute command: {arguments}"
+                command_result = (
+                    text_result
+                ) = f"Could not execute command: {command_name}"
             elif command_name == "human_feedback":
-                result = f"Human feedback: {user_input}"
+                command_result = text_result = f"Human feedback: {user_input}"
             else:
                 for plugin in self.config.plugins:
                     if not plugin.can_handle_pre_command():
@@ -267,41 +304,53 @@ class Agent:
                     command_name, arguments = plugin.pre_command(
                         command_name, arguments
                     )
+
                 command_result = execute_command(
                     self.command_registry,
                     command_name,
                     arguments,
                     agent=self,
                 )
-                result = f"Command {command_name} returned: " f"{command_result}"
+                # TODO: Something should change here
+                text_result = f"Function {command_name} returned: " f"{command_result}"
 
-                result_tlength = count_string_tokens(
-                    str(command_result), self.config.fast_llm_model
-                )
-                memory_tlength = count_string_tokens(
-                    str(self.history.summary_message()), self.config.fast_llm_model
-                )
-                if result_tlength + memory_tlength + 600 > self.fast_token_limit:
-                    result = f"Failure: command {command_name} returned too much output. \
-                        Do not execute this command again with the same arguments."
+            result_tlength = count_string_tokens(
+                str(command_result), self.config.fast_llm_model
+            )
+            memory_tlength = count_string_tokens(
+                str(self.history.summary_message()), self.config.fast_llm_model
+            )
+            if result_tlength + memory_tlength + 600 > self.fast_token_limit:
+                text_result = f"Failure: command {command_name} returned too much output. \
+                    Do not execute this command again with the same arguments."
 
-                for plugin in self.config.plugins:
-                    if not plugin.can_handle_post_command():
-                        continue
-                    result = plugin.post_command(command_name, result)
-                if self.next_action_count > 0:
-                    self.next_action_count -= 1
+            for plugin in self.config.plugins:
+                if not plugin.can_handle_post_command():
+                    continue
+                text_result = plugin.post_command(command_name, text_result)
+            if self.next_action_count > 0:
+                self.next_action_count -= 1
 
             # Check if there's a result from the command append it to the message
             # history
-            if result is not None:
-                self.history.add("system", result, "action_result")
-                logger.typewriter_log("SYSTEM: ", Fore.YELLOW, result)
-            else:
-                self.history.add("system", "Unable to execute command", "action_result")
+            if not text_result:
+                text_result = "Unable to execute command"
                 logger.typewriter_log(
                     "SYSTEM: ", Fore.YELLOW, "Unable to execute command"
                 )
+
+            logger.typewriter_log("SYSTEM: ", Fore.YELLOW, text_result)
+
+            # Step 4: Push results to history
+            message_cycle = MessageCycle.construct(
+                triggering_prompt=self.triggering_prompt,
+                ai_response=reply_content,
+                user_input=user_input,
+                command_result=text_result,
+                command_name=command_name,
+                command_arguments=arguments,
+            )
+            self.history.add(message_cycle)
 
     def _resolve_pathlike_command_args(self, command_args):
         if "directory" in command_args and command_args["directory"] in {"", "/"}:
@@ -313,3 +362,36 @@ class Agent:
                         self.workspace.get_path(command_args[pathlike])
                     )
         return command_args
+
+    def get_functions_from_commands(self) -> list[CommandFunction]:
+        """Get functions from the commands. "functions" in this context refers to OpenAI functions
+
+        see https://platform.openai.com/docs/guides/gpt/function-calling
+        """
+        functions = []
+        for command in self.command_registry.commands.values():
+            properties = {}
+            required = []
+
+            for argument in command.arguments:
+                properties[argument.name] = {
+                    "type": argument.type,
+                    "description": argument.description,
+                }
+                if argument.required:
+                    required.append(argument.name)
+
+            parameters = {
+                "type": "object",
+                "properties": properties,
+                "required": required,
+            }
+            functions.append(
+                CommandFunction(
+                    name=command.name,
+                    description=command.description,
+                    parameters=parameters,
+                )
+            )
+
+        return functions

@@ -32,24 +32,24 @@ def test_count_message_tokens_gpt_4():
         Message("user", "Hello"),
         Message("assistant", "Hi there!"),
     ]
-    assert count_message_tokens(messages, model="gpt-4-0314") == 15
+    assert count_message_tokens(messages, model="gpt-4-0613") == 15
 
 
 def test_count_string_tokens():
     """Test that the string tokens are counted correctly."""
 
     string = "Hello, world!"
-    assert count_string_tokens(string, model_name="gpt-3.5-turbo-0301") == 4
+    assert count_string_tokens(string, model_name="gpt-3.5-turbo-16k-0613") == 4
 
 
 def test_count_string_tokens_empty_input():
     """Test that the string tokens are counted correctly."""
 
-    assert count_string_tokens("", model_name="gpt-3.5-turbo-0301") == 0
+    assert count_string_tokens("", model_name="gpt-3.5-turbo-16k-0613") == 0
 
 
 def test_count_string_tokens_gpt_4():
     """Test that the string tokens are counted correctly."""
 
     string = "Hello, world!"
-    assert count_string_tokens(string, model_name="gpt-4-0314") == 4
+    assert count_string_tokens(string, model_name="gpt-4-0613") == 4

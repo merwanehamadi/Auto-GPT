@@ -3,13 +3,20 @@ from __future__ import annotations
 import time
 from typing import TYPE_CHECKING
 
+from autogpt.models.chat_completion_response import ChatCompletionResponse
+from autogpt.models.command_function import CommandFunction
+
 if TYPE_CHECKING:
     from autogpt.agent.agent import Agent
 
 from autogpt.config import Config
 from autogpt.llm.api_manager import ApiManager
 from autogpt.llm.base import ChatSequence, Message
-from autogpt.llm.utils import count_message_tokens, create_chat_completion
+from autogpt.llm.utils import (
+    FUNCTIONS_TOKEN_COST,
+    count_message_tokens,
+    create_chat_completion,
+)
 from autogpt.log_cycle.log_cycle import CURRENT_CONTEXT_FILE_NAME
 from autogpt.logs import logger
 
@@ -21,8 +28,9 @@ def chat_with_ai(
     system_prompt: str,
     triggering_prompt: str,
     token_limit: int,
+    functions: list[CommandFunction],
     model: str | None = None,
-):
+) -> ChatCompletionResponse:
     """
     Interact with the OpenAI API, sending the prompt, user input,
         message history, and permanent memory.
@@ -33,6 +41,7 @@ def chat_with_ai(
         system_prompt (str): The prompt explaining the rules to the AI.
         triggering_prompt (str): The input from the user.
         token_limit (int): The maximum number of tokens allowed in the API call.
+        functions (list[CommandFunction]): The callable functions to be passed to the AI
         model (str, optional): The model to use. If None, the config.fast_llm_model will be used. Defaults to None.
 
     Returns:
@@ -90,14 +99,14 @@ def chat_with_ai(
     #     )
 
     # Account for user input (appended later)
-    user_input_msg = Message("user", triggering_prompt)
-    current_tokens_used += count_message_tokens([user_input_msg], model)
+    triggering_prompt_msg = Message("user", triggering_prompt)
+    current_tokens_used += count_message_tokens([triggering_prompt_msg], model)
 
     current_tokens_used += 500  # Reserve space for new_summary_message
 
     # Add Messages until the token limit is reached or there are no more messages to add.
     for cycle in reversed(list(agent.history.per_cycle())):
-        messages_to_add = [msg for msg in cycle if msg is not None]
+        messages_to_add = cycle.messages
         tokens_to_add = count_message_tokens(messages_to_add, model)
         if current_tokens_used + tokens_to_add > send_token_limit:
             break
@@ -109,12 +118,15 @@ def chat_with_ai(
 
     # Update & add summary of trimmed messages
     if len(agent.history) > 0:
+        # FIXME: This never actually trimmed messages
         new_summary_message, trimmed_messages = agent.history.trim_messages(
             current_message_chain=list(message_sequence),
         )
         tokens_to_add = count_message_tokens([new_summary_message], model)
         message_sequence.insert(insertion_index, new_summary_message)
-        current_tokens_used += tokens_to_add - 500
+        current_tokens_used += (
+            tokens_to_add - 500 + FUNCTIONS_TOKEN_COST
+        )  # what's the goal of the -500 here?
 
         # FIXME: uncomment when memory is back in use
         # memory_store = get_memory(cfg)
@@ -143,7 +155,7 @@ def chat_with_ai(
         current_tokens_used += count_message_tokens([message_sequence[-1]], model)
 
     # Append user input, the length of this is accounted for above
-    message_sequence.append(user_input_msg)
+    message_sequence.append(triggering_prompt_msg)
 
     plugin_count = len(config.plugins)
     for i, plugin in enumerate(config.plugins):
@@ -180,23 +192,23 @@ def chat_with_ai(
         logger.debug(f"{message.role.capitalize()}: {message.content}")
         logger.debug("")
     logger.debug("----------- END OF CONTEXT ----------------")
+
+    prompt_to_log = {
+        "context": message_sequence.raw(),
+        "functions": [function.__dict__ for function in functions],
+    }
     agent.log_cycle_handler.log_cycle(
         agent.ai_name,
         agent.created_at,
         agent.cycle_count,
-        message_sequence.raw(),
+        prompt_to_log,
         CURRENT_CONTEXT_FILE_NAME,
     )
 
     # TODO: use a model defined elsewhere, so that model can contain
     # temperature and other settings we care about
     assistant_reply = create_chat_completion(
-        prompt=message_sequence,
-        max_tokens=tokens_remaining,
+        prompt=message_sequence, max_tokens=tokens_remaining, functions=functions
     )
-
-    # Update full message history
-    agent.history.append(user_input_msg)
-    agent.history.add("assistant", assistant_reply, "ai_response")
 
     return assistant_reply

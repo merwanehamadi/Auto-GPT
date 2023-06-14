@@ -19,15 +19,15 @@ from autogpt.logs import logger
         }
     },
 )
-def task_complete(reason: str, agent: Agent) -> NoReturn:
-    """
-    A function that takes in a string and exits the program
+def goals_accomplished(reason: str, agent: Agent) -> NoReturn:
+    """A function that takes in a string and exits the program
 
     Parameters:
-        reason (str): A summary to the user of how the goals were accomplished.
+        reason (str): A summary to the user of how the goals were accomplished
     Returns:
         A result string from create chat completion. A list of suggestions to
             improve the code.
     """
     logger.info(title="Shutting down...\n", message=reason)
+    # TODO: Not quit
     quit()

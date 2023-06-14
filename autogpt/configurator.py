@@ -14,8 +14,8 @@ from autogpt.memory.vector import get_supported_memory_backends
 if TYPE_CHECKING:
     from autogpt.config import Config
 
-GPT_4_MODEL = "gpt-4"
-GPT_3_MODEL = "gpt-3.5-turbo"
+GPT_4_MODEL = "gpt-4-0613"
+GPT_3_MODEL = "gpt-3.5-turbo-16k-0613"
 
 
 def create_config(
@@ -87,7 +87,7 @@ def create_config(
     # Set the default LLM models
     if gpt3only:
         logger.typewriter_log("GPT3.5 Only Mode: ", Fore.GREEN, "ENABLED")
-        # --gpt3only should always use gpt-3.5-turbo, despite user's FAST_LLM_MODEL config
+        # --gpt3only should always use gpt-3.5-turbo-16k-0613, despite user's FAST_LLM_MODEL config
         config.set_fast_llm_model(GPT_3_MODEL)
         config.set_smart_llm_model(GPT_3_MODEL)
 
@@ -96,7 +96,7 @@ def create_config(
         and check_model(GPT_4_MODEL, model_type="smart_llm_model") == GPT_4_MODEL
     ):
         logger.typewriter_log("GPT4 Only Mode: ", Fore.GREEN, "ENABLED")
-        # --gpt4only should always use gpt-4, despite user's SMART_LLM_MODEL config
+        # --gpt4only should always use gpt-4-0613, despite user's SMART_LLM_MODEL config
         config.set_fast_llm_model(GPT_4_MODEL)
         config.set_smart_llm_model(GPT_4_MODEL)
     else:

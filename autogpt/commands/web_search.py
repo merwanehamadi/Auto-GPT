@@ -51,7 +51,7 @@ def web_search(query: str, agent: Agent, num_results: int = 8) -> str:
         attempts += 1
 
     results = json.dumps(search_results, ensure_ascii=False, indent=4)
-    return safe_google_results(results)
+    return safe_web_search_results(results)
 
 
 @command(
@@ -119,10 +119,10 @@ def google(query: str, agent: Agent, num_results: int = 8) -> str | list[str]:
     # google_result can be a list or a string depending on the search results
 
     # Return the list of search result URLs
-    return safe_google_results(search_results_links)
+    return safe_web_search_results(search_results_links)
 
 
-def safe_google_results(results: str | list) -> str:
+def safe_web_search_results(results: str | list) -> str:
     """
         Return the results of a google search in a safe format.
 

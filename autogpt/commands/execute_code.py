@@ -33,13 +33,13 @@ DENYLIST_CONTROL = "denylist"
         },
     },
 )
-def execute_python_code(code: str, basename: str, agent: Agent) -> str:
+def execute_python_code(code: str, name: str, agent: Agent) -> str:
     """Create and execute a Python file in a Docker container and return the STDOUT of the
     executed code. If there is any data that needs to be captured use a print statement
 
     Args:
         code (str): The Python code to run
-        basename (str): A name to be given to the Python file
+        name (str): A name to be given to the Python file
 
     Returns:
         str: The STDOUT captured from the code when it ran
@@ -48,10 +48,10 @@ def execute_python_code(code: str, basename: str, agent: Agent) -> str:
     directory = os.path.join(agent.config.workspace_path, ai_name, "executed_code")
     os.makedirs(directory, exist_ok=True)
 
-    if not basename.endswith(".py"):
-        basename = basename + ".py"
+    if not name.endswith(".py"):
+        name = name + ".py"
 
-    path = os.path.join(directory, basename)
+    path = os.path.join(directory, name)
 
     try:
         with open(path, "w+", encoding="utf-8") as f:
@@ -200,9 +200,7 @@ def validate_command(command: str, config: Config) -> bool:
         }
     },
     enabled=lambda cfg: cfg.execute_local_commands,
-    disabled_reason="You are not allowed to run local shell commands. To execute"
-    " shell commands, EXECUTE_LOCAL_COMMANDS must be set to 'True' "
-    "in your config file: .env - do not attempt to bypass the restriction.",
+    disabled_reason="You are not allowed to run local shell commands. To execute",
 )
 def execute_shell(command_line: str, agent: Agent) -> str:
     """Execute a shell command and return the output

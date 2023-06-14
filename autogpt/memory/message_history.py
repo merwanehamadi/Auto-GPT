@@ -3,14 +3,15 @@ from __future__ import annotations
 import copy
 import json
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
+
+from autogpt.llm.base import ChatSequence, Message, MessageCycle
 
 if TYPE_CHECKING:
     from autogpt.agent import Agent
 
 from autogpt.config import Config
 from autogpt.json_utils.utilities import extract_json_from_response
-from autogpt.llm.base import ChatSequence, Message, MessageRole, MessageType
 from autogpt.llm.providers.openai import OPEN_AI_CHAT_MODELS
 from autogpt.llm.utils import count_string_tokens, create_chat_completion
 from autogpt.log_cycle.log_cycle import PROMPT_SUMMARY_FILE_NAME, SUMMARY_FILE_NAME
@@ -21,30 +22,33 @@ from autogpt.logs import logger
 class MessageHistory:
     agent: Agent
 
-    messages: list[Message] = field(default_factory=list)
+    message_cycles: list[MessageCycle] = field(default_factory=list)
     summary: str = "I was created"
 
     last_trimmed_index: int = 0
 
     def __getitem__(self, i: int):
-        return self.messages[i]
+        return self.message_cycles[i]
 
     def __iter__(self):
-        return iter(self.messages)
+        return iter(self.message_cycles)
 
     def __len__(self):
-        return len(self.messages)
+        return len(self.message_cycles)
 
-    def add(
-        self,
-        role: MessageRole,
-        content: str,
-        type: MessageType | None = None,
-    ):
-        return self.append(Message(role, content, type))
+    def add(self, message_cycle: MessageCycle):
+        return self.append(message_cycle)
 
-    def append(self, message: Message):
-        return self.messages.append(message)
+    def append(self, message_cycle: MessageCycle):
+        return self.message_cycles.append(message_cycle)
+
+    @property
+    def messages(self):
+        messages = []
+        for cycle in self.message_cycles:
+            messages += cycle.messages
+
+        return messages
 
     def trim_messages(
         self,
@@ -61,9 +65,9 @@ class MessageHistory:
             Message: A message with the new running summary after adding the trimmed messages.
             list[Message]: A list of messages that are in full_message_history with an index higher than last_trimmed_index and absent from current_message_chain.
         """
-        # Select messages in full_message_history with an index higher than last_trimmed_index
+        # Don't include the prompts in the summary
         new_messages = [
-            msg for i, msg in enumerate(self) if i > self.last_trimmed_index
+            msg for i, msg in enumerate(self.messages) if i > self.last_trimmed_index
         ]
 
         # Remove messages that are already present in current_message_chain
@@ -84,33 +88,13 @@ class MessageHistory:
 
         return new_summary_message, new_messages_not_in_chain
 
-    def per_cycle(self, messages: list[Message] | None = None):
+    def per_cycle(self):
         """
         Yields:
-            Message: a message containing user input
-            Message: a message from the AI containing a proposed action
-            Message: the message containing the result of the AI's proposed action
+            MessageCycle: a list of messages within the same cycle
         """
-        messages = messages or self.messages
-        for i in range(0, len(messages) - 1):
-            ai_message = messages[i]
-            if ai_message.type != "ai_response":
-                continue
-            user_message = (
-                messages[i - 1] if i > 0 and messages[i - 1].role == "user" else None
-            )
-            result_message = messages[i + 1]
-            try:
-                assert (
-                    extract_json_from_response(ai_message.content) != {}
-                ), "AI response is not a valid JSON object"
-                assert result_message.type == "action_result"
-
-                yield user_message, ai_message, result_message
-            except AssertionError as err:
-                logger.debug(
-                    f"Invalid item in message history: {err}; Messages: {messages[i-1:i+2]}"
-                )
+        for cycle in self.message_cycles:
+            yield cycle
 
     def summary_message(self) -> Message:
         return Message(
@@ -118,7 +102,7 @@ class MessageHistory:
             f"This reminds you of these events from your past: \n{self.summary}",
         )
 
-    def update_running_summary(self, new_events: list[Message]) -> Message:
+    def update_running_summary(self, new_events: List[MessageCycle]) -> Message:
         """
         This function takes a list of dictionaries representing new events and combines them with the current summary,
         focusing on key and potentially important information to remember. The updated summary is returned in a message
@@ -135,12 +119,16 @@ class MessageHistory:
             update_running_summary(new_events)
             # Returns: "This reminds you of these events from your past: \nI entered the kitchen and found a scrawled note saying 7."
         """
+
         cfg = Config()
 
         if not new_events:
             return self.summary_message()
 
         # Create a copy of the new_events list to prevent modifying the original list
+        nested_list = [cycle.messages for cycle in new_events]
+        flat_list = [message for messages in nested_list for message in messages]
+        new_events = flat_list
         new_events = copy.deepcopy(new_events)
 
         # Replace "assistant" with "you". This produces much better first person past tense results.
@@ -201,7 +189,8 @@ class MessageHistory:
 
         return self.summary_message()
 
-    def summarize_batch(self, new_events_batch, cfg):
+    def summarize_batch(self, new_events_batch: list[Message], cfg):
+        batch_string = ". ".join([json.dumps(m.raw()) for m in new_events_batch])
         prompt = f'''Your task is to create a concise running summary of actions and information results in the provided text, focusing on key and potentially important information to remember.
 
 You will receive the current summary and your latest actions. Combine them, adding relevant key information from the latest development in 1st person past tense and keeping the summary concise.
@@ -213,7 +202,7 @@ Summary So Far:
 
 Latest Development:
 """
-{new_events_batch or "Nothing new happened."}
+{batch_string or "Nothing new happened."}
 """
 '''
 
@@ -226,7 +215,7 @@ Latest Development:
             PROMPT_SUMMARY_FILE_NAME,
         )
 
-        self.summary = create_chat_completion(prompt)
+        self.summary = create_chat_completion(prompt).content
 
         self.agent.log_cycle_handler.log_cycle(
             self.agent.ai_name,

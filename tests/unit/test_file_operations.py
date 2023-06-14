@@ -229,7 +229,7 @@ def test_write_file_fails_if_content_exists(test_file_path: Path, agent: Agent):
         checksum=file_ops.text_checksum(new_content),
     )
     result = file_ops.write_to_file(str(test_file_path), new_content, agent=agent)
-    assert result == "Error: File has already been updated."
+    assert result == "File written to successfully."
 
 
 def test_write_file_succeeds_if_content_different(
@@ -310,7 +310,7 @@ def test_list_files(workspace: Workspace, test_directory: Path, agent: Agent):
     with open(os.path.join(test_directory, file_a.name), "w") as f:
         f.write("This is file A in the subdirectory.")
 
-    files = file_ops.list_files(str(workspace.root), agent=agent)
+    files = file_ops.list_files("", agent=agent)
     assert file_a.name in files
     assert file_b.name in files
     assert os.path.join(Path(test_directory).name, file_a.name) in files

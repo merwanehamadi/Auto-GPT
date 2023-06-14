@@ -1,31 +1,172 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from enum import Enum
 from math import ceil, floor
-from typing import List, Literal, TypedDict
+from typing import Any, List, Optional, TypedDict, Union
 
-MessageRole = Literal["system", "user", "assistant"]
-MessageType = Literal["ai_response", "action_result"]
+
+class MessageType(Enum):
+    AI_RESPONSE = "ai_response"
+    AI_FUNCTION_CALL = "ai_function_call"
+    ACTION_RESULT = "action_result"
+
+
+class MessageRole(Enum):
+    SYSTEM = "system"
+    USER = "user"
+    ASSISTANT = "assistant"
+    FUNCTION = "function"
+
+
+TText = list[int]
+"""Token array representing tokenized text"""
 
 TText = list[int]
 """Token array representing tokenized text"""
 
 
 class MessageDict(TypedDict):
-    role: MessageRole
-    content: str
+    role: str
+    content: Optional[str]
+    name: Optional[str]
+
+    function_call: Optional[dict]
 
 
-@dataclass
+class MessageCycle:
+    user_input: Message
+    ai_response: Message
+    ai_function_response: Message
+    result: Message
+
+    def __init__(
+        self,
+        user_input: Message,
+        ai_response: Message,
+        triggering_prompt: Message,
+        result: Message,
+        ai_function_response: Optional[Message] = None,
+        ai_function_arguments: Optional[str] = None,
+    ):
+        self.user_input = user_input
+        self.ai_response = ai_response
+        self.triggering_prompt = triggering_prompt
+        self.result = result
+        self.ai_function_response = ai_function_response
+        self.ai_function_arguments = ai_function_arguments
+
+    @property
+    def messages(self) -> list[Message]:
+        messages = [
+            self.user_input,
+            self.ai_response,
+            self.result,
+        ]
+
+        if self.ai_function_response:
+            messages.append(self.ai_function_response)
+
+        return messages
+
+    @classmethod
+    def construct(
+        cls,
+        triggering_prompt: str,
+        ai_response: str,
+        user_input: Optional[str] = None,
+        command_result: Optional[Any] = None,
+        command_name: Optional[str] = None,
+        command_arguments: Optional[dict] = None,
+    ) -> MessageCycle:
+        function_arguments = json.dumps(command_arguments)
+
+        if type(command_result) != str:
+            command_result = json.dumps(command_result)
+
+        return cls(
+            triggering_prompt=Message(
+                role=MessageRole.SYSTEM, content=triggering_prompt
+            ),
+            ai_response=Message(
+                role=MessageRole.ASSISTANT,
+                content=ai_response,
+                function_name=command_name,
+                function_arguments=function_arguments,
+            ),
+            user_input=Message(role=MessageRole.USER, content=user_input)
+            if user_input
+            else None,
+            result=Message(
+                # TODO: This should maybe be a `FUNCTION` role? but it doesn't work
+                role=MessageRole.SYSTEM,
+                content=command_result,
+                function_name=command_name,
+                function_arguments=function_arguments,
+            )
+            if command_result
+            else None,
+        )
+
+
 class Message:
     """OpenAI Message object containing a role and the message content"""
 
-    role: MessageRole
-    content: str
-    type: MessageType | None = None
+    def __init__(
+        self,
+        role: Union[MessageRole, str],
+        content: Optional[str] = None,
+        function_name: Optional[str] = None,
+        function_arguments: Optional[str] = None,
+        message_type: Optional[MessageType] = None,
+    ):
+        if type(role) == MessageRole:
+            self.role = role.value
+        else:
+            self.role: str = role
+
+        self.function_name = function_name
+        # This is a JSON-encoded string
+        self.function_arguments = function_arguments
+        self.message_type = message_type
+
+        # Docs say:
+        #   content string Optional
+        #   The contents of the message. content is required for all messages except assistant messages
+        #   with function calls.
+        # This is an assistant message with a function call, but it will error out if we don't include content.
+        if not content:
+            if function_name and self.role == MessageRole.ASSISTANT.value:
+                self.content = ""
+            else:
+                raise ValueError(
+                    "Content is required for all messages except assistant messages with function calls."
+                )
+        self.content = content
+
+    def __repr__(self):
+        return (
+            f"Message('{self.role}', '{self.content}', '{self.function_name}', '{self.function_arguments}', "
+            f"'{self.message_type}')"
+        )
 
     def raw(self) -> MessageDict:
-        return {"role": self.role, "content": self.content}
+        raw_message = {"role": self.role}
+
+        if self.content:
+            raw_message["content"] = self.content
+
+        if self.role == MessageRole.FUNCTION.value:
+            raw_message["name"] = self.function_name
+
+        if self.function_name and self.role == MessageRole.ASSISTANT.value:
+            raw_message["function_call"] = {
+                "name": self.function_name,
+                "arguments": self.function_arguments or "{}",
+            }
+
+        return raw_message
 
 
 @dataclass

@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import os
 import os.path
+from pathlib import Path
 from typing import Generator, Literal
 
 from confection import Config
@@ -11,6 +12,7 @@ from confection import Config
 from autogpt.agent.agent import Agent
 from autogpt.command_decorator import command
 from autogpt.commands.file_operations_utils import read_textual_file
+from autogpt.config import Config
 from autogpt.logs import logger
 from autogpt.memory.vector import MemoryItem, VectorMemory
 
@@ -134,6 +136,7 @@ def read_file(filename: str, agent: Agent) -> str:
         str: The contents of the file
     """
     try:
+        filename = os.path.join(agent.workspace.root, filename)
         content = read_textual_file(filename, logger)
 
         # TODO: invalidate/update memory when file is edited
@@ -198,16 +201,53 @@ def write_to_file(filename: str, text: str, agent: Agent) -> str:
     Returns:
         str: A message indicating success or failure
     """
-    checksum = text_checksum(text)
-    if is_duplicate_operation("write", filename, agent.config, checksum):
-        return "Error: File has already been updated."
     try:
-        directory = os.path.dirname(filename)
-        os.makedirs(directory, exist_ok=True)
-        with open(filename, "w", encoding="utf-8") as f:
+        workspace_root = agent.workspace.root
+        file_path = os.path.join(workspace_root, filename)
+        file_dir = os.path.dirname(os.path.abspath(file_path))
+
+        if not file_dir.startswith(str(workspace_root)):
+            return "Error: Attempting to write to a file outside of the workspace directory is not allowed"
+
+        if file_dir != workspace_root and not os.path.exists(file_dir):
+            Path(file_dir).mkdir(exist_ok=True)
+
+        with open(file_path, "w+") as f:
             f.write(text)
-        log_operation("write", filename, agent, checksum)
-        return "File written to successfully."
+
+        log_operation("write", filename, agent, text_checksum(text))
+    except BaseException as e:
+        return f"Error: {e}"
+
+    return "File written to successfully."
+
+
+@command(
+    "delete_file",
+    "Delete file",
+    arguments={
+        "filename": {
+            "type": "string",
+            "description": "The path of the file to delete",
+            "required": True,
+        }
+    },
+)
+def delete_file(filename: str, agent: Agent) -> str:
+    """Delete a file
+
+    Args:
+        filename (str): The name of the file to delete
+
+    Returns:
+        str: A message indicating success or failure
+    """
+    if is_duplicate_operation("delete", filename, agent.config):
+        return "Error: File has already been deleted."
+    try:
+        os.remove(filename)
+        log_operation("delete", filename, agent)
+        return "File deleted successfully."
     except Exception as err:
         return f"Error: {err}"
 
@@ -301,15 +341,12 @@ def delete_file(filename: str, agent: Agent) -> str:
 def list_files(directory: str, agent: Agent) -> list[str]:
     """lists files in a directory recursively
 
-    Args:
-        directory (str): The directory to search in
-
     Returns:
         list[str]: A list of files found in the directory
     """
     found_files = []
 
-    for root, _, files in os.walk(directory):
+    for root, _, files in os.walk(agent.workspace.root):
         for file in files:
             if file.startswith("."):
                 continue
