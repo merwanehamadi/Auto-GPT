@@ -31,7 +31,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 
 ## Setting up Auto-GPT
 
-### Set up with Docker
+### Option 1: Set up with Docker
 
 1. Make sure you have Docker installed, see [requirements](#requirements)
 2. Create a project directory for Auto-GPT
@@ -40,38 +40,24 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
         mkdir Auto-GPT
         cd Auto-GPT
 
-3. In the project directory, create a file called `docker-compose.yml` with the following contents:
+2. Copy the necessary files from the [repository] into the project directory by running this command:
+- If you're on windows, run:
 
-        :::yaml
-        version: "3.9"
-        services:
-          auto-gpt:
-            image: significantgravitas/auto-gpt
-            env_file:
-              - .env
-            profiles: ["exclude-from-up"]
-            volumes:
-              - ./auto_gpt_workspace:/app/autogpt/auto_gpt_workspace
-              - ./data:/app/data
-              ## allow auto-gpt to write logs to disk
-              - ./logs:/app/logs
-              ## uncomment following lines if you want to make use of these files
-              ## you must have them existing in the same folder as this docker-compose.yml
-              #- type: bind
-              #  source: ./azure.yaml
-              #  target: /app/azure.yaml
-              #- type: bind
-              #  source: ./ai_settings.yaml
-              #  target: /app/ai_settings.yaml
+        :::shell
+        curl -o install.sh https://raw.githubusercontent.com/merwanehamadi/Auto-GPT/install-branch/tools/install.sh && source install.sh && rm ../install.sh
+    
+- If you're on mac or linux, run:
 
-4. Create the necessary [configuration](#configuration) files. If needed, you can find
-    templates in the [repository].
-5. Pull the latest image from [Docker Hub]
+        :::shell
+        curl -o install.sh https://raw.githubusercontent.com/merwanehamadi/Auto-GPT/install-branch/tools/install.sh && source install.sh && rm ../install.sh
+
+3. Create the necessary [configuration](#configuration) files.
+4. Pull the latest image from [Docker Hub]:
 
         :::shell
         docker pull significantgravitas/auto-gpt
 
-6. Continue to [Run with Docker](#run-with-docker)
+5. Continue to [Run with Docker](#run-with-docker)
 
 !!! note "Docker only supports headless browsing"
     Auto-GPT uses a browser in headless mode by default: `HEADLESS_BROWSER=True`.
@@ -81,7 +67,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 [repository]: https://github.com/Significant-Gravitas/Auto-GPT
 
 
-### Set up with Git
+### Option 2: Set up with Git
 
 !!! important
     Make sure you have [Git](https://git-scm.com/downloads) installed for your OS.
@@ -101,7 +87,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
         cd Auto-GPT
 
 
-### Set up without Git/Docker
+### Option 3: Set up without Git/Docker
 
 !!! warning
     We recommend to use Git or Docker, to make updating easier. Also note that some features such as Python execution will only work inside docker for security reasons.
@@ -110,8 +96,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 2. Extract the zip-file into a folder
 
 
-### Configuration
-
+## Configure Auto-GPT
 1. Find the file named `.env.template` in the main `Auto-GPT` folder. This file may
     be hidden by default in some operating systems due to the dot prefix. To reveal
     hidden files, follow the instructions for your specific operating system:
