@@ -8,7 +8,7 @@ from autogpt.command_decorator import command
 
 
 @command(
-    "read_audio_from_file",
+    "read_audio_from_ffdsfdsile",
     "Convert Audio to text",
     '"filename": "<filename>"',
     lambda config: config.huggingface_audio_to_text_model
