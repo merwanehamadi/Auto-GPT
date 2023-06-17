@@ -369,6 +369,8 @@ class Agent:
         see https://platform.openai.com/docs/guides/gpt/function-calling
         """
         functions = []
+        if not self.config.openai_functions:
+            return functions
         for command in self.command_registry.commands.values():
             properties = {}
             required = []
