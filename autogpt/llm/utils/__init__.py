@@ -11,6 +11,7 @@ from ..api_manager import ApiManager
 from ..base import ChatSequence, Message
 from ..providers import openai as iopenai
 from .token_counter import *
+from ...models.command_function import CommandFunction
 
 
 def call_ai_function(
@@ -88,6 +89,7 @@ def create_text_completion(
 def create_chat_completion(
     prompt: ChatSequence,
     config: Config,
+    functions: Optional[List[CommandFunction]] = [],
     model: Optional[str] = None,
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
@@ -134,6 +136,10 @@ def create_chat_completion(
         chat_completion_kwargs[
             "deployment_id"
         ] = config.get_azure_deployment_id_for_model(model)
+    if functions:
+        chat_completion_kwargs["functions"] = [
+            function.__dict__ for function in functions
+        ]
 
     response = iopenai.create_chat_completion(
         messages=prompt.raw(),

@@ -10,7 +10,6 @@ from autogpt.config.ai_config import AIConfig
 from autogpt.json_utils.utilities import extract_json_from_response, validate_json
 from autogpt.llm.chat import chat_with_ai
 from autogpt.llm.providers.openai import OPEN_AI_CHAT_MODELS
-from autogpt.llm.utils import count_string_tokens
 from autogpt.log_cycle.log_cycle import (
     FULL_MESSAGE_HISTORY_FILE_NAME,
     NEXT_ACTION_FILE_NAME,
@@ -20,6 +19,7 @@ from autogpt.log_cycle.log_cycle import (
 from autogpt.logs import logger, print_assistant_thoughts
 from autogpt.memory.message_history import MessageHistory
 from autogpt.memory.vector import VectorMemory
+from autogpt.models.command_function import CommandFunction
 from autogpt.models.command_registry import CommandRegistry
 from autogpt.speech import say_text
 from autogpt.spinner import Spinner
@@ -138,7 +138,8 @@ class Agent:
                     self.system_prompt,
                     self.triggering_prompt,
                     self.fast_token_limit,
-                    self.config.fast_llm_model,
+                    self.get_functions_from_commands(),
+                    self.config.fast_llm_model
                 )
 
             try:
@@ -275,7 +276,7 @@ class Agent:
                     agent=self,
                 )
                 result = f"Command {command_name} returned: " f"{command_result}"
-
+                from autogpt.llm.utils import count_string_tokens
                 result_tlength = count_string_tokens(
                     str(command_result), self.config.fast_llm_model
                 )
@@ -314,3 +315,38 @@ class Agent:
                         self.workspace.get_path(command_args[pathlike])
                     )
         return command_args
+
+
+    def get_functions_from_commands(self) -> list[CommandFunction]:
+        """Get functions from the commands. "functions" in this context refers to OpenAI functions
+        see https://platform.openai.com/docs/guides/gpt/function-calling
+        """
+        functions = []
+        if not self.config.openai_functions:
+            return functions
+        for command in self.command_registry.commands.values():
+            properties = {}
+            required = []
+
+            for argument in command.arguments:
+                properties[argument.name] = {
+                    "type": argument.type,
+                    "description": argument.description,
+                }
+                if argument.required:
+                    required.append(argument.name)
+
+            parameters = {
+                "type": "object",
+                "properties": properties,
+                "required": required,
+            }
+            functions.append(
+                CommandFunction(
+                    name=command.name,
+                    description=command.description,
+                    parameters=parameters,
+                )
+            )
+
+        return functions
