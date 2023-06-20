@@ -33,7 +33,6 @@ def llm_response_schema(
 ) -> dict[str, Any]:
     filename = os.path.join(os.path.dirname(__file__), f"{schema_name}.json")
     with open(filename, "r") as f:
-
         json_schema = json.load(f)
     if config.openai_functions:
         del json_schema["properties"]["command"]

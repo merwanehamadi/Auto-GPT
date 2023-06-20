@@ -148,15 +148,18 @@ class PromptGenerator:
             f"{json.dumps(llm_response_schema(config))}\n"
         )
 
-def generate_prompt_string(self, commands: List[Command], config: Config) -> str:
-        """
-        Generate a prompt string based on the constraints, commands, resources,
-            and performance evaluations.
 
-        Returns:
-            str: The generated prompt string.
-        """
-        if config.openai_functions:
-            return ""
-        return ("Commands:\n"
-            f"{self._generate_numbered_list(self.commands, item_type='command')}\n\n")
+def generate_prompt_string(self, commands: List[Command], config: Config) -> str:
+    """
+    Generate a prompt string based on the constraints, commands, resources,
+        and performance evaluations.
+
+    Returns:
+        str: The generated prompt string.
+    """
+    if config.openai_functions:
+        return ""
+    return (
+        "Commands:\n"
+        f"{self._generate_numbered_list(self.commands, item_type='command')}\n\n"
+    )

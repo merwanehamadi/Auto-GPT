@@ -24,7 +24,7 @@ def chat_with_ai(
     triggering_prompt: str,
     token_limit: int,
     functions: List[CommandFunction],
-    model: str | None = None
+    model: str | None = None,
 ):
     """
     Interact with the OpenAI API, sending the prompt, user input,
@@ -198,12 +198,12 @@ def chat_with_ai(
         prompt=message_sequence,
         config=agent.config,
         functions=functions,
-        max_tokens=tokens_remaining
+        max_tokens=tokens_remaining,
     )
 
     # Update full message history
     agent.history.append(user_input_msg)
-    assistant_reply = "okfdsnfjdhsfndjsh"
-    agent.history.add("assistant", assistant_reply, "ai_response")
+
+    agent.history.add("assistant", assistant_reply.content, "ai_response")
 
     return assistant_reply

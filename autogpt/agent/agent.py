@@ -139,11 +139,13 @@ class Agent:
                     self.triggering_prompt,
                     self.fast_token_limit,
                     self.get_functions_from_commands(),
-                    self.config.fast_llm_model
+                    self.config.fast_llm_model,
                 )
 
             try:
-                assistant_reply_json = extract_json_from_response(assistant_reply)
+                assistant_reply_json = extract_json_from_response(
+                    assistant_reply.content
+                )
                 validate_json(assistant_reply_json, self.config)
             except json.JSONDecodeError as e:
                 logger.error(f"Exception while validating assistant reply JSON: {e}")
@@ -161,7 +163,9 @@ class Agent:
                     print_assistant_thoughts(
                         self.ai_name, assistant_reply_json, self.config
                     )
-                    command_name, arguments = get_command(assistant_reply_json)
+                    command_name, arguments = get_command(
+                        assistant_reply_json, assistant_reply, self.config
+                    )
                     if self.config.speak_mode:
                         say_text(f"I want to execute {command_name}")
 
@@ -277,6 +281,7 @@ class Agent:
                 )
                 result = f"Command {command_name} returned: " f"{command_result}"
                 from autogpt.llm.utils import count_string_tokens
+
                 result_tlength = count_string_tokens(
                     str(command_result), self.config.fast_llm_model
                 )
@@ -315,7 +320,6 @@ class Agent:
                         self.workspace.get_path(command_args[pathlike])
                     )
         return command_args
-
 
     def get_functions_from_commands(self) -> list[CommandFunction]:
         """Get functions from the commands. "functions" in this context refers to OpenAI functions
