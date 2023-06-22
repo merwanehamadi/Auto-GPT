@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 from math import ceil, floor
 from typing import List, Literal, TypedDict
 
+from autogpt.models.command_argument import CommandArgument
+
 MessageRole = Literal["system", "user", "assistant"]
 MessageType = Literal["ai_response", "action_result"]
 
@@ -157,3 +159,32 @@ class ChatModelResponse(LLMResponse):
     """Standard response struct for a response from an LLM model."""
 
     content: str = None
+    function_call: OpenAIFunctionCall = None
+
+
+@dataclass
+class OpenAIFunctionSpec:
+    """Represents a "function" in OpenAI, which is mapped to a Command in Auto-GPT"""
+
+    name: str
+    description: str
+    parameters: OpenAIFunctionParameter
+
+
+@dataclass
+class OpenAIFunctionCall:
+    name: str
+    arguments: List[CommandArgument]
+
+
+@dataclass
+class OpenAIFunctionParameter:
+    type: str
+    properties: OpenAIFunctionProperties
+    required: bool
+
+
+@dataclass
+class OpenAIFunctionProperties:
+    type: str
+    description: str

@@ -13,6 +13,9 @@ from autogpt.llm.base import (
     ChatModelInfo,
     EmbeddingModelInfo,
     MessageDict,
+    OpenAIFunctionParameter,
+    OpenAIFunctionProperties,
+    OpenAIFunctionSpec,
     TextModelInfo,
     TText,
 )
@@ -267,3 +270,38 @@ def create_embedding(
         input=input,
         **kwargs,
     )
+
+
+def get_openai_command_specs(agent) -> list[OpenAIFunctionSpec]:
+    """Get OpenAI-consumable function specs for the agent's available commands.
+    see https://platform.openai.com/docs/guides/gpt/function-calling
+    """
+    functions = []
+    if not agent.config.openai_functions:
+        return functions
+    for command in agent.command_registry.commands.values():
+        properties = {}
+        required = []
+
+        for argument in command.arguments:
+            properties[argument.name] = OpenAIFunctionProperties(
+                type=argument.type,
+                description=argument.description,
+            )
+            if argument.required:
+                required.append(argument.name)
+        parameters = OpenAIFunctionParameter(
+            type="object",
+            properties=properties,
+            required=required,
+        )
+
+        functions.append(
+            OpenAIFunctionSpec(
+                name=command.name,
+                description=command.description,
+                parameters=parameters,
+            )
+        )
+
+    return functions
