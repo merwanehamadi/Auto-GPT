@@ -1,4 +1,3 @@
 {
-  "workspace": "autogpt/workspace/auto_gpt_workspace",
-  "entry_path": "agbenchmark.benchmarks"
+  "workspace": "autogpt/workspace/auto_gpt_workspace"
 }
